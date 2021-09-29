@@ -1,9 +1,6 @@
 import 'package:croptivate_app/pallete.dart';
 import 'package:croptivate_app/services/auth.dart';
 import 'package:croptivate_app/widgets/backgroundimage.dart';
-import 'package:croptivate_app/widgets/inputpassword.dart';
-import 'package:croptivate_app/widgets/roundedtext_button.dart';
-import 'package:croptivate_app/widgets/textinputfield.dart';
 import 'package:flutter/material.dart';
 
 class SignIn extends StatefulWidget {
@@ -16,6 +13,10 @@ class SignIn extends StatefulWidget {
 class _SignInState extends State<SignIn> {
 
   final AuthService _auth = AuthService(); 
+
+  //textformfield state
+  String email = '';
+  String password = '';
 
   @override
   Widget build(BuildContext context) {
@@ -40,36 +41,111 @@ class _SignInState extends State<SignIn> {
                   )
                 ),
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  TextInputField(
-                    icon: Icons.mail_outline,
-                    hint: "Email Address",
-                    inputType: TextInputType.emailAddress,
-                    inputAction: TextInputAction.next,
-                  ),
-                  InputPassword(
-                  icon: Icons.lock_outline_rounded,
-                  hint: "Password",
-                  inputType: TextInputType.visiblePassword,
-                  inputAction: TextInputAction.done,
-                  ),
-                  GestureDetector(
-                    onTap: () => Navigator.pushNamed(context, 'ForgotPassword'),
-                    child: Text(
-                      "Forgot Password?",
-                      style: smallBodyText,
+              Form(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10.0),
+                      child: Container(
+                        height: size.height * 0.07,
+                        width: size.width * 0.8,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[500]!.withOpacity(0.5),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Center(
+                          child: TextFormField(
+                            onChanged: (val) {
+                              setState(() => email = val);
+                            },
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              prefixIcon: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                                child: Icon(
+                                  Icons.mail_outline_rounded, 
+                                  size: 20, 
+                                  color: cWhite),
+                              ),
+                              hintText: "Email Address",
+                              hintStyle: cBodyText,
+                            ),
+                            style: cBodyText,
+                            keyboardType: TextInputType.emailAddress,
+                            textInputAction: TextInputAction.next,
+                          ),
+                        ),
+                      ),
+                    ), //EMAIL ADDRESS
+
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    child: Container(
+                      height: size.height * 0.07,
+                      width: size.width * 0.8,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[500]!.withOpacity(0.5),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Center(
+                        child: TextFormField(
+                          onChanged: (val) {
+                            setState(() => password = val);
+                          },
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            prefixIcon: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                              child: Icon(
+                                Icons.lock_outline_rounded, 
+                                size: 20, 
+                                color: cWhite),
+                            ),
+                            hintText: "Password",
+                            hintStyle: cBodyText,
+                          ),
+                          obscureText: true,
+                          style: cBodyText,
+                          keyboardType: TextInputType.visiblePassword,
+                          textInputAction: TextInputAction.done,
+                        ),
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  RoundedTextButton(buttonName: 'Sign In',),
-                  SizedBox(
-                    height: 10,
-                  ),
-                ],
+                  ), //PASSWORD
+                    GestureDetector(
+                      onTap: () => Navigator.pushNamed(context, 'ForgotPassword'),
+                      child: Text(
+                        "Forgot Password?",
+                        style: smallBodyText,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+
+                    Container(
+                      height: size.height * 0.07,
+                      width: size.width * 0.8,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        color: cGreen),
+                      child: TextButton(
+                        onPressed: () async{
+                          print(email);
+                          print(password);
+                        },
+                        child: Text(
+                          "Sign In",
+                          style: cBodyText.copyWith(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                ),
               ),
               GestureDetector(
                 onTap: () => Navigator.pushNamed(context, 'AccountCategories'),
