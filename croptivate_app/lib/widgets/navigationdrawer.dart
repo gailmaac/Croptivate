@@ -103,37 +103,18 @@ void selectedItem(BuildContext context, int index) {
      case 0:
        Navigator.of(context).push(MaterialPageRoute(builder: (context) => DashboardPage()));
        break;
-     default:
-   }
-
-    switch (index) {
      case 1:
        Navigator.of(context).push(MaterialPageRoute(builder: (context) => NotificationsPage()));
        break;
-     default:
-   }
-
-    switch (index) {
      case 2:
        Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProductPage()));
        break;
-     default:
-   }
-
-    switch (index) {
      case 3:
        Navigator.of(context).push(MaterialPageRoute(builder: (context) => OrdersPage()));
        break;
-     default:
-   }
-
-    switch (index) {
      case 4:
        Navigator.of(context).push(MaterialPageRoute(builder: (context) => SettingsPage()));
-       break;
-     default:
+       break;  
+     default: break;
    }
-
-
-
  }
