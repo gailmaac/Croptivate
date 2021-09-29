@@ -13,7 +13,7 @@ class AuthService {
   //Auth change user stream
   Stream<MyUser?> get user {
     return _auth.authStateChanges()
-      .map((User? user) => _userFromFirebase(user!));
+      .map((User? user) => user != null ? _userFromFirebase(user) : null);
   }
 
   //Sign In Anonymously
