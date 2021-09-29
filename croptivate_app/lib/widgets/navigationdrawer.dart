@@ -52,15 +52,18 @@ class NavigationDrawerWidget extends StatelessWidget {
 
             const SizedBox(height: 16,),
             buildMenuItem(
-              text: "Sign Out",
-              icon: Icons.logout_rounded,
-              onClicked: () => selectedItem(context, 4),
-            ),
-            const SizedBox(height: 16,),
-            buildMenuItem(
               text: "Settings",
               icon: Icons.settings_outlined,
-              onClicked: () => selectedItem(context, 5),
+              onClicked: () => selectedItem(context, 4),
+            ),
+
+            const SizedBox(height: 16,),
+            buildMenuItem(
+              text: "Sign Out",
+              icon: Icons.logout_rounded,
+              onClicked: () async{
+                await _auth.signOut();
+              }
             ),
           ],
         ),
@@ -91,7 +94,7 @@ Widget buildMenuItem({
         fontWeight: FontWeight.w500)
     ),
     hoverColor: hoverColor,
-    onTap: () {},
+    onTap: onClicked,
   );
 }
 
@@ -105,35 +108,28 @@ void selectedItem(BuildContext context, int index) {
 
     switch (index) {
      case 1:
-       Navigator.of(context).push(MaterialPageRoute(builder: (context) => DashboardPage()));
+       Navigator.of(context).push(MaterialPageRoute(builder: (context) => NotificationsPage()));
        break;
      default:
    }
 
     switch (index) {
      case 2:
-       Navigator.of(context).push(MaterialPageRoute(builder: (context) => DashboardPage()));
+       Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProductPage()));
        break;
      default:
    }
 
     switch (index) {
      case 3:
-       Navigator.of(context).push(MaterialPageRoute(builder: (context) => DashboardPage()));
+       Navigator.of(context).push(MaterialPageRoute(builder: (context) => OrdersPage()));
        break;
      default:
    }
 
     switch (index) {
      case 4:
-       Navigator.of(context).push(MaterialPageRoute(builder: (context) => DashboardPage()));
-       break;
-     default:
-   }
-
-    switch (index) {
-     case 5:
-       Navigator.of(context).push(MaterialPageRoute(builder: (context) => DashboardPage()));
+       Navigator.of(context).push(MaterialPageRoute(builder: (context) => SettingsPage()));
        break;
      default:
    }
