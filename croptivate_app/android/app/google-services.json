@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "21427020190",
+    "project_id": "croptivate",
+    "storage_bucket": "croptivate.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:21427020190:android:3e4e30e4b4c1dc7c25b68f",
+        "android_client_info": {
+          "package_name": "com.capstone.croptivate_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "21427020190-9e3rcsc85ja32lh23n7i5884t1m86utt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsZqJkF-8piML5M0Md5ddUgOXR0Yj6yyA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "21427020190-9e3rcsc85ja32lh23n7i5884t1m86utt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
