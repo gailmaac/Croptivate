@@ -2,6 +2,7 @@ import 'package:croptivate_app/models/user_data.dart';
 import 'package:croptivate_app/screens/authentication/account_categories.dart';
 import 'package:croptivate_app/screens/authentication/register_buyer.dart';
 import 'package:croptivate_app/screens/authentication/register_seller.dart';
+import 'package:croptivate_app/screens/authentication/register_transporter.dart';
 import 'package:croptivate_app/screens/home/forgot_password.dart';
 import 'package:croptivate_app/screens/wrapper.dart';
 import 'package:croptivate_app/services/auth.dart';
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
           'AccountCategories' : (context) => AccountCategories(),
           'RegisterSeller' : (context) => RegisterSeller(),
           'RegisterBuyer' : (context) => RegisterBuyer(),
-          // 'RegisterTransporter' : (context) => RegisterTransporter(),
+          'RegisterTransporter' : (context) => RegisterTransporter(),
         },
       ),
     );
