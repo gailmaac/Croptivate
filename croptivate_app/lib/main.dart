@@ -1,4 +1,4 @@
-import 'package:croptivate_app/models/user_data.dart';
+import 'package:croptivate_app/models/user.dart';
 import 'package:croptivate_app/screens/authentication/account_categories.dart';
 import 'package:croptivate_app/screens/authentication/register_buyer.dart';
 import 'package:croptivate_app/screens/authentication/register_seller.dart';
