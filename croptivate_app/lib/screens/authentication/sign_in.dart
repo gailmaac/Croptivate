@@ -1,5 +1,6 @@
 import 'package:croptivate_app/pallete.dart';
 import 'package:croptivate_app/services/auth.dart';
+import 'package:croptivate_app/shared/loading.dart';
 import 'package:croptivate_app/widgets/backgroundimage.dart';
 import 'package:flutter/material.dart';
 
@@ -13,15 +14,19 @@ class SignIn extends StatefulWidget {
 class _SignInState extends State<SignIn> {
 
   final AuthService _auth = AuthService(); 
+  final _formKey = GlobalKey<FormState>();
+  bool loading = false;
 
   //textformfield state
   String email = '';
   String password = '';
 
+  String error = '';
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Stack(
+    return loading ? Loading() : Stack(
       children: [
         BackgroundImage(image: "assets/vegetable2.jpg"),
         Scaffold(
@@ -42,9 +47,11 @@ class _SignInState extends State<SignIn> {
                 ),
               ),
               Form(
+                key: _formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
+                    //EMAIL ADDRESS
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10.0),
                       child: Container(
@@ -56,11 +63,16 @@ class _SignInState extends State<SignIn> {
                         ),
                         child: Center(
                           child: TextFormField(
+                            validator: (val) => val!.isEmpty ? 'Enter a valid Email Address' : null,
                             onChanged: (val) {
                               setState(() => email = val);
                             },
                             decoration: InputDecoration(
                               border: InputBorder.none,
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: cWhite, width: 2.0),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
                               prefixIcon: Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                                 child: Icon(
@@ -77,8 +89,9 @@ class _SignInState extends State<SignIn> {
                           ),
                         ),
                       ),
-                    ), //EMAIL ADDRESS
-
+                    ), 
+                    
+                  //PASSWORD
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: Container(
@@ -90,10 +103,15 @@ class _SignInState extends State<SignIn> {
                       ),
                       child: Center(
                         child: TextFormField(
+                          validator: (val) => val!.length < 8 ? 'Password must contain 8 or more characters.' : null, 
                           onChanged: (val) {
                             setState(() => password = val);
                           },
                           decoration: InputDecoration(
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: cWhite, width: 2.0),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
                             border: InputBorder.none,
                             prefixIcon: Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -112,7 +130,8 @@ class _SignInState extends State<SignIn> {
                         ),
                       ),
                     ),
-                  ), //PASSWORD
+                  ), 
+                  
                     GestureDetector(
                       onTap: () => Navigator.pushNamed(context, 'ForgotPassword'),
                       child: Text(
@@ -124,6 +143,10 @@ class _SignInState extends State<SignIn> {
                       height: 20,
                     ),
 
+                     Text(
+                      error,
+                      style: TextStyle(color: Colors.red, fontSize: 14)
+                    ),
                     Container(
                       height: size.height * 0.07,
                       width: size.width * 0.8,
@@ -132,8 +155,18 @@ class _SignInState extends State<SignIn> {
                         color: cGreen),
                       child: TextButton(
                         onPressed: () async{
-                          print(email);
-                          print(password);
+                          if (_formKey.currentState!.validate()){
+                            setState(() {
+                              loading = true;
+                            });
+                            dynamic result = await _auth.signIn(email, password);
+                             if (result == null) {
+                               setState(() {
+                                 error = "Could not sign in with those credentials";
+                                 loading = false;
+                               });
+                             }
+                          }
                         },
                         child: Text(
                           "Sign In",
@@ -144,6 +177,7 @@ class _SignInState extends State<SignIn> {
                     SizedBox(
                       height: 10,
                     ),
+                   
                   ],
                 ),
               ),
