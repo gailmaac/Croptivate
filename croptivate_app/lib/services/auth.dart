@@ -1,6 +1,6 @@
 import 'package:croptivate_app/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:croptivate_app/models/user_data.dart';
+import 'package:croptivate_app/models/user.dart';
 
 class AuthService {
 
