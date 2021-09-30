@@ -1,4 +1,4 @@
-import 'package:croptivate_app/models/user_data.dart';
+import 'package:croptivate_app/models/user.dart';
 import 'package:croptivate_app/screens/authentication/authenticate.dart';
 import 'package:croptivate_app/screens/home/home.dart';
 import 'package:flutter/material.dart';
