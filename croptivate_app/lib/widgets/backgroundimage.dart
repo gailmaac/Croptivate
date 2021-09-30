@@ -16,7 +16,7 @@ final String image;
       shaderCallback: (rect) => LinearGradient(
         begin: Alignment.bottomCenter,
         end:  Alignment.center,
-        colors: [cDGreen, Colors.transparent],
+        colors: [Colors.black54, Colors.transparent],
       ).createShader(rect),
       blendMode: BlendMode.darken,
       child: Container(
