@@ -25,4 +25,9 @@ class DatabaseService {
     return sellerCollection.snapshots();
   }
 
+
+  //get user doc stream
+  Stream<DocumentSnapshot> get userSellerData {
+    return sellerCollection.doc(uid).snapshots();
+  }
 }
