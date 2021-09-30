@@ -34,14 +34,15 @@ class _RegisterSellerState extends State<RegisterSeller> {
     "Retailer",
   ];
 
+//form values
   String email = '';
   String password = '';
-  String fname = '';
-  String lname = '';
-  String loc = '';
-  String shopname = '';
-  String shopdesc = '';
-  int cnum = 0;
+  String _fname = '';
+  String _lname = '';
+  String _loc = '';
+  String _shopname = '';
+  String _shopdesc = '';
+  int _cnum = 0;
 
   String error = '';
 
@@ -191,8 +192,9 @@ class _RegisterSellerState extends State<RegisterSeller> {
                           ),
                           child: Center(
                             child: TextFormField(
+                              validator: (val) => val!.isEmpty ? 'Please enter your first name' : null, 
                                onChanged: (val) {
-                                  setState(() => fname = val);
+                                  setState(() => _fname = val);
                                 },
                               decoration: InputDecoration(
                                 border: InputBorder.none,
@@ -220,9 +222,10 @@ class _RegisterSellerState extends State<RegisterSeller> {
                           ),
                           child: Center(
                             child: TextFormField(
-                               onChanged: (val) {
-                                  setState(() => lname = val);
-                                },
+                              validator: (val) => val!.isEmpty ? 'Please enter your last name' : null, 
+                              onChanged: (val) {
+                                setState(() => _lname = val);
+                              },
                               decoration: InputDecoration(
                                 border: InputBorder.none,
                                 hintText: "Last Name",
@@ -249,8 +252,9 @@ class _RegisterSellerState extends State<RegisterSeller> {
                           ),
                           child: Center(
                             child: TextFormField(
+                              validator: (val) => val!.isEmpty ? 'Please enter your address' : null, 
                                onChanged: (val) {
-                                  setState(() => loc = val);
+                                  setState(() => _loc = val);
                                 },
                               decoration: InputDecoration(
                                 border: InputBorder.none,
@@ -278,8 +282,9 @@ class _RegisterSellerState extends State<RegisterSeller> {
                           ),
                           child: Center(
                             child: TextFormField(
+                              validator: (val) => val!.isEmpty ? 'Input your shop name' : null, 
                                onChanged: (val) {
-                                  setState(() => shopname = val);
+                                  setState(() => _shopname = val);
                                 },
                               decoration: InputDecoration(
                                 border: InputBorder.none,
@@ -308,7 +313,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
                           child: Center(
                             child: TextFormField(
                                onChanged: (val) {
-                                  setState(() => shopdesc = val);
+                                  setState(() => _shopdesc = val);
                                 },
                               decoration: InputDecoration(
                                 border: InputBorder.none,
@@ -338,7 +343,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
                             child: TextFormField(
                               validator: (val) => val!.length < 11 ? 'Contact number must have 11 characters.' : null, 
                               onChanged: (val) {
-                                setState(() => cnum = 0);
+                                setState(() => _cnum = 0);
                               },
                               decoration: InputDecoration(
                                 border: InputBorder.none,
@@ -363,6 +368,15 @@ class _RegisterSellerState extends State<RegisterSeller> {
                           color: cGreen),
                         child: TextButton(
                           onPressed: () async {
+                            print(myInitialItem);
+                            print(email);
+                            print(password);
+                            print(_fname);
+                            print(_lname);
+                            print(_loc);
+                            print(_shopname);
+                            print(_shopdesc);
+                            print(_cnum);
                             if (_formKey.currentState!.validate()){
                               setState(() {
                                 loading = true;
