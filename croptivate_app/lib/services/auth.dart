@@ -1,3 +1,4 @@
+import 'package:croptivate_app/screens/authentication/register_seller.dart';
 import 'package:croptivate_app/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:croptivate_app/models/user.dart';
@@ -47,7 +48,7 @@ class AuthService {
       User? user = result.user;
 
       //Create a new document for sellers with the uid
-      await DatabaseService(uid: user!.uid).updateUserData(" ", " ", " ", " ", " ", " ", 0);
+      await DatabaseService(uid: user!.uid).addUserSeller("sellerType", "fname", "lname", "loc", "shopname", "shopdesc", 0);
       return _userFromFirebase(user);
     } catch(e) {
       print(e.toString());
