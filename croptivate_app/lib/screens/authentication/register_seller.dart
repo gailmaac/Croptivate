@@ -20,7 +20,6 @@ class RegisterSeller extends StatefulWidget {
 
 class _RegisterSellerState extends State<RegisterSeller> {
 
-  // TextEditingController myItems = new TextEditingController();
   TextEditingController fname = new TextEditingController();
   TextEditingController lname = new TextEditingController();
   TextEditingController loc = new TextEditingController();
