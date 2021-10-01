@@ -10,9 +10,9 @@ class DatabaseService {
   //collection reference
   CollectionReference sellerCollection = FirebaseFirestore.instance.collection('userSeller');
 // String myInitialItem,
-  Future addUserSeller( String fname, String lname, String loc, String shopname, String shopdesc, int cnum) async {
-    return await sellerCollection
-    .add({//'myInitialItem' : myInitialItem,
+  Future addUserSeller(var myInitialItem, String fname, String lname, String loc, String shopname, String shopdesc, int cnum) async {
+    return await sellerCollection.doc(uid)
+    .set({'myInitialItem' : myInitialItem,
       'fname' : fname,
       'lname' : lname,
       'loc' : loc,
