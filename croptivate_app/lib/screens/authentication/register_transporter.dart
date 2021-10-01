@@ -177,6 +177,7 @@ class _RegisterTransporterState extends State<RegisterTransporter> {
                         ),
                         child: Center(
                           child: TextFormField(
+                            controller: fname,
                             onChanged: (val) {
                             setState(() => _fname = val);
                             },
@@ -206,6 +207,7 @@ class _RegisterTransporterState extends State<RegisterTransporter> {
                         ),
                         child: Center(
                           child: TextFormField(
+                            controller: lname,
                             onChanged: (val) {
                               setState(() => _lname = val);
                               },
@@ -235,6 +237,7 @@ class _RegisterTransporterState extends State<RegisterTransporter> {
                         ),
                         child: Center(
                           child: TextFormField(
+                            controller: loc,
                             onChanged: (val) {
                               setState(() => _loc = val);
                               },
@@ -264,6 +267,7 @@ class _RegisterTransporterState extends State<RegisterTransporter> {
                         ),
                         child: Center(
                           child: TextFormField(
+                            controller: cnum,
                             validator: (val) => val!.length < 11 ? 'Contact number must have 11 characters.' : null, 
                             onChanged: (val) {
                             setState(() => _cnum = val);
