@@ -38,8 +38,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
   //textfieldform state
   List<String> myItems = [
     "Farmer",
-    "Distributor",
-    "Retailer",
+    "Reseller",
   ];
 
 //form values
@@ -57,15 +56,6 @@ class _RegisterSellerState extends State<RegisterSeller> {
 
   @override
   Widget build(BuildContext context) {
-
-    // final userSeller = Provider.of<QuerySnapshot>(context);
-    // for (var doc in userSeller.docs) {
-    //   print(doc.data);
-    // }
-    
-// StreamProvider<QuerySnapshot?>.value(
-//       value: DatabaseService(uid: '').userSeller,
-//       initialData: null,
     Size size = MediaQuery.of(context).size;
     return loading ? Loading() : Stack(
         children: [
