@@ -1,23 +1,24 @@
 import 'package:croptivate_app/pallete.dart';
-import 'package:croptivate_app/screens/authentication/authenticate.dart';
 import 'package:croptivate_app/sellers/dashboard_page.dart';
 import 'package:croptivate_app/sellers/notifications.dart';
 import 'package:croptivate_app/sellers/product_listings.dart';
 import 'package:croptivate_app/sellers/orders.dart';
 import 'package:croptivate_app/sellers/settings.dart';
 import 'package:croptivate_app/services/auth.dart';
+import 'package:croptivate_app/shared/loading.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:croptivate_app/screens/authentication/sign_in.dart';
+
 
 class NavigationDrawerWidget extends StatelessWidget {
 
   final AuthService _auth = AuthService();
   final padding = EdgeInsets.symmetric(horizontal: 25);
+  bool loading = false;
 
   @override
   Widget build(BuildContext context) {
-    return Drawer( 
+    return loading ? Loading() : Drawer( 
       child: Material(
         color: cWhite,
         child: ListView(
@@ -62,6 +63,7 @@ class NavigationDrawerWidget extends StatelessWidget {
               text: "Sign Out",
               icon: Icons.logout_rounded,
               onClicked: () async{
+                loading = true;
                 await _auth.signOut();
               }
             ),
