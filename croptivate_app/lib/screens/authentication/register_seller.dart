@@ -386,8 +386,6 @@ class _RegisterSellerState extends State<RegisterSeller> {
                               setState(() {
                                 loading = true;
                               });
-
-                              dynamic result = await _auth.registerSeller(email, password);
                               Map <String, dynamic> sellerCollection = {
                               'myInitialItem' : myInitialItem,
                               'fname' : fname.text,
@@ -396,7 +394,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
                               'shopname' : shopname.text,
                               'shopdesc' : shopdesc.text,
                               'cnum' : cnum.text};
-                              FirebaseFirestore.instance.collection('userSeller').add(sellerCollection);
+                              dynamic result = await _auth.registerSeller(email, password, sellerCollection);
                               
                               if (result == null) {
                                 setState(() {
