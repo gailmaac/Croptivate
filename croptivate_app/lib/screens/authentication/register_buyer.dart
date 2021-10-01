@@ -16,22 +16,27 @@ class RegisterBuyer extends StatefulWidget {
 
 class _RegisterBuyerState extends State<RegisterBuyer> {
 
+  TextEditingController fname = new TextEditingController();
+  TextEditingController lname = new TextEditingController();
+  TextEditingController loc = new TextEditingController();
+  TextEditingController cnum = new TextEditingController();
+
   final AuthService _auth = AuthService(); 
   final _formKey = GlobalKey<FormState>();
   bool loading = false;
 
   String email = '';
   String password = '';
-  String fname = '';
-  String lname = '';
-  String loc = '';
-  String cnum = '';
+  String _fname = '';
+  String _lname = '';
+  String _loc = '';
+  String _cnum = '';
 
   String error = '';
 
   @override
   Widget build(BuildContext context) {
-     Size size = MediaQuery.of(context).size;
+    Size size = MediaQuery.of(context).size;
     return loading ? Loading() : Stack(
       children: [
         BackgroundImage(image: "assets/vegetable4.jpg"),
@@ -132,8 +137,9 @@ class _RegisterBuyerState extends State<RegisterBuyer> {
                         ),
                         child: Center(
                           child: TextFormField(
+                            controller: fname,
                             onChanged: (val) {
-                                setState(() => fname = val);
+                                setState(() => _fname = val);
                               },
                             decoration: InputDecoration(
                               border: InputBorder.none,
@@ -162,8 +168,9 @@ class _RegisterBuyerState extends State<RegisterBuyer> {
                         ),
                         child: Center(
                           child: TextFormField(
+                            controller: lname,
                             onChanged: (val) {
-                                setState(() => lname = val);
+                                setState(() => _lname = val);
                               },
                             decoration: InputDecoration(
                               border: InputBorder.none,
@@ -191,8 +198,9 @@ class _RegisterBuyerState extends State<RegisterBuyer> {
                         ),
                         child: Center(
                           child: TextFormField(
+                            controller: loc,
                             onChanged: (val) {
-                                setState(() => loc = val);
+                                setState(() => _loc = val);
                               },
                             decoration: InputDecoration(
                               border: InputBorder.none,
@@ -220,8 +228,9 @@ class _RegisterBuyerState extends State<RegisterBuyer> {
                         ),
                         child: Center(
                           child: TextFormField(
+                            controller: cnum,
                             onChanged: (val) {
-                                setState(() => cnum = val);
+                                setState(() => _cnum = val);
                               },
                             decoration: InputDecoration(
                               border: InputBorder.none,
@@ -245,17 +254,22 @@ class _RegisterBuyerState extends State<RegisterBuyer> {
                         color: cGreen),
                       child: TextButton(
                         onPressed: () async {
-                           if (_formKey.currentState!.validate()){
-                             setState(() {
-                               loading = true;
-                             });
-                             dynamic result = await _auth.registerBuyer(email, password);
-                             if (result == null) {
-                               setState(() {
-                                  error = "Please supply valid Email";
-                                  loading = false;
-                               });
-                             }
+                          if (_formKey.currentState!.validate()){
+                            setState(() {
+                              loading = true;
+                            });
+                            Map <String, dynamic> buyerCollection = {
+                              'fname' : fname.text,
+                              'lname' : lname.text,
+                              'loc' : loc.text,
+                              'cnum' : cnum.text};
+                            dynamic result = await _auth.registerBuyer(email, password, buyerCollection);
+                            if (result == null) {
+                              setState(() {
+                                error = "Please supply valid Email";
+                                loading = false;
+                              });
+                            }
                           }
                         },
                         child: Text(
@@ -270,7 +284,7 @@ class _RegisterBuyerState extends State<RegisterBuyer> {
                       error,
                       style: TextStyle(color: Colors.red, fontSize: 14)
                     ),
-                 ],   
+                  ],   
                 ),
               ),
             ),
