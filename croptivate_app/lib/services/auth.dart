@@ -48,7 +48,7 @@ class AuthService {
       User? user = result.user;
 
       //Create a new document for sellers with the uid
-      await DatabaseService(uid: user!.uid).addUserSeller("sellerType", "fname", "lname", "loc", "shopname", "shopdesc", 0);
+      await DatabaseService(uid: user!.uid).addUserSeller;
       return _userFromFirebase(user);
     } catch(e) {
       print(e.toString());
