@@ -17,6 +17,11 @@ class RegisterTransporter extends StatefulWidget {
 
 class _RegisterTransporterState extends State<RegisterTransporter> {
 
+  TextEditingController fname = new TextEditingController();
+  TextEditingController lname = new TextEditingController();
+  TextEditingController loc = new TextEditingController();
+  TextEditingController cnum = new TextEditingController();
+
   final AuthService _auth = AuthService(); 
   final _formKey = GlobalKey<FormState>();
   bool loading = false;
@@ -25,10 +30,10 @@ class _RegisterTransporterState extends State<RegisterTransporter> {
 
   String email = '';
   String password = '';
-  String fname = '';
-  String lname = '';
-  String loc = '';
-  String cnum = '';
+  String _fname = '';
+  String _lname = '';
+  String _loc = '';
+  String _cnum = '';
 
   String error = '';
 
@@ -173,7 +178,7 @@ class _RegisterTransporterState extends State<RegisterTransporter> {
                         child: Center(
                           child: TextFormField(
                             onChanged: (val) {
-                            setState(() => fname = val);
+                            setState(() => _fname = val);
                             },
                             decoration: InputDecoration(
                               border: InputBorder.none,
@@ -201,8 +206,8 @@ class _RegisterTransporterState extends State<RegisterTransporter> {
                         ),
                         child: Center(
                           child: TextFormField(
-                             onChanged: (val) {
-                              setState(() => lname = val);
+                            onChanged: (val) {
+                              setState(() => _lname = val);
                               },
                             decoration: InputDecoration(
                               border: InputBorder.none,
@@ -230,8 +235,8 @@ class _RegisterTransporterState extends State<RegisterTransporter> {
                         ),
                         child: Center(
                           child: TextFormField(
-                             onChanged: (val) {
-                              setState(() => loc = val);
+                            onChanged: (val) {
+                              setState(() => _loc = val);
                               },
                             decoration: InputDecoration(
                               border: InputBorder.none,
@@ -245,7 +250,7 @@ class _RegisterTransporterState extends State<RegisterTransporter> {
                         )
                       ),
                     ), 
-               
+
                     //Contact number
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5),
@@ -261,7 +266,7 @@ class _RegisterTransporterState extends State<RegisterTransporter> {
                           child: TextFormField(
                             validator: (val) => val!.length < 11 ? 'Contact number must have 11 characters.' : null, 
                             onChanged: (val) {
-                            setState(() => cnum = val);
+                            setState(() => _cnum = val);
                             },
                             decoration: InputDecoration(
                               border: InputBorder.none,
@@ -289,13 +294,19 @@ class _RegisterTransporterState extends State<RegisterTransporter> {
                             setState(() {
                               loading = true;
                             });
-                             dynamic result = await _auth.registerTransporter(email, password);
-                             if (result == null) {
-                               setState(() {
+                            Map <String, dynamic> transporterCollection = {
+                              'myInitialItem' : myInitialItem,
+                              'fname' : fname.text,
+                              'lname' : lname.text,
+                              'loc' : loc.text,
+                              'cnum' : cnum.text};
+                              dynamic result = await _auth.registerTransporter(email, password, transporterCollection);
+                              if (result == null) {
+                                setState(() {
                                   error = "Please supply valid Email";
                                   loading = false;
-                               });
-                             }
+                                });
+                              }
                           }
                         },
                         child: Text(
@@ -305,7 +316,7 @@ class _RegisterTransporterState extends State<RegisterTransporter> {
                       ),
                     ),
                     SizedBox(height:20),
-                 ],   
+                  ],   
                 ),
               ),
             ),
