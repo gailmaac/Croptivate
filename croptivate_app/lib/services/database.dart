@@ -9,22 +9,34 @@ class DatabaseService {
 
   //collection reference
   CollectionReference sellerCollection = FirebaseFirestore.instance.collection('userSeller');
-// String myInitialItem,
+  CollectionReference buyerCollection = FirebaseFirestore.instance.collection('userBuyer');
+  CollectionReference transporterCollection = FirebaseFirestore.instance.collection('userTransporter');
+// UserSeller
   Future<void> addUserSeller(Map<String, dynamic> sellerInfo) async {
     return await sellerCollection.doc(uid).set(sellerInfo);
-      
-    
+  }
+//UserBuyer
+Future<void> addUserBuyer(Map<String, dynamic> buyerInfo) async {
+    return await buyerCollection.doc(uid).set(buyerInfo);
   }
 
-  //Get Seller Stream
-  Stream<QuerySnapshot?> get userSeller {
-    return sellerCollection.snapshots();
+//UserTransporter
+Future<void> addUserTransporter(Map<String, dynamic> transporterInfo) async {
+    return await transporterCollection.doc(uid).set(transporterInfo);
   }
 
 
-  //get user doc stream
-  Stream<DocumentSnapshot> get userSellerData {
-    return sellerCollection.doc(uid).snapshots();
-  }
+  // //Get Seller Stream
+  // Stream<QuerySnapshot?> get userSeller {
+  //   return sellerCollection.snapshots();
+  // }
+
+  // //Get Buyer
+
+
+  // //get user doc stream
+  // Stream<DocumentSnapshot> get userSellerData {
+  //   return sellerCollection.doc(uid).snapshots();
+  // }
 }
 
