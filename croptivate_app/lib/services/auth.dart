@@ -42,13 +42,13 @@ class AuthService {
     }
   }
   //Register with Email and Password - Seller
-  Future registerSeller(String email, String password) async {
+  Future registerSeller(String email, String password, Map<String, dynamic> sellerInfo) async {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       User? user = result.user;
 
       //Create a new document for sellers with the uid
-      await DatabaseService(uid: user!.uid).addUserSeller;
+      await DatabaseService(uid: user!.uid).addUserSeller(sellerInfo);
       return _userFromFirebase(user);
     } catch(e) {
       print(e.toString());
