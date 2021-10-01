@@ -201,15 +201,19 @@ class _SignInState extends State<SignIn> {
               Container(
                 child: TextButton(
                   onPressed: () async {
+                    setState(() {
+                      loading = true;
+                    });
                    dynamic result = await _auth.signInAnon();
                    if(result == null){
                      print("There is an error signing in.");
                      print(result);
                    } else {
-                     print("You have signed in.");
-                     print(result.uid);
-                   }
-                  },
+                      print("You have signed in.");
+                      print(result.uid);
+                     }  
+                   },
+
                   child: Text(
                     "Continue as Guest.",
                     style: smallBodyText,
