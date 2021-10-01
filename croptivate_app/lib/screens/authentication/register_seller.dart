@@ -20,6 +20,14 @@ class RegisterSeller extends StatefulWidget {
 
 class _RegisterSellerState extends State<RegisterSeller> {
 
+  // TextEditingController myItems = new TextEditingController();
+  TextEditingController fname = new TextEditingController();
+  TextEditingController lname = new TextEditingController();
+  TextEditingController loc = new TextEditingController();
+  TextEditingController shopname = new TextEditingController();
+  TextEditingController shopdesc = new TextEditingController();
+  TextEditingController cnum = new TextEditingController();
+
   final AuthService _auth = AuthService(); 
   final _formKey = GlobalKey<FormState>();
   bool loading = false;
@@ -42,7 +50,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
   String _loc = '';
   String _shopname = '';
   String _shopdesc = '';
-  int _cnum = 0;
+  String _cnum = '';
 
   String error = '';
 
@@ -147,7 +155,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
                           )
                         ),
                       ),
-                       
+                      
                        //Password 
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 5),
@@ -178,7 +186,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
                           )
                         ),
                       ), 
-                     
+                    
                       //First Name
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 5),
@@ -192,8 +200,9 @@ class _RegisterSellerState extends State<RegisterSeller> {
                           ),
                           child: Center(
                             child: TextFormField(
+                              controller: fname,
                               validator: (val) => val!.isEmpty ? 'Please enter your first name' : null, 
-                               onChanged: (val) {
+                              onChanged: (val) {
                                   setState(() => _fname = val);
                                 },
                               decoration: InputDecoration(
@@ -222,6 +231,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
                           ),
                           child: Center(
                             child: TextFormField(
+                              controller: lname,
                               validator: (val) => val!.isEmpty ? 'Please enter your last name' : null, 
                               onChanged: (val) {
                                 setState(() => _lname = val);
@@ -252,6 +262,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
                           ),
                           child: Center(
                             child: TextFormField(
+                              controller: loc,
                               validator: (val) => val!.isEmpty ? 'Please enter your address' : null, 
                                onChanged: (val) {
                                   setState(() => _loc = val);
@@ -282,6 +293,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
                           ),
                           child: Center(
                             child: TextFormField(
+                              controller: shopname,
                               validator: (val) => val!.isEmpty ? 'Input your shop name' : null, 
                                onChanged: (val) {
                                   setState(() => _shopname = val);
@@ -312,7 +324,8 @@ class _RegisterSellerState extends State<RegisterSeller> {
                           ),
                           child: Center(
                             child: TextFormField(
-                               onChanged: (val) {
+                              controller: shopdesc,
+                              onChanged: (val) {
                                   setState(() => _shopdesc = val);
                                 },
                               decoration: InputDecoration(
@@ -327,7 +340,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
                           )
                         ),
                       ), 
-                     
+                    
                       //Contact number
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 5),
@@ -341,9 +354,10 @@ class _RegisterSellerState extends State<RegisterSeller> {
                           ),
                           child: Center(
                             child: TextFormField(
+                              controller: cnum,
                               validator: (val) => val!.length < 11 ? 'Contact number must have 11 characters.' : null, 
                               onChanged: (val) {
-                                setState(() => _cnum = 0);
+                                setState(() => _cnum = val);
                               },
                               decoration: InputDecoration(
                                 border: InputBorder.none,
@@ -368,26 +382,28 @@ class _RegisterSellerState extends State<RegisterSeller> {
                           color: cGreen),
                         child: TextButton(
                           onPressed: () async {
-                            print(myInitialItem);
-                            print(email);
-                            print(password);
-                            print(_fname);
-                            print(_lname);
-                            print(_loc);
-                            print(_shopname);
-                            print(_shopdesc);
-                            print(_cnum);
                             if (_formKey.currentState!.validate()){
                               setState(() {
                                 loading = true;
                               });
-                               dynamic result = await _auth.registerSeller(email, password);
-                               if (result == null) {
-                                 setState(() {
-                                   error = "Please supply valid Email";
-                                   loading = false;
-                                 } );
-                               }
+
+                              dynamic result = await _auth.registerSeller(email, password);
+                              Map <String, dynamic> sellerCollection = {
+                              'myInitialItem' : myInitialItem,
+                              'fname' : fname.text,
+                              'lname' : lname.text,
+                              'loc' : loc.text,
+                              'shopname' : shopname.text,
+                              'shopdesc' : shopdesc.text,
+                              'cnum' : cnum.text};
+                              FirebaseFirestore.instance.collection('userSeller').add(sellerCollection);
+                              
+                              if (result == null) {
+                                setState(() {
+                                  error = "Please supply valid Email";
+                                  loading = false;
+                                } );
+                              }
                             }
                           },
                           child: Text(
@@ -401,7 +417,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
                         error,
                         style: TextStyle(color: Colors.red, fontSize: 14)
                       ),
-                   ],   
+                  ],   
                   ),
                 ),
               ),
