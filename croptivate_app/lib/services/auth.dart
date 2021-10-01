@@ -76,9 +76,9 @@ class AuthService {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       User? user = result.user;
-      
-       //Create a new document for buyer with the uid
-      await DatabaseService(uid: user!.uid).addUserBuyer(transporterInfo);
+
+       //Create a new document for transporter with the uid
+      await DatabaseService(uid: user!.uid).addUserTransporter(transporterInfo);
       return _userFromFirebase(user);
     } catch(e) {
       print(e.toString());
