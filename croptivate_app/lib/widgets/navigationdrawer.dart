@@ -1,9 +1,9 @@
 import 'package:croptivate_app/pallete.dart';
-import 'package:croptivate_app/sellers/dashboard_page.dart';
-import 'package:croptivate_app/sellers/notifications.dart';
-import 'package:croptivate_app/sellers/product_listings.dart';
-import 'package:croptivate_app/sellers/orders.dart';
-import 'package:croptivate_app/sellers/settings.dart';
+import 'package:croptivate_app/screens/sellers/home_seller.dart';
+import 'package:croptivate_app/screens/sellers/notifications.dart';
+import 'package:croptivate_app/screens/sellers/orders.dart';
+import 'package:croptivate_app/screens/sellers/product_listings.dart';
+import 'package:croptivate_app/screens/sellers/settings.dart';
 import 'package:croptivate_app/services/auth.dart';
 import 'package:croptivate_app/shared/loading.dart';
 import 'package:flutter/cupertino.dart';
@@ -42,7 +42,7 @@ class NavigationDrawerWidget extends StatelessWidget {
               icon: Icons.note_alt_outlined,
               onClicked: () => selectedItem(context, 2),
             ),
-             const SizedBox(height: 16,),
+            const SizedBox(height: 16,),
             buildMenuItem(
               text: "Orders",
               icon: Icons.shopping_basket_outlined,
@@ -73,7 +73,7 @@ class NavigationDrawerWidget extends StatelessWidget {
     );
   }
 
- 
+
 }
 
 Widget buildMenuItem({
@@ -101,22 +101,22 @@ Widget buildMenuItem({
 }
 
 void selectedItem(BuildContext context, int index) {
-   switch (index) {
-     case 0:
-       Navigator.of(context).push(MaterialPageRoute(builder: (context) => DashboardPage()));
-       break;
-     case 1:
-       Navigator.of(context).push(MaterialPageRoute(builder: (context) => NotificationsPage()));
-       break;
-     case 2:
-       Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProductPage()));
-       break;
-     case 3:
-       Navigator.of(context).push(MaterialPageRoute(builder: (context) => OrdersPage()));
-       break;
-     case 4:
-       Navigator.of(context).push(MaterialPageRoute(builder: (context) => SettingsPage()));
-       break;  
-     default: break;
-   }
- }
+  switch (index) {
+    case 0:
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomeSeller()));
+      break;
+    case 1:
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => NotificationsPage()));
+      break;
+    case 2:
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProductPage()));
+      break;
+    case 3:
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => OrdersPage()));
+      break;
+    case 4:
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) => SettingsPage()));
+      break;  
+    default: break;
+  }
+}
