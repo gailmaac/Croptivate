@@ -143,7 +143,7 @@ class _SignInState extends State<SignIn> {
                       height: 20,
                     ),
 
-                     Text(
+                    Text(
                       error,
                       style: TextStyle(color: Colors.red, fontSize: 14)
                     ),
@@ -160,12 +160,12 @@ class _SignInState extends State<SignIn> {
                               loading = true;
                             });
                             dynamic result = await _auth.signIn(email, password);
-                             if (result == null) {
-                               setState(() {
-                                 error = "Could not sign in with those credentials";
-                                 loading = false;
-                               });
-                             }
+                            if (result == null) {
+                              setState(() {
+                                error = "Could not sign in with those credentials";
+                                loading = false;
+                              });
+                            }
                           }
                         },
                         child: Text(
@@ -177,7 +177,7 @@ class _SignInState extends State<SignIn> {
                     SizedBox(
                       height: 10,
                     ),
-                   
+                  
                   ],
                 ),
               ),
@@ -204,15 +204,15 @@ class _SignInState extends State<SignIn> {
                     setState(() {
                       loading = true;
                     });
-                   dynamic result = await _auth.signInAnon();
-                   if(result == null){
-                     print("There is an error signing in.");
-                     print(result);
-                   } else {
+                  dynamic result = await _auth.signInAnon();
+                  if(result == null){
+                    print("There is an error signing in.");
+                    print(result);
+                  } else {
                       print("You have signed in.");
                       print(result.uid);
-                     }  
-                   },
+                    }  
+                  },
 
                   child: Text(
                     "Continue as Guest.",
