@@ -1,17 +1,20 @@
 import 'package:croptivate_app/pallete.dart';
-import 'package:croptivate_app/widgets/navigationdrawer.dart';
+import 'package:croptivate_app/screens/buyers/basket.dart';
+import 'package:croptivate_app/screens/buyers/user_profile.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 
-class Home extends StatelessWidget {
-  const Home({ Key? key }) : super(key: key);
+class HomeBuyer extends StatelessWidget {
+  const HomeBuyer({ Key? key }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: NavigationDrawerWidget(),
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           backgroundColor: cGreen,
+          systemOverlayStyle: SystemUiOverlayStyle.dark,
           title: Align(
             alignment: AlignmentDirectional(0.4, 0),
             child: Container(
@@ -133,7 +136,7 @@ class Home extends StatelessWidget {
             color: cWhite,
             boxShadow: [
               BoxShadow(
-                offset: Offset(0, 20),
+                offset: Offset(1, 10),
                 blurRadius: 35,
                 color: cGrey.withOpacity(0.40),
               )
@@ -143,19 +146,26 @@ class Home extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               IconButton(
-                onPressed: () {}, 
+                onPressed: () {
+                  print("Home is pressed");
+                }, 
                 icon: Icon(Icons.home_outlined, ),
               ),
               IconButton(
-                onPressed: () {}, 
+                onPressed: () {
+                  print("Messaging is pressed");
+                }, 
                 icon: Icon(Icons.chat_bubble_outline_rounded, ),
               ),
               IconButton(
-                onPressed: () {}, 
+                onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => Basket()));
+                }, 
                 icon: Icon(Icons.shopping_basket_outlined, ),
               ),
               IconButton(
                 onPressed: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => UserProfile()));
                 }, 
                 icon: Icon(Icons.person_outline_rounded, )
               ),
