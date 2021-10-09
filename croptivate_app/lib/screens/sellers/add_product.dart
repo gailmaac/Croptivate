@@ -5,7 +5,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
-
+import 'package:path_provider/path_provider.dart';
+import 'package:image/image.dart' as Im;
+import 'package:uuid/uuid.dart';
+// import 'package:geolocator/geolocator.dart';
+// import 'package:geocoding/geocoding.dart';
 
 
 class AddProduct extends StatefulWidget {
@@ -17,9 +21,21 @@ class AddProduct extends StatefulWidget {
 
 class _AddProductState extends State<AddProduct> {
 
+  TextEditingController locationController = new TextEditingController();
+
   File? imageOne;
   File? imageTwo;
   File? imageThree;
+
+  bool isUploading = false;
+
+
+
+  handleSubmit() {
+    setState(() {
+      isUploading = true;
+    });
+  }
 
 
   Future chooseImageOne(ImageSource source) async {
@@ -228,16 +244,17 @@ class _AddProductState extends State<AddProduct> {
               color: cDGreen,
               ),
             ),
-            onPressed: () {
-              print("Add Product");
-            },
+            onPressed: isUploading ? null : () => handleSubmit(),
           )
         ],
       ),
+      
     body: SingleChildScrollView(
       child: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
+          isUploading ? LinearProgressIndicator() : Text(""),
+          SizedBox(height: 5),
           Container(
             width: double.infinity,
             height: 150,
@@ -622,10 +639,84 @@ class _AddProductState extends State<AddProduct> {
               ],
             )
           ),
+
+          //Location
+          Container(
+            width: double.infinity,
+            height: 90,
+            child: Stack(
+              children: [
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(15, 5, 0, 0),
+                  child: Text("Location",
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 16,
+                    color: cBlack,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(15, 30, 15, 0),
+                  child: TextFormField(
+                    controller: locationController,
+                    textCapitalization: TextCapitalization.words,
+                    decoration: InputDecoration(
+                      contentPadding: new EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(6),
+                      borderSide: BorderSide(color: cGrey, width: 1.0)),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: cGrey, width: 1.0),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      hintText: "Input Location",
+                      hintStyle: TextStyle(
+                        fontFamily: 'Poppins',
+                        color: cGrey,
+                        fontSize: 14
+                      ),
+                    ),
+                    style: TextStyle(
+                        fontFamily: 'Poppins',
+                        color: Colors.black87,
+                        fontSize: 14
+                    ),
+                    keyboardType: TextInputType.number,
+                    textInputAction: TextInputAction.next,
+                  ),
+                ), 
+              ],
+            )
+          ),
+
+          //Location Button
+          Container(
+            width: 250,
+            height: 40,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              color: cGreen
+            ),
+            child: TextButton.icon(
+              onPressed: (){},//getLocation,
+              icon: Icon(
+                Icons.location_pin,
+                color: cWhite,
+                size: 20), 
+              label: Text("Use your curent location",
+                style: TextStyle(
+                  color: cWhite,
+                  fontFamily: 'Poppins',
+                  fontSize: 16,
+                ),
+              ),
+            ), 
+          ),
+          SizedBox(height: 10)
         ],
       ),
     ),
-    
     
     bottomNavigationBar: Container(
           padding: EdgeInsets.only(
@@ -670,4 +761,32 @@ class _AddProductState extends State<AddProduct> {
         ),
     );
   }
+
+  // getLocation() async {
+
+  //   Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+  
+  //   List<Placemark>? placemarks;
+  
+  //   placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
+
+  //   Placemark placemark = placemarks[0];
+
+  //   String completeAddress =
+  //   '${placemark.subThoroughfare}${placemark.thoroughfare},'
+  //   '${placemark.subThoroughfare}${placemark.locality},'
+  //   '${placemark.subAdministrativeArea},'
+  //   '${placemark.administrativeArea},'
+  //   '${placemark.postalCode},'
+  //   '${placemark.country}';
+
+  //   print(completeAddress);
+  //   String formattedAddress = '${placemark.locality}, ${placemark.country}';
+  //   locationController.text = formattedAddress;
+  // }
+
 }
+
+
+
+
