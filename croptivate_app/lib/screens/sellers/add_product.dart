@@ -4,12 +4,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image/image.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart';
 import 'package:image/image.dart' as Im;
 import 'package:uuid/uuid.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:croptivate_app/services/database.dart';
 
 
 class AddProduct extends StatefulWidget {
@@ -22,18 +27,85 @@ class AddProduct extends StatefulWidget {
 class _AddProductState extends State<AddProduct> {
 
   TextEditingController locationController = new TextEditingController();
+  TextEditingController prodnameController = new TextEditingController();
+  TextEditingController proddescController = new TextEditingController();
+  TextEditingController stockController = new TextEditingController();
+  TextEditingController retailController = new TextEditingController();
+  TextEditingController countController = new TextEditingController();
+  TextEditingController wholesaleController = new TextEditingController();
+
+  final storageRef = FirebaseStorage.instance.ref();
+  final postRef = FirebaseFirestore.instance.collection('sellerPosts');
 
   File? imageOne;
   File? imageTwo;
   File? imageThree;
+  String postId = Uuid().v4();
 
   bool isUploading = false;
 
+  String? get uid => null;
 
+  uploadImage(imageFile) async {
+    UploadTask uploadTask = storageRef.child("post_$postId.jpg").putFile(imageFile);
+    TaskSnapshot storageSnap = await uploadTask;
+    String downloadUrl = await storageSnap.ref.getDownloadURL();
+    return downloadUrl;
+  }
 
-  handleSubmit() {
+  createPostInFirestore({String? mediaUrlOne, String? mediaUrlTwo, String? mediaUrlThree, String? prodname, String? proddesc, String? stock, String? retail, String? count, String? wholesale, String? location, Map<String, dynamic>? sellerInfo}) {
+    postRef
+    .doc(uid)
+    .collection('sellerPosts')
+    .doc(postId)
+    .set({
+      "postId": postId,
+      "ownerId": uid,
+      // "name": uid.sellerInfo.fname
+      "mediaUrlOne": mediaUrlOne,
+      "mediaUrlTwo": mediaUrlTwo,
+      "mediaUrlThree": mediaUrlThree,
+      "prodname": prodname,
+      "proddesc": proddesc,
+      "stock": stock,
+      "retail": retail,
+      "count": count,
+      "wholesale": wholesale,
+      "location": location
+    });
+  }
+
+  handleSubmit() async {
     setState(() {
       isUploading = true;
+    });
+    String mediaUrlOne = await uploadImage(imageOne);
+    String mediaUrlTwo = await uploadImage(imageTwo);
+    String mediaUrlThree = await uploadImage(imageThree);
+    createPostInFirestore(
+      mediaUrlOne: mediaUrlOne,
+      mediaUrlTwo: mediaUrlTwo,
+      mediaUrlThree: mediaUrlThree,
+      prodname: prodnameController.text,
+      proddesc: proddescController.text,
+      stock: stockController.text,
+      retail: retailController.text,
+      count: countController.text,
+      wholesale: wholesaleController.text,
+      location: locationController.text
+    );
+    prodnameController.clear();
+    proddescController.clear();
+    stockController.clear();
+    retailController.clear();
+    countController.clear();
+    wholesaleController.clear();
+    locationController.clear();
+    setState(() {
+      imageOne = null;
+      imageTwo = null;
+      imageThree = null;
+      isUploading = false;
     });
   }
 
@@ -280,12 +352,16 @@ class _AddProductState extends State<AddProduct> {
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         //first add image button
-                        imageOne != null ? Image.file(imageOne!, width: 90, height: 90) : Padding(
+                        Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(15, 20, 0, 0),
                           child: Container(
                             height: 90,
                             width: 90,
                             decoration: BoxDecoration(
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: FileImage(imageOne!),
+                              ),
                               color: Colors.transparent, 
                               borderRadius: BorderRadius.circular(12), 
                               border: Border.all(
@@ -301,12 +377,16 @@ class _AddProductState extends State<AddProduct> {
                         ),
                         
                         // second add image button
-                        imageTwo != null ? Image.file(imageTwo!, width: 90, height: 90) : Padding(
+                        Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(15, 20, 0, 0),
                           child: Container(
                             height: 90,
                             width: 90,
                             decoration: BoxDecoration(
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: FileImage(imageTwo!),
+                              ),
                               color: Colors.transparent, 
                               borderRadius: BorderRadius.circular(12), 
                               border: Border.all(
@@ -322,12 +402,16 @@ class _AddProductState extends State<AddProduct> {
                         ),
                         
                         //third add image button
-                        imageThree != null ? Image.file(imageThree!, width: 90, height: 90) : Padding(
+                        Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(15, 20, 0, 0),
                           child: Container(
                             height: 90,
                             width: 90,
                             decoration: BoxDecoration(
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: FileImage(imageThree!),
+                              ),
                               color: Colors.transparent, 
                               borderRadius: BorderRadius.circular(12), 
                               border: Border.all(
@@ -368,6 +452,7 @@ class _AddProductState extends State<AddProduct> {
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(15, 30, 15, 0),
                   child: TextFormField(
+                    controller: prodnameController,
                     textCapitalization: TextCapitalization.words,
                     decoration: InputDecoration(
                       contentPadding: new EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
@@ -416,6 +501,7 @@ class _AddProductState extends State<AddProduct> {
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(15, 30, 15, 0),
                   child: TextFormField(
+                    controller: proddescController,
                     maxLines: 7,
                     minLines: 5,
                     textCapitalization: TextCapitalization.words,
@@ -466,6 +552,7 @@ class _AddProductState extends State<AddProduct> {
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(15, 30, 15, 0),
                   child: TextFormField(
+                    controller: stockController,
                     textCapitalization: TextCapitalization.words,
                     decoration: InputDecoration(
                       contentPadding: new EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
@@ -514,6 +601,7 @@ class _AddProductState extends State<AddProduct> {
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(15, 30, 15, 0),
                   child: TextFormField(
+                    controller: retailController,
                     textCapitalization: TextCapitalization.words,
                     decoration: InputDecoration(
                       contentPadding: new EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
@@ -563,6 +651,7 @@ class _AddProductState extends State<AddProduct> {
                   Padding(
                     padding: EdgeInsets.fromLTRB(250, 0, 0, 0),
                     child: TextFormField(
+                      controller: countController,
                       decoration: InputDecoration(
                         contentPadding: new EdgeInsets.symmetric(vertical: 10.0, horizontal: 10),
                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(6),
@@ -611,6 +700,7 @@ class _AddProductState extends State<AddProduct> {
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(15, 30, 15, 0),
                   child: TextFormField(
+                    controller: wholesaleController,
                     textCapitalization: TextCapitalization.words,
                     decoration: InputDecoration(
                       contentPadding: new EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
