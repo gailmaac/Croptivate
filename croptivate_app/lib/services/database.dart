@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 
 
@@ -9,8 +10,13 @@ class DatabaseService {
 
   //collection reference
   CollectionReference sellerCollection = FirebaseFirestore.instance.collection('userSeller');
+  CollectionReference postRef = FirebaseFirestore.instance.collection('sellerPosts');
+  
+  
+
   CollectionReference buyerCollection = FirebaseFirestore.instance.collection('userBuyer');
   CollectionReference transporterCollection = FirebaseFirestore.instance.collection('userTransporter');
+
 // UserSeller
   Future<void> addUserSeller(Map<String, dynamic> sellerInfo) async {
     return await sellerCollection.doc(uid).set(sellerInfo);
