@@ -37,8 +37,8 @@ dependencies:
   path_provider: ^2.0.5
   image: ^3.0.8
   uuid: ^3.0.5
-  # geolocator:
-  # geocoding:
+  geolocator:
+  geocoding:
 
   
 dev_dependencies:
