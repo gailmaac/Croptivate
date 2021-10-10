@@ -8,8 +8,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:image/image.dart' as Im;
 import 'package:uuid/uuid.dart';
-// import 'package:geolocator/geolocator.dart';
-// import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 
 
 class AddProduct extends StatefulWidget {
@@ -236,6 +236,7 @@ class _AddProductState extends State<AddProduct> {
         centerTitle: true,
         actions: <Widget> [
           TextButton(
+            onPressed: isUploading ? null : () => handleSubmit(),
             child: Text("Post",
             style: TextStyle(
               fontFamily: 'Poppins',
@@ -244,7 +245,6 @@ class _AddProductState extends State<AddProduct> {
               color: cDGreen,
               ),
             ),
-            onPressed: isUploading ? null : () => handleSubmit(),
           )
         ],
       ),
@@ -699,7 +699,7 @@ class _AddProductState extends State<AddProduct> {
               color: cGreen
             ),
             child: TextButton.icon(
-              onPressed: (){},//getLocation,
+              onPressed: getLocation,
               icon: Icon(
                 Icons.location_pin,
                 color: cWhite,
@@ -762,28 +762,28 @@ class _AddProductState extends State<AddProduct> {
     );
   }
 
-  // getLocation() async {
+  getLocation() async {
 
-  //   Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
   
-  //   List<Placemark>? placemarks;
+    List<Placemark>? placemarks;
   
-  //   placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
+    placemarks = await placemarkFromCoordinates(position.latitude, position.longitude);
 
-  //   Placemark placemark = placemarks[0];
+    Placemark placemark = placemarks[0];
 
-  //   String completeAddress =
-  //   '${placemark.subThoroughfare}${placemark.thoroughfare},'
-  //   '${placemark.subThoroughfare}${placemark.locality},'
-  //   '${placemark.subAdministrativeArea},'
-  //   '${placemark.administrativeArea},'
-  //   '${placemark.postalCode},'
-  //   '${placemark.country}';
+    String completeAddress =
+    '${placemark.subThoroughfare}${placemark.thoroughfare},'
+    '${placemark.subThoroughfare}${placemark.locality},'
+    '${placemark.subAdministrativeArea},'
+    '${placemark.administrativeArea},'
+    '${placemark.postalCode},'
+    '${placemark.country}';
 
-  //   print(completeAddress);
-  //   String formattedAddress = '${placemark.locality}, ${placemark.country}';
-  //   locationController.text = formattedAddress;
-  // }
+    print(completeAddress);
+    String formattedAddress = '${placemark.locality}, ${placemark.country}';
+    locationController.text = formattedAddress;
+  }
 
 }
 
