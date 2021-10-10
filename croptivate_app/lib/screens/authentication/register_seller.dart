@@ -52,6 +52,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
 
   String error = '';
 
+  String imageUrl = '';
 
   @override
   Widget build(BuildContext context) {
