@@ -5,6 +5,7 @@ import 'package:croptivate_app/screens/authentication/register_seller.dart';
 import 'package:croptivate_app/screens/authentication/register_transporter.dart';
 import 'package:croptivate_app/screens/buyers/basket.dart';
 import 'package:croptivate_app/screens/home/forgot_password.dart';
+import 'package:croptivate_app/screens/splashscreen.dart';
 import 'package:croptivate_app/screens/wrapper.dart';
 import 'package:croptivate_app/services/auth.dart';
 import 'package:firebase_core/firebase_core.dart';
