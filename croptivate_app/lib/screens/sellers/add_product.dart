@@ -1,21 +1,16 @@
-import 'dart:io';
-import 'package:croptivate_app/pallete.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:image/image.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart';
-import 'package:image/image.dart' as Im;
-import 'package:uuid/uuid.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:croptivate_app/services/database.dart';
 
+
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:croptivate_app/pallete.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:uuid/uuid.dart';
 
 class AddProduct extends StatefulWidget {
   const AddProduct({ Key? key }) : super(key: key);
@@ -37,9 +32,27 @@ class _AddProductState extends State<AddProduct> {
   final storageRef = FirebaseStorage.instance.ref();
   final postRef = FirebaseFirestore.instance.collection('sellerPosts');
 
-  File? imageOne;
-  File? imageTwo;
-  File? imageThree;
+  final picUrl = '';
+  final ImagePicker _picker = ImagePicker();
+  dynamic _pickImageError;
+  
+  File ? imageOne;
+  set _imageOneFile(XFile? value) {
+    imageOne = (value == null ? null : [value]) as File?;
+  }
+
+  File ? imageTwo;
+  set _imageTwoFile(XFile? value) {
+    imageTwo = (value == null ? null : [value]) as File?;
+  }
+  File ? imageThree;
+set _imageThreeFile(XFile? value) {
+    imageThree = (value == null ? null : [value]) as File?;
+  }
+
+  File ? fileOne;
+  File ? fileTwo;
+  File ? fileThree;
   String postId = Uuid().v4();
 
   bool isUploading = false;
@@ -112,38 +125,63 @@ class _AddProductState extends State<AddProduct> {
 
   Future chooseImageOne(ImageSource source) async {
     try {
-      final imageOne = await ImagePicker().pickImage(source: source);
-    if (imageOne == null) return;
-
-    final imageTemporary = File(imageOne.path);
-    setState(() => this.imageOne = imageTemporary);
-    } on PlatformException catch(error) {
-      print("Failed to pick image: $error");
+      final pickedImageOne = await _picker.pickImage(source: source);
+    
+    setState(() {
+      imageOne = pickedImageOne as File?;
+    });
+    } catch (e) {
+      setState(() {
+        _pickImageError = e;
+      });
     }
+    
+    
+    // try {
+    //   final imageOne = await ImagePicker().pickImage(source: source);
+    // if (imageOne == null) return;
+
+    // final imageTemporary = File(imageOne.path);
+    // setState(() => this.imageOne = imageTemporary);
+    // } on PlatformException catch(error) {
+    //   print("Failed to pick image: $error");
+    // }
   }
 
   Future chooseImageTwo(ImageSource source) async {
-    try {
-      final imageTwo = await ImagePicker().pickImage(source: source);
-    if (imageTwo == null) return;
+    final imageTwo = await ImagePicker().pickImage(source: source);
+    final _imageTwo = File(imageTwo!.path);
+    setState(() {
+      this.fileTwo = _imageTwo;
+    });
+    
+    // try {
+    //   final imageTwo = await ImagePicker().pickImage(source: source);
+    // if (imageTwo == null) return;
 
-    final imageTemporary = File(imageTwo.path);
-    setState(() => this.imageTwo = imageTemporary);
-    } on PlatformException catch(error) {
-      print("Failed to pick image: $error");
-    }
+    // final imageTemporary = File(imageTwo.path);
+    // setState(() => this.imageTwo = imageTemporary);
+    // } on PlatformException catch(error) {
+    //   print("Failed to pick image: $error");
+    // }
   }
 
   Future chooseImageThree(ImageSource source) async {
-    try {
-      final imageThree = await ImagePicker().pickImage(source: source);
-    if (imageThree == null) return;
+    final imageThree = await ImagePicker().pickImage(source: source);
+    final _imageThree = File(imageThree!.path);
+    setState(() {
+      this.fileThree = _imageThree;
+    });
+    
+    // try {
+    //   final imageThree = await ImagePicker().pickImage(source: source);
+    // if (imageThree == null) return;
 
-    final imageTemporary = File(imageThree.path);
-    setState(() => this.imageThree = imageTemporary);
-    } on PlatformException catch(error) {
-      print("Failed to pick image: $error");
-    }
+    // final imageTemporary = File(imageThree.path);
+    // setState(() => this.imageThree = imageTemporary);
+    // } on PlatformException catch(error) {
+    //   print("Failed to pick image: $error");
+    // }
   }
 
   selectImageOne(parentContext) {
@@ -352,15 +390,17 @@ class _AddProductState extends State<AddProduct> {
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         //first add image button
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(15, 20, 0, 0),
+                        Material(
+                          child: InkWell(
+                            onTap: () {
+                              selectImageOne(context);
+                            },
                           child: Container(
                             height: 90,
                             width: 90,
                             decoration: BoxDecoration(
                               image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: FileImage(imageOne!),
+                                image: imageOne != null ? null : Image.file(imageOne),
                               ),
                               color: Colors.transparent, 
                               borderRadius: BorderRadius.circular(12), 
@@ -368,38 +408,36 @@ class _AddProductState extends State<AddProduct> {
                                 width: 1, 
                                 color: cGrey),
                               ),
-                            child: TextButton(
-                              onPressed: () => selectImageOne(context),
-                              child: Icon(Icons.add_circle_outline, size: 15, color: cGrey),
-                              
-                            ),
-                          ),
+                            child: Icon(Icons.add_circle_outline, size: 15, color: cGrey)
+                            )
+                          )
                         ),
+
+
+
+                        // 
                         
                         // second add image button
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(15, 20, 0, 0),
-                          child: Container(
-                            height: 90,
-                            width: 90,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: FileImage(imageTwo!),
-                              ),
-                              color: Colors.transparent, 
-                              borderRadius: BorderRadius.circular(12), 
-                              border: Border.all(
-                                width: 1, 
-                                color: cGrey),
-                              ),
-                            child: TextButton(
-                              onPressed: () => selectImageTwo(context),
-                              child: Icon(Icons.add_circle_outline, size: 15, color: cGrey),
+                        // Padding(
+                        //   padding: EdgeInsetsDirectional.fromSTEB(15, 20, 0, 0),
+                        //   child: Container(
+                        //     height: 90,
+                        //     width: 90,
+                        //     decoration: BoxDecoration(
+                            
+                        //       color: Colors.transparent, 
+                        //       borderRadius: BorderRadius.circular(12), 
+                        //       border: Border.all(
+                        //         width: 1, 
+                        //         color: cGrey),
+                        //       ),
+                        //     child: TextButton(
+                        //       onPressed: () => selectImageTwo(context),
+                        //       child: Icon(Icons.add_circle_outline, size: 15, color: cGrey),
                               
-                            ),
-                          ),
-                        ),
+                        //     ),
+                        //   ),
+                        // ),
                         
                         //third add image button
                         Padding(
@@ -408,10 +446,6 @@ class _AddProductState extends State<AddProduct> {
                             height: 90,
                             width: 90,
                             decoration: BoxDecoration(
-                              image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: FileImage(imageThree!),
-                              ),
                               color: Colors.transparent, 
                               borderRadius: BorderRadius.circular(12), 
                               border: Border.all(
