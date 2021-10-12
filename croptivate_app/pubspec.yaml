@@ -37,10 +37,10 @@ dependencies:
   image_picker: ^0.8.3+1
   path_provider: ^2.0.5
   path: ^1.8.0
-  image: 
   uuid: ^3.0.5
   geolocator:
   geocoding:
+  image_cropper:
 
   
 dev_dependencies:
