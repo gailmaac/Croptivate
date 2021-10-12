@@ -8,6 +8,7 @@ import 'package:croptivate_app/widgets/imagewidget.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
@@ -125,75 +126,75 @@ set _imageThreeFile(XFile? value) {
 
 
   Future chooseImageOne(ImageSource source) async {
-    try {
-      final pickedImageOne = await _picker.pickImage(source: source);
-    
-    setState(() {
-      imageOne = pickedImageOne as File?;
-    });
-    } catch (e) {
-      setState(() {
-        _pickImageError = e;
-      });
-    }
-    
-    
     // try {
-    //   final imageOne = await ImagePicker().pickImage(source: source);
-    // if (imageOne == null) return;
-
-    // final imageTemporary = File(imageOne.path);
-    // setState(() => this.imageOne = imageTemporary);
-    // } on PlatformException catch(error) {
-    //   print("Failed to pick image: $error");
+    //   final pickedImageOne = await _picker.pickImage(source: source);
+    
+    // setState(() {
+    //   imageOne = pickedImageOne as File?;
+    // });
+    // } catch (e) {
+    //   setState(() {
+    //     _pickImageError = e;
+    //   });
     // }
+    
+    
+    try {
+      final imageOne = await ImagePicker().pickImage(source: source);
+    if (imageOne == null) return;
+
+    final imageTemporary = File(imageOne.path);
+    setState(() => this.imageOne = imageTemporary);
+    } on PlatformException catch(error) {
+      print("Failed to pick image: $error");
+    }
   }
 
   Future chooseImageTwo(ImageSource source) async {
-    try {
-      final pickedImageTwo = await _picker.pickImage(source: source);
-    
-    setState(() {
-      imageTwo = pickedImageTwo as File?;
-    });
-    } catch (e) {
-      setState(() {
-        _pickImageError = e;
-      });
-    }
-    
     // try {
-    //   final imageTwo = await ImagePicker().pickImage(source: source);
-    // if (imageTwo == null) return;
-
-    // final imageTemporary = File(imageTwo.path);
-    // setState(() => this.imageTwo = imageTemporary);
-    // } on PlatformException catch(error) {
-    //   print("Failed to pick image: $error");
+    //   final pickedImageTwo = await _picker.pickImage(source: source);
+    
+    // setState(() {
+    //   imageTwo = pickedImageTwo as File?;
+    // });
+    // } catch (e) {
+    //   setState(() {
+    //     _pickImageError = e;
+    //   });
     // }
+    
+    try {
+      final imageTwo = await ImagePicker().pickImage(source: source);
+    if (imageTwo == null) return;
+
+    final imageTemporary = File(imageTwo.path);
+    setState(() => this.imageTwo = imageTemporary);
+    } on PlatformException catch(error) {
+      print("Failed to pick image: $error");
+    }
   }
 
   Future chooseImageThree(ImageSource source) async {
-   try {
-      final pickedImageThree = await _picker.pickImage(source: source);
+  //  try {
+  //     final pickedImageThree = await _picker.pickImage(source: source);
     
-    setState(() {
-      imageThree = pickedImageThree as File?;
-    });
-    } catch (e) {
-      setState(() {
-        _pickImageError = e;
-      });
-    }
-    // try {
-    //   final imageThree = await ImagePicker().pickImage(source: source);
-    // if (imageThree == null) return;
+  //   setState(() {
+  //     imageThree = pickedImageThree as File?;
+  //   });
+  //   } catch (e) {
+  //     setState(() {
+  //       _pickImageError = e;
+  //     });
+  //   }
+    try {
+      final imageThree = await ImagePicker().pickImage(source: source);
+    if (imageThree == null) return;
 
-    // final imageTemporary = File(imageThree.path);
-    // setState(() => this.imageThree = imageTemporary);
-    // } on PlatformException catch(error) {
-    //   print("Failed to pick image: $error");
-    // }
+    final imageTemporary = File(imageThree.path);
+    setState(() => this.imageThree = imageTemporary);
+    } on PlatformException catch(error) {
+      print("Failed to pick image: $error");
+    }
   }
 
   selectImageOne(parentContext) {
