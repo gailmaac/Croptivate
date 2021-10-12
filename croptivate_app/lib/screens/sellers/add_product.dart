@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:croptivate_app/pallete.dart';
+import 'package:croptivate_app/widgets/imagewidget.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -149,11 +150,17 @@ set _imageThreeFile(XFile? value) {
   }
 
   Future chooseImageTwo(ImageSource source) async {
-    final imageTwo = await ImagePicker().pickImage(source: source);
-    final _imageTwo = File(imageTwo!.path);
+    try {
+      final pickedImageTwo = await _picker.pickImage(source: source);
+    
     setState(() {
-      this.fileTwo = _imageTwo;
+      imageTwo = pickedImageTwo as File?;
     });
+    } catch (e) {
+      setState(() {
+        _pickImageError = e;
+      });
+    }
     
     // try {
     //   final imageTwo = await ImagePicker().pickImage(source: source);
@@ -167,12 +174,17 @@ set _imageThreeFile(XFile? value) {
   }
 
   Future chooseImageThree(ImageSource source) async {
-    final imageThree = await ImagePicker().pickImage(source: source);
-    final _imageThree = File(imageThree!.path);
-    setState(() {
-      this.fileThree = _imageThree;
-    });
+   try {
+      final pickedImageThree = await _picker.pickImage(source: source);
     
+    setState(() {
+      imageThree = pickedImageThree as File?;
+    });
+    } catch (e) {
+      setState(() {
+        _pickImageError = e;
+      });
+    }
     // try {
     //   final imageThree = await ImagePicker().pickImage(source: source);
     // if (imageThree == null) return;
@@ -385,67 +397,72 @@ set _imageThreeFile(XFile? value) {
                 Align(
                   alignment: AlignmentDirectional(-0.05, 0),
                   child: Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(30, 0, 30, 0),
+                    padding: EdgeInsetsDirectional.fromSTEB(42, 15, 30, 0),
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         //first add image button
-                        Material(
-                          child: InkWell(
-                            onTap: () {
-                              selectImageOne(context);
-                            },
-                          child: Container(
+                        imageOne != null 
+                        ? ImageWidget(image: imageOne!, 
+                        onClicked: (source) => selectImageOne(context)) 
+                        : Container(
                             height: 90,
                             width: 90,
                             decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: imageOne != null ? null : Image.file(imageOne),
-                              ),
+                              // image: DecorationImage(
+                              //   image: FileImage(imageOne!),
+                              // ),
                               color: Colors.transparent, 
                               borderRadius: BorderRadius.circular(12), 
                               border: Border.all(
                                 width: 1, 
                                 color: cGrey),
                               ),
-                            child: Icon(Icons.add_circle_outline, size: 15, color: cGrey)
-                            )
-                          )
-                        ),
-
-
-
-                        // 
+                            child: TextButton(
+                              onPressed: () => selectImageOne(context),
+                              child: Icon(Icons.add_circle_outline, size: 15, color: cGrey),
+                              
+                            ),
+                          ), 
+                          SizedBox(width: 20),
                         
                         // second add image button
-                        // Padding(
-                        //   padding: EdgeInsetsDirectional.fromSTEB(15, 20, 0, 0),
-                        //   child: Container(
-                        //     height: 90,
-                        //     width: 90,
-                        //     decoration: BoxDecoration(
-                            
-                        //       color: Colors.transparent, 
-                        //       borderRadius: BorderRadius.circular(12), 
-                        //       border: Border.all(
-                        //         width: 1, 
-                        //         color: cGrey),
-                        //       ),
-                        //     child: TextButton(
-                        //       onPressed: () => selectImageTwo(context),
-                        //       child: Icon(Icons.add_circle_outline, size: 15, color: cGrey),
-                              
-                        //     ),
-                        //   ),
-                        // ),
-                        
-                        //third add image button
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(15, 20, 0, 0),
-                          child: Container(
+                          imageTwo != null 
+                          ? ImageWidget(image: imageTwo!, 
+                          onClicked: (source) => selectImageTwo(context)) 
+                          : Container(
                             height: 90,
                             width: 90,
                             decoration: BoxDecoration(
+                              // image: DecorationImage(
+                              //   image: FileImage(imageTwo!),
+                              // ),
+                              color: Colors.transparent, 
+                              borderRadius: BorderRadius.circular(12), 
+                              border: Border.all(
+                                width: 1, 
+                                color: cGrey),
+                              ),
+                            child: TextButton(
+                              onPressed: () => selectImageTwo(context),
+                              child: Icon(Icons.add_circle_outline, size: 15, color: cGrey),
+                              
+                            ),
+                          ),
+                          SizedBox(width: 20),
+
+                        
+                        //third add image button
+                          imageThree != null 
+                          ? ImageWidget(image: imageThree!, 
+                          onClicked: (source) => selectImageThree(context)) 
+                          : Container(
+                            height: 90,
+                            width: 90,
+                            decoration: BoxDecoration(
+                              // image: DecorationImage(
+                              //   image: FileImage(imageThree!),
+                              // ),
                               color: Colors.transparent, 
                               borderRadius: BorderRadius.circular(12), 
                               border: Border.all(
@@ -455,10 +472,8 @@ set _imageThreeFile(XFile? value) {
                             child: TextButton(
                               onPressed: () => selectImageThree(context),
                               child: Icon(Icons.add_circle_outline, size: 15, color: cGrey),
-                              
                             ),
                           ),
-                        ),
                       ],
                     ),
                   ),
