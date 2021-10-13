@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:croptivate_app/pallete.dart';
 import 'package:croptivate_app/widgets/imagewidget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 
 class AddProduct extends StatefulWidget {
-  const AddProduct({ Key? key }) : super(key: key);
 
   @override
   _AddProductState createState() => _AddProductState();
@@ -52,23 +52,44 @@ set _imageThreeFile(XFile? value) {
     imageThree = (value == null ? null : [value]) as File?;
   }
 
-  File ? fileOne;
-  File ? fileTwo;
-  File ? fileThree;
+  
+  String postIdOne = Uuid().v4();
+  String postIdTwo = Uuid().v4();
+  String postIdThree = Uuid().v4();
   String postId = Uuid().v4();
 
   bool isUploading = false;
 
   String? get uid => null;
 
-  uploadImage(imageFile) async {
-    UploadTask uploadTask = storageRef.child("post_$postId.jpg").putFile(imageFile);
-    TaskSnapshot storageSnap = await uploadTask;
-    String downloadUrl = await storageSnap.ref.getDownloadURL();
-    return downloadUrl;
+
+  uploadImageOne(imageOne) async {
+    UploadTask uploadTaskOne = storageRef.child("sellerposts/post_$postIdOne.jpg").putFile(imageOne);
+    TaskSnapshot storageSnapOne = await uploadTaskOne;
+    String downloadUrlOne = await storageSnapOne.ref.getDownloadURL();
+    return downloadUrlOne;
   }
 
-  createPostInFirestore({String? mediaUrlOne, String? mediaUrlTwo, String? mediaUrlThree, String? prodname, String? proddesc, String? stock, String? retail, String? count, String? wholesale, String? location, Map<String, dynamic>? sellerInfo}) {
+  uploadImageTwo(imageTwo) async {
+    UploadTask uploadTaskTwo = storageRef.child("sellerposts/post_$postIdTwo.jpg").putFile(imageTwo);
+    TaskSnapshot storageSnapTwo = await uploadTaskTwo;
+    String downloadUrlTwo = await storageSnapTwo.ref.getDownloadURL();
+    return downloadUrlTwo;
+  }
+
+  uploadImageThree(imageThree) async {
+    UploadTask uploadTaskThree = storageRef.child("sellerposts/post_$postIdThree.jpg").putFile(imageThree);
+    TaskSnapshot storageSnapThree = await uploadTaskThree;
+    String downloadUrlThree = await storageSnapThree.ref.getDownloadURL();
+    return downloadUrlThree;
+  }
+
+  createPostInFirestore({String? mediaUrlOne, 
+                    String? mediaUrlTwo, 
+                    String? mediaUrlThree, 
+                    String? prodname, 
+                    String? proddesc, 
+                    String? stock, String? retail, String? count, String? wholesale, String? location, Map<String, dynamic>? sellerInfo}) {
     postRef
     .doc(uid)
     .collection('sellerPosts')
@@ -94,9 +115,9 @@ set _imageThreeFile(XFile? value) {
     setState(() {
       isUploading = true;
     });
-    String mediaUrlOne = await uploadImage(imageOne);
-    String mediaUrlTwo = await uploadImage(imageTwo);
-    String mediaUrlThree = await uploadImage(imageThree);
+    String mediaUrlOne = await uploadImageOne(imageOne);
+    String mediaUrlTwo = await uploadImageTwo(imageTwo);
+    String mediaUrlThree = await uploadImageThree(imageThree);
     createPostInFirestore(
       mediaUrlOne: mediaUrlOne,
       mediaUrlTwo: mediaUrlTwo,
@@ -126,19 +147,7 @@ set _imageThreeFile(XFile? value) {
 
 
   Future chooseImageOne(ImageSource source) async {
-    // try {
-    //   final pickedImageOne = await _picker.pickImage(source: source);
-    
-    // setState(() {
-    //   imageOne = pickedImageOne as File?;
-    // });
-    // } catch (e) {
-    //   setState(() {
-    //     _pickImageError = e;
-    //   });
-    // }
-    
-    
+
     try {
       final imageOne = await ImagePicker().pickImage(source: source);
     if (imageOne == null) return;
@@ -151,17 +160,6 @@ set _imageThreeFile(XFile? value) {
   }
 
   Future chooseImageTwo(ImageSource source) async {
-    // try {
-    //   final pickedImageTwo = await _picker.pickImage(source: source);
-    
-    // setState(() {
-    //   imageTwo = pickedImageTwo as File?;
-    // });
-    // } catch (e) {
-    //   setState(() {
-    //     _pickImageError = e;
-    //   });
-    // }
     
     try {
       final imageTwo = await ImagePicker().pickImage(source: source);
@@ -175,17 +173,7 @@ set _imageThreeFile(XFile? value) {
   }
 
   Future chooseImageThree(ImageSource source) async {
-  //  try {
-  //     final pickedImageThree = await _picker.pickImage(source: source);
-    
-  //   setState(() {
-  //     imageThree = pickedImageThree as File?;
-  //   });
-  //   } catch (e) {
-  //     setState(() {
-  //       _pickImageError = e;
-  //     });
-  //   }
+  
     try {
       final imageThree = await ImagePicker().pickImage(source: source);
     if (imageThree == null) return;
@@ -576,7 +564,7 @@ set _imageThreeFile(XFile? value) {
                         fontSize: 14
                     ),
                     keyboardType: TextInputType.name,
-                    textInputAction: TextInputAction.next,
+                    textInputAction: TextInputAction.newline,
                   ),
                 ), 
               ],
