@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class HomeSeller extends StatefulWidget {
+  static String route = "homeseller";
+
   const HomeSeller({ Key? key }) : super(key: key);
 
   @override
