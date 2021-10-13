@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:croptivate_app/pallete.dart';
+import 'package:croptivate_app/screens/buyers/user_profile.dart';
 import 'package:croptivate_app/widgets/imagewidget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -881,7 +882,7 @@ set _imageThreeFile(XFile? value) {
               ),
               IconButton(
                 onPressed: () {
-                  
+                  Navigator.pushNamed(context, UserProfile.route);
                 }, 
                 icon: Icon(Icons.person_outline_rounded, )
               ),
