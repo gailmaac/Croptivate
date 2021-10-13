@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:croptivate_app/pallete.dart';
+import 'package:croptivate_app/screens/sellers/home_seller.dart';
 import 'package:croptivate_app/services/auth.dart';
 import 'package:croptivate_app/services/database.dart';
 import 'package:croptivate_app/shared/loading.dart';
@@ -393,6 +394,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
                                 } );
                               }
                             }
+                            Navigator.pushNamed(context, HomeSeller.route);
                           },
                           child: Text(
                             "Sign Up",
