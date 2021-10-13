@@ -4,7 +4,10 @@ import 'package:croptivate_app/screens/authentication/register_buyer.dart';
 import 'package:croptivate_app/screens/authentication/register_seller.dart';
 import 'package:croptivate_app/screens/authentication/register_transporter.dart';
 import 'package:croptivate_app/screens/buyers/basket.dart';
+import 'package:croptivate_app/screens/buyers/user_profile.dart';
 import 'package:croptivate_app/screens/home/forgot_password.dart';
+import 'package:croptivate_app/screens/home/home_buyer.dart';
+import 'package:croptivate_app/screens/sellers/home_seller.dart';
 import 'package:croptivate_app/screens/splashscreen.dart';
 import 'package:croptivate_app/screens/wrapper.dart';
 import 'package:croptivate_app/services/auth.dart';
@@ -36,11 +39,11 @@ class MyApp extends StatelessWidget {
           'RegisterSeller' : (context) => RegisterSeller(),
           'RegisterBuyer' : (context) => RegisterBuyer(),
           'RegisterTransporter' : (context) => RegisterTransporter(),
-          
+          UserProfile.route: (context) => UserProfile(),
+          HomeSeller.route: (context) => HomeSeller(),
+          HomeBuyer.route: (context) => HomeBuyer(),
         },
       ),
     );
   }
 }
-
- 
