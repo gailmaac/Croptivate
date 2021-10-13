@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:croptivate_app/shared/loading.dart';
 
 class UserProfile extends StatefulWidget {
+  static String route = "userprofile";
+
   const UserProfile({ Key? key }) : super(key: key);
 
   @override
