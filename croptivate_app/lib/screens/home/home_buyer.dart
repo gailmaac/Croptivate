@@ -6,6 +6,8 @@ import 'package:flutter/services.dart';
 
 
 class HomeBuyer extends StatelessWidget {
+  static String route = "homebuyer";
+
   const HomeBuyer({ Key? key }) : super(key: key);
 
   @override
