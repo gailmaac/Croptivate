@@ -1,4 +1,5 @@
 import 'package:croptivate_app/pallete.dart';
+import 'package:croptivate_app/screens/home/home_buyer.dart';
 import 'package:croptivate_app/services/auth.dart';
 import 'package:croptivate_app/shared/loading.dart';
 import 'package:croptivate_app/widgets/backgroundimage.dart';
@@ -271,6 +272,7 @@ class _RegisterBuyerState extends State<RegisterBuyer> {
                               });
                             }
                           }
+                          Navigator.pushNamed(context, HomeBuyer.route);
                         },
                         child: Text(
                           "Sign Up",
