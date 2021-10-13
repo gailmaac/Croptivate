@@ -13,6 +13,7 @@ class DatabaseService {
   CollectionReference postRef = FirebaseFirestore.instance.collection('sellerPosts');
   
   
+  
 
   CollectionReference buyerCollection = FirebaseFirestore.instance.collection('userBuyer');
   CollectionReference transporterCollection = FirebaseFirestore.instance.collection('userTransporter');
