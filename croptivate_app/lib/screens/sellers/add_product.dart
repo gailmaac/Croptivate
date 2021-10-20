@@ -1,10 +1,8 @@
-
-
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:croptivate_app/pallete.dart';
 import 'package:croptivate_app/screens/buyers/user_profile.dart';
+import 'package:croptivate_app/screens/sellers/home_seller.dart';
 import 'package:croptivate_app/widgets/imagewidget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -34,6 +32,7 @@ class _AddProductState extends State<AddProduct> {
 
   final storageRef = FirebaseStorage.instance.ref();
   final postRef = FirebaseFirestore.instance.collection('sellerPosts');
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   final picUrl = '';
   final ImagePicker _picker = ImagePicker();
@@ -65,21 +64,21 @@ set _imageThreeFile(XFile? value) {
 
 
   uploadImageOne(imageOne) async {
-    UploadTask uploadTaskOne = storageRef.child("sellerposts/post_$postIdOne.jpg").putFile(imageOne);
+    UploadTask uploadTaskOne = storageRef.child("sellerposts_$postId/post_$postIdOne.jpg").putFile(imageOne);
     TaskSnapshot storageSnapOne = await uploadTaskOne;
     String downloadUrlOne = await storageSnapOne.ref.getDownloadURL();
     return downloadUrlOne;
   }
 
   uploadImageTwo(imageTwo) async {
-    UploadTask uploadTaskTwo = storageRef.child("sellerposts/post_$postIdTwo.jpg").putFile(imageTwo);
+    UploadTask uploadTaskTwo = storageRef.child("sellerposts_$postId/post_$postIdTwo.jpg").putFile(imageTwo);
     TaskSnapshot storageSnapTwo = await uploadTaskTwo;
     String downloadUrlTwo = await storageSnapTwo.ref.getDownloadURL();
     return downloadUrlTwo;
   }
 
   uploadImageThree(imageThree) async {
-    UploadTask uploadTaskThree = storageRef.child("sellerposts/post_$postIdThree.jpg").putFile(imageThree);
+    UploadTask uploadTaskThree = storageRef.child("sellerposts_$postId/post_$postIdThree.jpg").putFile(imageThree);
     TaskSnapshot storageSnapThree = await uploadTaskThree;
     String downloadUrlThree = await storageSnapThree.ref.getDownloadURL();
     return downloadUrlThree;
@@ -90,14 +89,14 @@ set _imageThreeFile(XFile? value) {
                     String? mediaUrlThree, 
                     String? prodname, 
                     String? proddesc, 
-                    String? stock, String? retail, String? count, String? wholesale, String? location, Map<String, dynamic>? sellerInfo}) {
+                    String? stock, String? retail, String? count, String? wholesale, String? location}) {
     postRef
-    .doc(uid)
+    .doc(_auth.currentUser!.uid)
     .collection('sellerPosts')
     .doc(postId)
     .set({
       "postId": postId,
-      "ownerId": uid,
+      "ownerId": _auth.currentUser!.uid,
       // "name": uid.sellerInfo.fname
       "mediaUrlOne": mediaUrlOne,
       "mediaUrlTwo": mediaUrlTwo,
@@ -108,7 +107,8 @@ set _imageThreeFile(XFile? value) {
       "retail": retail,
       "count": count,
       "wholesale": wholesale,
-      "location": location
+      "location": location,
+      "time": DateTime.now()
     });
   }
 
@@ -119,6 +119,7 @@ set _imageThreeFile(XFile? value) {
     String mediaUrlOne = await uploadImageOne(imageOne);
     String mediaUrlTwo = await uploadImageTwo(imageTwo);
     String mediaUrlThree = await uploadImageThree(imageThree);
+
     createPostInFirestore(
       mediaUrlOne: mediaUrlOne,
       mediaUrlTwo: mediaUrlTwo,
@@ -139,10 +140,7 @@ set _imageThreeFile(XFile? value) {
     wholesaleController.clear();
     locationController.clear();
     setState(() {
-      imageOne = null;
-      imageTwo = null;
-      imageThree = null;
-      isUploading = false;
+      Navigator.push(context, MaterialPageRoute(builder: (context) => HomeSeller()));
     });
   }
 
@@ -365,7 +363,7 @@ set _imageThreeFile(XFile? value) {
       child: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
-          isUploading ? LinearProgressIndicator() : Text(""),
+          isUploading ? LinearProgressIndicator(valueColor: AlwaysStoppedAnimation(cGreen)) : Text(""),
           SizedBox(height: 5),
           Container(
             width: double.infinity,
