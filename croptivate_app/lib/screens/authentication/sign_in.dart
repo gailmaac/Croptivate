@@ -198,35 +198,35 @@ class _SignInState extends State<SignIn> {
                 ),
               ),
                 SizedBox(height: 5),
-              Container(
-                child: TextButton(
-                  onPressed: () async {
-                    setState(() {
-                      loading = true;
-                    });
-                  dynamic result = await _auth.signInAnon();
-                  if(result == null){
-                    print("There is an error signing in.");
-                    print(result);
-                  } else {
-                      print("You have signed in.");
-                      print(result.uid);
-                    }  
-                  },
+              // Container(
+              //   child: TextButton(
+              //     onPressed: () async {
+              //       setState(() {
+              //         loading = true;
+              //       });
+              //     dynamic result = await _auth.signInAnon();
+              //     if(result == null){
+              //       print("There is an error signing in.");
+              //       print(result);
+              //     } else {
+              //         print("You have signed in.");
+              //         print(result.uid);
+              //       }  
+              //     },
 
-                  child: Text(
-                    "Continue as Guest.",
-                    style: smallBodyText,
-                  ),
-                ),
-                decoration: BoxDecoration(
-                  border: Border(bottom: BorderSide(
-                    width: 0.5, 
-                    color: cWhite)
-                  )
-                )
-              ),
-              SizedBox(height: 20)
+              //     child: Text(
+              //       "Continue as Guest.",
+              //       style: smallBodyText,
+              //     ),
+              //   ),
+              //   decoration: BoxDecoration(
+              //     border: Border(bottom: BorderSide(
+              //       width: 0.5, 
+              //       color: cWhite)
+              //     )
+              //   )
+              // ),
+              SizedBox(height: 50)
             ],
           ),
         )
