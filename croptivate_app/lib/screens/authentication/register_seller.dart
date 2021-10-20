@@ -255,7 +255,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
                             child: TextFormField(
                               controller: loc,
                               validator: (val) => val!.isEmpty ? 'Please enter your address' : null, 
-                               onChanged: (val) {
+                              onChanged: (val) {
                                   setState(() => _loc = val);
                                 },
                               decoration: InputDecoration(
@@ -286,7 +286,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
                             child: TextFormField(
                               controller: shopname,
                               validator: (val) => val!.isEmpty ? 'Input your shop name' : null, 
-                               onChanged: (val) {
+                              onChanged: (val) {
                                   setState(() => _shopname = val);
                                 },
                               decoration: InputDecoration(
