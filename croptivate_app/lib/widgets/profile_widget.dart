@@ -11,7 +11,7 @@ class ProfileWidget extends StatelessWidget {
       Key? key,
       required this.imagePath,
       required this.onClicked,
-    }) : super(key: key);
+    });
 
     @override
     Widget build(BuildContext context) {
