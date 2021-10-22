@@ -108,7 +108,8 @@ set _imageThreeFile(XFile? value) {
       "count": count,
       "wholesale": wholesale,
       "location": location,
-      "time": DateTime.now()
+      "time": DateTime.now(),
+      "status": 'active',
     });
   }
 
