@@ -11,9 +11,6 @@ class DatabaseService {
   //collection reference
   CollectionReference sellerCollection = FirebaseFirestore.instance.collection('userSeller');
   // CollectionReference sellerPostsCollection = FirebaseFirestore.instance.collection('sellerPosts');
-  
-  
-  
 
   CollectionReference buyerCollection = FirebaseFirestore.instance.collection('userBuyer');
   CollectionReference transporterCollection = FirebaseFirestore.instance.collection('userTransporter');
@@ -21,6 +18,14 @@ class DatabaseService {
 // UserSeller
   Future<void> addUserSeller(Map<String, dynamic> sellerInfo) async {
     return await sellerCollection.doc(uid).set(sellerInfo);
+  }
+
+  Future getUserInfo() async {
+    try{
+
+    } catch (e) {
+      
+    }
   }
   //   Future<void> addUserPosts(Map<String, dynamic> sellerPostsInfo) async {
   //   return await sellerPostsCollection.doc(uid).set(sellerPostsInfo);
