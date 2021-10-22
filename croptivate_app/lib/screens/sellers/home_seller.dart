@@ -15,11 +15,10 @@ class HomeSeller extends StatefulWidget {
 }
 
 List<Tab> tabs = [
-  Tab(child: Text("Overview")),
-  Tab(child: Text("To-Do List")),
-  Tab(child: Text("Cost Analysis")),
-  Tab(child: Text("Revenue and Sales")),
-  Tab(child: Text("Business Insights")),
+  Tab(child: Text("To Ship")),
+  Tab(child: Text("Shipping")),
+  Tab(child: Text("Completed")),
+  Tab(child: Text("Refunded")),
 ];
 
 class _HomeSellerState extends State<HomeSeller> {
@@ -34,7 +33,7 @@ class _HomeSellerState extends State<HomeSeller> {
           backgroundColor: cWhite,
           elevation: 1,
           systemOverlayStyle: SystemUiOverlayStyle.dark,
-          title: Text("Dashboard",
+          title: Text("Orders",
           style: TextStyle(
             fontFamily: 'Poppins',
             fontSize: 24,
@@ -72,10 +71,7 @@ class _HomeSellerState extends State<HomeSeller> {
                   height: double.infinity,
                   color: cBlack,
                 ),
-                Container(
-                  height: double.infinity,
-                  color: Colors.yellowAccent,
-                ),
+
               ]
             ),
         bottomNavigationBar: Container(
