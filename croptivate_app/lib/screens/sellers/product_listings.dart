@@ -12,12 +12,36 @@ class ProductPage extends StatefulWidget {
 }
 
 class _ProductPageState extends State<ProductPage> {
-  FirebaseAuth _auth = FirebaseAuth.instance;
+  // FirebaseAuth _auth = FirebaseAuth.instance;
 
-  late QuerySnapshot products;
+  // late QuerySnapshot products;
 
-
+  // getData() {
+  //   var userId = FirebaseAuth.instance.currentUser!.uid;
+  //   FirebaseFirestore.instance.collection('userSeller').doc(userId).get().then((results){
+  //     setState(() {
+  //       getName = results.data()!["fname"];
+  //     });
+  //   });
+  // }
   
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   userId = FirebaseAuth.instance.currentUser!.uid;
+  //   userEmail = FirebaseAuth.instance.currentUser!.uid;
+
+  //   FirebaseFirestore.instance.collection('sellerPosts').where('status', isEqualTo: "active")
+  //   .orderBy("time", descending: true).get().then((results){
+
+  //     setState(() {
+  //       products = results;
+  //     });
+  //   });
+
+  //   getData();
+  // }
+
   @override
   Widget build(BuildContext context) {
   return Scaffold(
