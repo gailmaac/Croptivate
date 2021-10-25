@@ -1,17 +1,21 @@
 import 'package:croptivate_app/pallete.dart';
-import 'package:croptivate_app/screens/buyers/user_profile.dart';
 import 'package:croptivate_app/screens/sellers/add_product.dart';
 import 'package:croptivate_app/widgets/navigationdrawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class HomeSeller extends StatefulWidget {
-  static String route = "homeseller";
 
   const HomeSeller({ Key? key }) : super(key: key);
 
   @override
   _HomeSellerState createState() => _HomeSellerState();
+  static const String routeName = '/homeseller';
+  static Route route() {
+  return MaterialPageRoute(
+    settings: RouteSettings(name: routeName),
+    builder: (_) => HomeSeller());
+  }
 }
 
 List<Tab> tabs = [
@@ -36,9 +40,8 @@ class _HomeSellerState extends State<HomeSeller> {
           title: Text("Orders",
           style: TextStyle(
             fontFamily: 'Poppins',
-            fontSize: 24,
             color: cGreen,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.bold,
           ),
         ),
         centerTitle: true,
@@ -109,7 +112,7 @@ class _HomeSellerState extends State<HomeSeller> {
               ),
               IconButton(
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => UserProfile()));
+                  // Navigator.push(context, MaterialPageRoute(builder: (context) => UserProfile()));
                 }, 
                 icon: Icon(Icons.person_outline_rounded, )
               ),
