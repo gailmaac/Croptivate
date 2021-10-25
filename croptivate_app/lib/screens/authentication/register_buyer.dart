@@ -1,5 +1,4 @@
 import 'package:croptivate_app/pallete.dart';
-import 'package:croptivate_app/screens/home/home_buyer.dart';
 import 'package:croptivate_app/services/auth.dart';
 import 'package:croptivate_app/shared/loading.dart';
 import 'package:croptivate_app/widgets/backgroundimage.dart';
@@ -13,6 +12,13 @@ class RegisterBuyer extends StatefulWidget {
 
   @override
   _RegisterBuyerState createState() => _RegisterBuyerState();
+
+  static const String routeName = '/regbuyer';
+  static Route route() {
+  return MaterialPageRoute(
+    settings: RouteSettings(name: routeName),
+    builder: (_) => RegisterBuyer());
+  }
 }
 
 class _RegisterBuyerState extends State<RegisterBuyer> {
@@ -272,7 +278,7 @@ class _RegisterBuyerState extends State<RegisterBuyer> {
                               });
                             }
                           }
-                          Navigator.pushNamed(context, HomeBuyer.route);
+                          Navigator.pushNamed(context, '/homebuyer');
                         },
                         child: Text(
                           "Sign Up",
