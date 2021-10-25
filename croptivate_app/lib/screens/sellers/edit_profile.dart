@@ -19,9 +19,8 @@ class _EditProfileState extends State<EditProfile> {
         title: Text("Edit my Profile", 
         style: TextStyle(
             fontFamily: 'Poppins',
-            fontSize: 24,
             color: cGreen,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.bold,
           ),
         ),
         centerTitle: true,
