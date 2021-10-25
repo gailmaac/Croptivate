@@ -9,9 +9,19 @@ class SignIn extends StatefulWidget {
 
   @override
   _SignInState createState() => _SignInState();
+
+  static const String routeName = '/';
+  static Route route() {
+    return MaterialPageRoute(
+      settings: RouteSettings(name: routeName),
+      builder: (_) => SignIn());
+  }
 }
 
 class _SignInState extends State<SignIn> {
+
+  
+  
 
   final AuthService _auth = AuthService(); 
   final _formKey = GlobalKey<FormState>();
@@ -133,7 +143,7 @@ class _SignInState extends State<SignIn> {
                   ), 
                   
                     GestureDetector(
-                      onTap: () => Navigator.pushNamed(context, 'ForgotPassword'),
+                      onTap: () => Navigator.pushNamed(context, '/forgotpass'),
                       child: Text(
                         "Forgot Password?",
                         style: smallBodyText,
@@ -160,6 +170,7 @@ class _SignInState extends State<SignIn> {
                               loading = true;
                             });
                             dynamic result = await _auth.signIn(email, password);
+                            
                             if (result == null) {
                               setState(() {
                                 error = "Could not sign in with those credentials";
@@ -182,7 +193,9 @@ class _SignInState extends State<SignIn> {
                 ),
               ),
               GestureDetector(
-                onTap: () => Navigator.pushNamed(context, 'AccountCategories'),
+                onTap: () {
+                  Navigator.pushNamed(context, '/accountcategories');
+                },
                 child: Container(
                   height: size.height * 0.07,
                   width: size.width * 0.8,
