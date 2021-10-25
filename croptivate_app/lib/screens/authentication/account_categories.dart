@@ -2,12 +2,18 @@ import 'package:croptivate_app/pallete.dart';
 import 'package:croptivate_app/widgets/backgroundimage.dart';
 import 'package:croptivate_app/widgets/gesturedetector_catb.dart';
 import 'package:croptivate_app/widgets/gesturedetector_cats.dart';
-import 'package:croptivate_app/widgets/gesturedetector_catt.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AccountCategories extends StatelessWidget {
-  const AccountCategories({ Key? key }) : super(key: key);
+  static const String routeName = '/accountcategories';
+  
+  static Route route() {
+    return MaterialPageRoute(
+      settings: RouteSettings(name: routeName),
+      builder: (_) => AccountCategories());
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -45,12 +51,12 @@ class AccountCategories extends StatelessWidget {
                   ),
                 )
               ),
-              SizedBox(height: 80),
+              SizedBox(height: 160),
               GestureDetectorCats(accounttype: "I am a Seller"),
               SizedBox(height: 30),
               GestureDetectorCatb(accounttype: "I am a Buyer"),
-              SizedBox(height: 30),
-              GestureDetectorCatt(accounttype: "I am a Transporter"),
+              // SizedBox(height: 30),
+              // GestureDetectorCatt(accounttype: "I am a Transporter"),
             ],
           ),
         )
