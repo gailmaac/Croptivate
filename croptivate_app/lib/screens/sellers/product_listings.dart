@@ -9,6 +9,12 @@ class ProductPage extends StatefulWidget {
 
   @override
   _ProductPageState createState() => _ProductPageState();
+  static const String routeName = '/prodlistings';
+  static Route route() {
+  return MaterialPageRoute(
+    settings: RouteSettings(name: routeName),
+    builder: (_) => ProductPage());
+  }
 }
 
 class _ProductPageState extends State<ProductPage> {
