@@ -13,7 +13,7 @@ class GestureDetectorCats extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return GestureDetector(
-      onTap: () => Navigator.pushNamed(context, 'RegisterSeller'),
+      onTap: () => Navigator.pushNamed(context, '/regseller'),
       child: Container(
         height: size.height * 0.08,
         width: size.width * 0.8,
