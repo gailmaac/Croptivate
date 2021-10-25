@@ -89,17 +89,14 @@ Widget buildMenuItem({
 void selectedItem(BuildContext context, int index) {
   switch (index) {
     case 0:
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => NotificationsPage()));
+      Navigator.pushNamed(context, '/notifications');
       break;
     case 1:
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProductPage()));
+      Navigator.pushNamed(context, '/prodlistings');
       break;
     case 2:
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomeSeller()));
+      Navigator.pushNamed(context, '/homeseller');
       break;
-    case 3:
-      Navigator.of(context).push(MaterialPageRoute(builder: (context) => SettingsPage()));
-      break;  
     default: break;
   }
 }
