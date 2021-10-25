@@ -17,6 +17,12 @@ class RegisterSeller extends StatefulWidget {
 
   @override
   _RegisterSellerState createState() => _RegisterSellerState();
+  static const String routeName = '/regseller';
+  static Route route() {
+  return MaterialPageRoute(
+    settings: RouteSettings(name: routeName),
+    builder: (_) => RegisterSeller());
+  }
 }
 
 class _RegisterSellerState extends State<RegisterSeller> {
@@ -394,7 +400,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
                                 } );
                               }
                             }
-                            Navigator.pushNamed(context, HomeSeller.route);
+                            Navigator.pushNamed(context, '/homeseller');
                           },
                           child: Text(
                             "Sign Up",
