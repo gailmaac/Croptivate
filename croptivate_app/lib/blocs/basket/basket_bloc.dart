@@ -1,4 +1,4 @@
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:croptivate_app/models/basket_model.dart';
 import 'package:croptivate_app/models/product_model.dart';
 import 'package:equatable/equatable.dart';
@@ -8,7 +8,7 @@ part 'basket_event.dart';
 part 'basket_state.dart';
 
 class BasketBloc extends Bloc<BasketEvent, BasketState> {
-  BasketBloc() : super(BasketLoading()) {
+  BasketBloc() : super(BasketLoading()); 
 
     @override 
     Stream<BasketState> mapEventToState(
@@ -22,13 +22,17 @@ class BasketBloc extends Bloc<BasketEvent, BasketState> {
         yield* _mapBasketProductRemovedToState(event, state);
       }
     }
-  }
     Stream<BasketState> _mapBasketStartedToState() async* {
       yield BasketLoading();
       try {
-        await Future<void>.delayed(Duration(seconds: 0));
+        await Future<void>
+        .delayed(
+          Duration(
+            seconds: 1
+            )
+          );
         yield BasketLoaded();
-      } catch (_) {} 
+      } catch (_) {}
     }
 
   Stream<BasketState> _mapBasketProductAddedToState(
