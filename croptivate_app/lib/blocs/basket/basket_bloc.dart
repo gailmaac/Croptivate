@@ -26,7 +26,7 @@ class BasketBloc extends Bloc<BasketEvent, BasketState> {
     Stream<BasketState> _mapBasketStartedToState() async* {
       yield BasketLoading();
       try {
-        await Future<void>.delayed(Duration(seconds: 1));
+        await Future<void>.delayed(Duration(seconds: 0));
         yield BasketLoaded();
       } catch (_) {} 
     }
