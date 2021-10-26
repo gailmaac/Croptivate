@@ -1,5 +1,6 @@
 part of 'basket_bloc.dart';
 
+@immutable
 abstract class BasketState extends Equatable{
   const BasketState();
 
@@ -22,7 +23,6 @@ class BasketLoaded extends BasketState {
 }
 
 class BasketError extends BasketState {
-
   @override
   List<Object?> get props => [];
 }
