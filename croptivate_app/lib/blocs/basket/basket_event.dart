@@ -1,5 +1,6 @@
 part of 'basket_bloc.dart';
 
+@immutable
 abstract class BasketEvent extends Equatable{
   const BasketEvent();
 
@@ -16,6 +17,7 @@ class BasketProductAdded extends BasketEvent {
   final Product product;
 
   const BasketProductAdded(this.product);
+  
   @override 
   List<Object> get props => [product];
 }
