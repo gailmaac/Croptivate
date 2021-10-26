@@ -14,7 +14,7 @@ class Basket extends Equatable {
 
   double shippingFee(subtotal) {
     if(subtotal >= 500.0) {
-      return 0.0;
+      return 30.0;
     } else {
       return 100.0;
     }
