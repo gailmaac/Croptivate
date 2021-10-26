@@ -12,6 +12,7 @@ import 'package:croptivate_app/screens/buyers/home_buyer.dart';
 import 'package:croptivate_app/screens/buyers/product_screen.dart';
 import 'package:croptivate_app/screens/sellers/notifications.dart';
 import 'package:croptivate_app/screens/sellers/product_listings.dart';
+import 'package:croptivate_app/screens/splashscreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -24,6 +25,8 @@ class AppRouter {
         return SignIn.route();
       case HomeBuyer.routeName:
         return HomeBuyer.route();
+      case SplashScreen.routeName:
+        return SplashScreen.route();
       case RegisterBuyer.routeName:
         return RegisterBuyer.route();
       case RegisterSeller.routeName:
