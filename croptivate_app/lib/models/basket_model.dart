@@ -16,7 +16,7 @@ class Basket extends Equatable {
     if(subtotal >= 500.0) {
       return 30.0;
     } else {
-      return 100.0;
+      return 90.0;
     }
   }
 
