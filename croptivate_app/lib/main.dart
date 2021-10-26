@@ -3,6 +3,7 @@ import 'package:croptivate_app/blocs/favorites/favorites_bloc.dart';
 import 'package:croptivate_app/config/app_router.dart';
 import 'package:croptivate_app/models/user.dart';
 import 'package:croptivate_app/screens/authentication/sign_in.dart';
+import 'package:croptivate_app/screens/splashscreen.dart';
 import 'package:croptivate_app/screens/wrapper.dart';
 import 'package:croptivate_app/services/auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -33,7 +34,7 @@ class MyApp extends StatelessWidget {
           // home: Wrapper(),
 
           onGenerateRoute: AppRouter.onGenerateRoute,
-          initialRoute: SignIn.routeName,
+          initialRoute: SplashScreen.routeName,
 
           // routes: {
           //   'ForgotPassword' : (context) => ForgotPassword(),
