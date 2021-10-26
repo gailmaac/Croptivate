@@ -4,6 +4,7 @@ import 'package:croptivate_app/models/product_model.dart';
 import 'package:croptivate_app/pallete.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
@@ -87,34 +88,27 @@ class ProductCard extends StatelessWidget {
                     ),
                     BlocBuilder<BasketBloc, BasketState>(
                       builder: (context, state) {
-                        if (state is BasketLoading) {
-                          return Center(
-                            child: CircularProgressIndicator(
-                              color: cGreen
-                            )
-                          );
+                        if(state is BasketLoading) {
+                          return Center(child: Text("sshh"));
                         }
-
-                        if (state is BasketLoaded) {
+                        if(state is BasketLoaded) {
                           return Expanded(
                           child: IconButton(
-                            onPressed: () {
-                              context
-                              .read<BasketBloc>()
-                              .add(BasketProductAdded(product));
-                            },
-                            icon: Icon(
-                              Icons.add_circle_outline_rounded,
-                              color: cGreen
-                              )
-                            ),
-                          );
-                        }
-                        else {
-                          return (Text(
-                            "Sorry")
-                          );
-                        }
+                              onPressed: () {
+                                context
+                                    .read<BasketBloc>()
+                                    .add(BasketProductAdded(product));
+
+                                    final snackBar = SnackBar(
+                                          content: Text(
+                                              "Item was added to your Basket!"));
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(snackBar);
+                              },
+                              icon: Icon(Icons.add_circle_outline_rounded,
+                                  color: cGreen)),
+                        );
+                        } else{return Text("soreh");}
                       },
                     ),
                     isFavorite
@@ -124,11 +118,14 @@ class ProductCard extends StatelessWidget {
                                 child: IconButton(
                                     onPressed: () {
                                       context
-                                        .read<FavoritesBloc>().add(RemoveFavoritesProduct(product));
+                                          .read<FavoritesBloc>()
+                                          .add(RemoveFavoritesProduct(product));
 
-                                        final snackBar =
-                                          SnackBar(content: Text("Item was removed to your Favorites!"));
-                                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                      final snackBar = SnackBar(
+                                          content: Text(
+                                              "Item was removed to your Favorites!"));
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(snackBar);
                                     },
                                     icon: Icon(Icons.delete_outline_rounded,
                                         color: cGreen)),
