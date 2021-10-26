@@ -88,7 +88,7 @@ class ProductScreen extends StatelessWidget {
                             .add(AddFavoritesProduct(product));
 
                         final snackBar =
-                            SnackBar(content: Text("Added to you Favorites!"));
+                            SnackBar(content: Text("Added to your Favorites!"));
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       },
                       icon: Icon(
@@ -104,13 +104,10 @@ class ProductScreen extends StatelessWidget {
                         style: ElevatedButton.styleFrom(primary: cGreen),
                         onPressed: () {
                           context
-                          .read<BasketBloc>()
-                          .add(BasketProductAdded(product));
+                              .read<BasketBloc>()
+                              .add(BasketProductAdded(product));
 
-                          
-                          final snackBar =
-                            SnackBar(content: Text("Added to your Basket!"));
-                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                              Navigator.pushNamed(context, '/basket');
                         },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
@@ -141,7 +138,7 @@ class ProductScreen extends StatelessWidget {
             ],
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.all(8),
             child: Stack(
               children: [
                 Container(
