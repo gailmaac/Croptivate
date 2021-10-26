@@ -106,16 +106,16 @@ class _BasketScreenState extends State<BasketScreen> {
               Container(
                 height: double.infinity,
                 // child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    BlocBuilder<BasketBloc, BasketState>(
-                      builder: (context, state) {
-                        if (state is BasketLoading) {
-                          return Center(child: CircularProgressIndicator(color: cGreen,),);
-                        }
-                        if (state is BasketLoaded) {
-                          return Column(
+                child: BlocBuilder<BasketBloc, BasketState>(
+                  builder: (context, state) {
+                    if(state is BasketLoading) {
+                      return Center(child: CircularProgressIndicator(color: cGreen));
+                    }
+                    if(state is BasketLoaded) {
+                      return Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
                           children: [
                             Padding(
                               padding: const EdgeInsets.symmetric(
@@ -135,92 +135,95 @@ class _BasketScreenState extends State<BasketScreen> {
                               ),
                             ),
                           ],
-                        );
-                        } else {
-                          return Text("sory");
-                        }
-                        
-                      },
-                    ),
-                    Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Divider(
-                            thickness: 1,
-                          ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 30, vertical: 10),
-                          child: Column(
-                            children: [
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                        Column(
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 20),
+                              child: Divider(
+                                thickness: 1,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 30, vertical: 10),
+                              child: Column(
                                 children: [
-                                  Text("Subtotal",
-                                      style: TextStyle(
-                                          color: cBlack,
-                                          fontSize: 22,
-                                          fontFamily: 'Poppins',
-                                          fontWeight: FontWeight.bold)),
-                                  Text('\₱${Basket().subtotalString}',
-                                      style: TextStyle(
-                                          color: cBlack,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold)),
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text("Subtotal",
+                                          style: TextStyle(
+                                              color: cBlack,
+                                              fontSize: 22,
+                                              fontFamily: 'Poppins',
+                                              fontWeight: FontWeight.bold)),
+                                      Text('\₱${state.basket.subtotalString}',
+                                          style: TextStyle(
+                                              color: cBlack,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold)),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text("Shipping Fee",
+                                          style: TextStyle(
+                                              color: cBlack,
+                                              fontSize: 22,
+                                              fontFamily: 'Poppins',
+                                              fontWeight: FontWeight.bold)),
+                                      Text('\₱${state.basket.shippingFeeString}',
+                                          style: TextStyle(
+                                              color: cBlack,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold)),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 35,
+                                  ),
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text("Total",
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 28,
+                                              fontFamily: 'Poppins',
+                                              fontWeight: FontWeight.bold)),
+                                      Text('\₱${state.basket.totalString}',
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 28,
+                                              fontWeight: FontWeight.bold)),
+                                    ],
+                                  )
                                 ],
                               ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text("Shipping Fee",
-                                      style: TextStyle(
-                                          color: cBlack,
-                                          fontSize: 22,
-                                          fontFamily: 'Poppins',
-                                          fontWeight: FontWeight.bold)),
-                                  Text('\₱${Basket().shippingFeeString}',
-                                      style: TextStyle(
-                                          color: cBlack,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold)),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 35,
-                              ),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text("Total",
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 28,
-                                          fontFamily: 'Poppins',
-                                          fontWeight: FontWeight.bold)),
-                                  Text('\₱${Basket().totalString}',
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 28,
-                                          fontWeight: FontWeight.bold)),
-                                ],
-                              )
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ],
-                    ),
-                  ],
+                    );
+                    } else {
+                      return Text("sarreh");
+                    }
+                  },
                 ),
               ),
               Container(
