@@ -54,6 +54,7 @@ class _FavoritesState extends State<Favorites> {
       bottomNavigationBar: BottomNavBar(),
       body: BlocBuilder<FavoritesBloc, FavoritesState>(
         builder: (context, state) {
+          print("State: $state");
           if (state is FavoritesLoading) {
             return Center(
               child: CircularProgressIndicator(color: cGreen,),
