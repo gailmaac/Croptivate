@@ -127,9 +127,9 @@ class _BasketScreenState extends State<BasketScreen> {
                                           SizedBox(
                                             height: 400,
                                             child: ListView.builder(
-                                              itemCount: Basket().products.length,
+                                              itemCount: state.basket.products.length,
                                               itemBuilder: (context, index){
-                                                return BasketProdCard(product: Basket().products[index]);
+                                                return BasketProdCard(product: state.basket.products[index]);
                                               }
                                             )
                                           ),
