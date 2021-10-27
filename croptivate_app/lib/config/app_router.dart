@@ -10,6 +10,7 @@ import 'package:croptivate_app/screens/buyers/catalog.dart';
 import 'package:croptivate_app/screens/buyers/favorites.dart';
 import 'package:croptivate_app/screens/buyers/home_buyer.dart';
 import 'package:croptivate_app/screens/buyers/product_screen.dart';
+import 'package:croptivate_app/screens/sellers/home_seller.dart';
 import 'package:croptivate_app/screens/sellers/notifications.dart';
 import 'package:croptivate_app/screens/sellers/product_listings.dart';
 import 'package:croptivate_app/screens/splashscreen.dart';
@@ -25,6 +26,8 @@ class AppRouter {
         return SignIn.route();
       case HomeBuyer.routeName:
         return HomeBuyer.route();
+      case HomeSeller.routeName:
+        return HomeSeller.route();
       case SplashScreen.routeName:
         return SplashScreen.route();
       case RegisterBuyer.routeName:
