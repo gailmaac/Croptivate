@@ -125,11 +125,21 @@ class _BasketScreenState extends State<BasketScreen> {
                                   SizedBox(
                                       height: 400,
                                       child: ListView.builder(
-                                          itemCount: state.basket.products.length,
+                                          itemCount: state.basket
+                                          .productQuantity(state.basket.products)
+                                          .keys
+                                          .length,
                                           itemBuilder: (context, index) {
                                             return BasketProdCard(
-                                                product:
-                                                    state.basket.products[index]);
+                                                product: state.basket
+                                                .productQuantity(state.basket.products)
+                                                .keys
+                                                .elementAt(index),
+                                                quantity: state.basket
+                                                .productQuantity(state.basket.products)
+                                                .values
+                                                .elementAt(index),
+                                                    );
                                           })),
                                 ],
                               ),
