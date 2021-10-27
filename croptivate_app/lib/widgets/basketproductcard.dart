@@ -6,7 +6,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BasketProductCard extends StatelessWidget {
   final Product product;
-  const BasketProductCard({Key? key, required this.product}) : super(key: key);
+  final int quantity;
+  const BasketProductCard({
+    Key? key, 
+    required this.product,
+    required this.quantity,
+
+    }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -43,38 +49,44 @@ class BasketProductCard extends StatelessWidget {
           ),
           BlocBuilder<BasketBloc, BasketState>(
             builder: (context, state) {
-              return Row(
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      context
-                      .read<BasketBloc>()
-                      .add(BasketProductRemoved(product));
-                    },
-                    icon: Icon(
-                      Icons.indeterminate_check_box_rounded,
-                      color: cGreen,
+              if (state is BasketLoading) {
+                return CircularProgressIndicator();
+              }
+              if (state is BasketLoaded) {
+                return Row(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        context
+                        .read<BasketBloc>()
+                        .add(BasketProductRemoved(product));
+                      },
+                      icon: Icon(
+                        Icons.indeterminate_check_box_rounded,
+                        color: cGreen,
+                      ),
                     ),
-                  ),
-                  Text("1",
-                      style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 14,
-                          color: cBlack,
-                          fontWeight: FontWeight.bold)),
-                  IconButton(
-                    onPressed: () {
-                      context
-                      .read<BasketBloc>()
-                      .add(BasketProductAdded(product));
-                    },
-                    icon: Icon(
-                      Icons.add_box_rounded,
-                      color: cGreen,
-                    ),
-                  )
-                ],
-              );
+                    Text('$quantity',
+                        style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 14,
+                            color: cBlack,
+                            fontWeight: FontWeight.bold)),
+                    IconButton(
+                      onPressed: () {
+                        context
+                        .read<BasketBloc>()
+                        .add(BasketProductAdded(product));
+                      },
+                      icon: Icon(
+                        Icons.add_box_rounded,
+                        color: cGreen,
+                      ),
+                    )
+                  ],
+                );
+              } else {return Text("sorry");}
+              
             },
           )
         ],
