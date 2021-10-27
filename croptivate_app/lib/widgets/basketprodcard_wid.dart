@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 
 class BasketProdCard extends StatelessWidget {
   final Product product;
+  final int quantity;
   const BasketProdCard({
     required this.product,
+    required this.quantity,
     Key? key,
   }) : super(key: key);
 
@@ -27,7 +29,8 @@ class BasketProdCard extends StatelessWidget {
           ]
           ),
         child: BasketProductCard(
-          product: product),
+          product: product,
+          quantity: quantity,),
       )
     );
   }
