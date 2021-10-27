@@ -14,8 +14,18 @@ import 'package:provider/provider.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  Bloc.observer = SimpleBlocObserver();
   runApp(MyApp());
 }
+
+class SimpleBlocObserver extends BlocObserver{
+  void onChange(BlocBase BasketBloc, Change BasketChange) {
+    super.onChange(BasketBloc, BasketChange);
+    if (BasketBloc is Cubit) print(BasketChange);
+  }
+}
+
+
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
