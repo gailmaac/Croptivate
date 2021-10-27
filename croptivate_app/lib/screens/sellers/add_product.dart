@@ -317,8 +317,20 @@ set _imageThreeFile(XFile? value) {
     );
   }
   
+
+  var myInitialCat;
+
+  //textfieldform state
+  List<String> myCategory = [
+    "Plant Vegetables",
+    "Climbers and Creepers",
+    "Leafy Vegetables",
+    "Root Vegetables",
+  ];
+
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: cWhite,
       appBar: AppBar(
@@ -471,6 +483,37 @@ set _imageThreeFile(XFile? value) {
             ), 
           ),
           
+          Container(
+            child: Center(
+              child: DropdownButtonHideUnderline(
+                child: Container(
+                  height: size.height * 0.06,
+                  width: size.width * 0.92,
+                  padding: EdgeInsets.only(left: 16, right: 16),
+                  decoration: BoxDecoration(
+                    color: cWhite,
+                    borderRadius: BorderRadius.circular(6),
+                    border: Border.all(color: cGrey, width: 1.0)
+                    ),
+                  child: DropdownButton(
+                    hint: Text("Choose Product Category", style: inputBodyText.copyWith(color: cBlack)),
+                    dropdownColor: Colors.transparent,
+                    icon: Icon(Icons.arrow_drop_down_circle_outlined, color: cBlack, size: 23),
+                    style: inputBodyText.copyWith(color: cBlack),
+                    onChanged: (value) {
+                      setState(() {
+                        myInitialCat = value;
+                      });
+                    },
+                    value: myInitialCat,
+                    items: myCategory.map((items) {
+                      return DropdownMenuItem(value: items, child: Text(items));
+                    }).toList()),
+                ),
+              ) 
+            ),
+          ),
+          SizedBox(height: 5),
           //Product Name
           Container(
             width: double.infinity,
