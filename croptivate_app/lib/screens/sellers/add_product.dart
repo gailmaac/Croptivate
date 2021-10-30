@@ -87,6 +87,7 @@ set _imageThreeFile(XFile? value) {
   createPostInFirestore({String? mediaUrlOne, 
                     String? mediaUrlTwo, 
                     String? mediaUrlThree, 
+                    String? myInitialCat,
                     String? prodname, 
                     String? proddesc, 
                     String? stock, String? retail, String? count, String? wholesale, String? location}) {
@@ -101,6 +102,7 @@ set _imageThreeFile(XFile? value) {
       "mediaUrlOne": mediaUrlOne,
       "mediaUrlTwo": mediaUrlTwo,
       "mediaUrlThree": mediaUrlThree,
+      "myInitialCat": myInitialCat,
       "prodname": prodname,
       "proddesc": proddesc,
       "stock": stock,
@@ -125,6 +127,7 @@ set _imageThreeFile(XFile? value) {
       mediaUrlOne: mediaUrlOne,
       mediaUrlTwo: mediaUrlTwo,
       mediaUrlThree: mediaUrlThree,
+      myInitialCat: myInitialCat,
       prodname: prodnameController.text,
       proddesc: proddescController.text,
       stock: stockController.text,
@@ -496,10 +499,10 @@ set _imageThreeFile(XFile? value) {
                     border: Border.all(color: cGrey, width: 1.0)
                     ),
                   child: DropdownButton(
-                    hint: Text("Choose Product Category", style: inputBodyText.copyWith(color: cBlack)),
-                    dropdownColor: Colors.transparent,
-                    icon: Icon(Icons.arrow_drop_down_circle_outlined, color: cBlack, size: 23),
-                    style: inputBodyText.copyWith(color: cBlack),
+                    hint: Text("Choose Product Category", style: inputBodyText.copyWith(color: cGrey)),
+                    dropdownColor: cWhite,
+                    icon: Icon(Icons.arrow_drop_down_circle_outlined, color: cGrey, size: 23),
+                    style: inputBodyText.copyWith(color: cGrey),
                     onChanged: (value) {
                       setState(() {
                         myInitialCat = value;
