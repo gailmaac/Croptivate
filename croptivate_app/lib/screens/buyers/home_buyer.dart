@@ -16,7 +16,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeBuyer extends StatelessWidget {
-  static const String routeName = '/';
+  static const String routeName = '/homebuyer';
 
   static Route route() {
     return MaterialPageRoute(
