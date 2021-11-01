@@ -18,5 +18,4 @@ class ProductRepository extends BaseProductRepository {
       return snapshot.docs.map((doc) => Product.fromSnapshot(doc)).toList();
     });
   }
-  
 }
