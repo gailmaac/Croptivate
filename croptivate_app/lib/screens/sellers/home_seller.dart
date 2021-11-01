@@ -10,7 +10,7 @@ class HomeSeller extends StatefulWidget {
 
   @override
   _HomeSellerState createState() => _HomeSellerState();
-  static const String routeName = '/homeseller';
+  static const String routeName = '/';
   static Route route() {
   return MaterialPageRoute(
     settings: RouteSettings(name: routeName),
