@@ -18,6 +18,12 @@ class AddProduct extends StatefulWidget {
 
   @override
   _AddProductState createState() => _AddProductState();
+    static const String routeName = '/addproduct';
+    static Route route() {
+    return MaterialPageRoute(
+      settings: RouteSettings(name: routeName),
+      builder: (_) => AddProduct());
+  }
 }
 
 class _AddProductState extends State<AddProduct> {
@@ -60,7 +66,8 @@ set _imageThreeFile(XFile? value) {
 
   bool isUploading = false;
 
-  String? get uid => null;
+  // String? get uid => null;
+
 
 
   uploadImageOne(imageOne) async {
@@ -88,6 +95,8 @@ set _imageThreeFile(XFile? value) {
                     String? mediaUrlTwo, 
                     String? mediaUrlThree, 
                     String? myInitialCat,
+                    bool? isDeals,
+                    bool? isRecommended,
                     String? prodname, 
                     String? proddesc, 
                     String? stock, String? retail, String? count, String? wholesale, String? location}) {
@@ -98,11 +107,12 @@ set _imageThreeFile(XFile? value) {
     .set({
       "postId": postId,
       "ownerId": _auth.currentUser!.uid,
-      // "name": uid.sellerInfo.fname
       "mediaUrlOne": mediaUrlOne,
       "mediaUrlTwo": mediaUrlTwo,
       "mediaUrlThree": mediaUrlThree,
       "myInitialCat": myInitialCat,
+      "isDeals": isDeals,
+      "isRecommended": isRecommended,
       "prodname": prodname,
       "proddesc": proddesc,
       "stock": stock,
@@ -128,6 +138,8 @@ set _imageThreeFile(XFile? value) {
       mediaUrlTwo: mediaUrlTwo,
       mediaUrlThree: mediaUrlThree,
       myInitialCat: myInitialCat,
+      isDeals: isDeals,
+      isRecommended: isRecommended,
       prodname: prodnameController.text,
       proddesc: proddescController.text,
       stock: stockController.text,
@@ -144,7 +156,7 @@ set _imageThreeFile(XFile? value) {
     wholesaleController.clear();
     locationController.clear();
     setState(() {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => HomeSeller()));
+      Navigator.pushNamed(context, '/');
     });
   }
 
@@ -331,6 +343,10 @@ set _imageThreeFile(XFile? value) {
     "Root Vegetables",
   ];
 
+  bool isDeals = false;
+  bool isRecommended = false;
+
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -486,6 +502,7 @@ set _imageThreeFile(XFile? value) {
             ), 
           ),
           
+          //Dropdown for category
           Container(
             child: Center(
               child: DropdownButtonHideUnderline(
@@ -499,10 +516,10 @@ set _imageThreeFile(XFile? value) {
                     border: Border.all(color: cGrey, width: 1.0)
                     ),
                   child: DropdownButton(
-                    hint: Text("Choose Product Category", style: inputBodyText.copyWith(color: cGrey)),
+                    hint: Text("Choose Product Category", style: inputBodyText.copyWith(color: Colors.black87)),
                     dropdownColor: cWhite,
                     icon: Icon(Icons.arrow_drop_down_circle_outlined, color: cGrey, size: 23),
-                    style: inputBodyText.copyWith(color: cGrey),
+                    style: inputBodyText.copyWith(color: Colors.black87),
                     onChanged: (value) {
                       setState(() {
                         myInitialCat = value;
@@ -517,6 +534,74 @@ set _imageThreeFile(XFile? value) {
             ),
           ),
           SizedBox(height: 5),
+
+        //Radio button for field posting
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(15, 5, 0, 0),
+              child: Container(
+                child: Text("Post this product on:",
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 16,
+                      color: cBlack,
+                      ),
+                    ),
+              ),
+            ),
+            Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Checkbox(
+                        value: isDeals,
+                        activeColor: cGreen,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            isDeals = value!;
+                            print("Deals");
+                          });
+                        }),
+                      Text("Deals of the Day", 
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          color: cBlack,
+                          fontSize: 16
+                        )
+                      )
+                    ],
+                  ),
+                    Row(
+                      children: [
+                        Checkbox(
+                        value: isRecommended,
+                        activeColor: cGreen,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            isRecommended = value!;
+                            print("Recommended");
+                          });
+                        }),
+                        Text("Recommended", 
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          color: cBlack,
+                          fontSize: 16
+                        )
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+
           //Product Name
           Container(
             width: double.infinity,
