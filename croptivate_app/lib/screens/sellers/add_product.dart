@@ -156,7 +156,7 @@ set _imageThreeFile(XFile? value) {
     wholesaleController.clear();
     locationController.clear();
     setState(() {
-      Navigator.pushNamed(context, '/');
+      Navigator.pushNamed(context, '/homeseller');
     });
   }
 
