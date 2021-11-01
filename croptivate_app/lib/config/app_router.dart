@@ -10,10 +10,12 @@ import 'package:croptivate_app/screens/buyers/catalog.dart';
 import 'package:croptivate_app/screens/buyers/favorites.dart';
 import 'package:croptivate_app/screens/buyers/home_buyer.dart';
 import 'package:croptivate_app/screens/buyers/product_screen.dart';
+import 'package:croptivate_app/screens/sellers/add_product.dart';
 import 'package:croptivate_app/screens/sellers/home_seller.dart';
 import 'package:croptivate_app/screens/sellers/notifications.dart';
 import 'package:croptivate_app/screens/sellers/product_listings.dart';
 import 'package:croptivate_app/screens/splashscreen.dart';
+import 'package:croptivate_app/widgets/messagesscreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -23,6 +25,7 @@ class AppRouter {
 
     switch (settings.name) {
       case '/':
+        // return HomeSeller.route();
         return SignIn.route();
       case HomeBuyer.routeName:
         return HomeBuyer.route();
@@ -46,6 +49,10 @@ class AppRouter {
         return ProductPage.route();
       case NotificationsPage.routeName:
         return NotificationsPage.route();
+      case AddProduct.routeName:
+        return Messagescreen.route();
+      case Messagescreen.routeName:
+        return NotificationsPage.route(); 
       case CatalogScreen.routeName:
         return CatalogScreen.route(category: settings.arguments as Category);
       case ProductScreen.routeName:
