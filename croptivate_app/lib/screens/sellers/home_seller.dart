@@ -60,19 +60,19 @@ class _HomeSellerState extends State<HomeSeller> {
               children: [
                 Container(
                   height: double.infinity,
-                  color: Colors.brown[800],
+                  color: cWhite,
                 ),
                 Container(
                   height: double.infinity,
-                  color: cDGreen,
+                  color: cWhite,
                 ),
                 Container(
                   height: double.infinity,
-                  color: cGrey,
+                  color: cWhite,
                 ),
                 Container(
                   height: double.infinity,
-                  color: cBlack,
+                  color: cWhite,
                 ),
 
               ]
@@ -112,7 +112,7 @@ class _HomeSellerState extends State<HomeSeller> {
               ),
               IconButton(
                 onPressed: () {
-                  // Navigator.push(context, MaterialPageRoute(builder: (context) => UserProfile()));
+                  Navigator.pushNamed(context, '/userprofile');
                 }, 
                 icon: Icon(Icons.person_outline_rounded, )
               ),

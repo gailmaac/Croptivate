@@ -10,7 +10,7 @@ class SignIn extends StatefulWidget {
   @override
   _SignInState createState() => _SignInState();
 
-  static const String routeName = '/';
+  static const String routeName = '/signin';
   static Route route() {
     return MaterialPageRoute(
       settings: RouteSettings(name: routeName),

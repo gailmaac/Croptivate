@@ -40,7 +40,7 @@ class ProductCard extends StatelessWidget {
               decoration: BoxDecoration(),
               width: MediaQuery.of(context).size.width / widthFactor,
               height: 200,
-              child: Image.network(product.imageUrl, fit: BoxFit.cover),
+              child: Image.network(product.imageUrlOne, fit: BoxFit.cover),
             ),
           ),
           Positioned(

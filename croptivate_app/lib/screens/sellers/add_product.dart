@@ -18,17 +18,23 @@ class AddProduct extends StatefulWidget {
 
   @override
   _AddProductState createState() => _AddProductState();
+    static const String routeName = '/addproduct';
+    static Route route() {
+    return MaterialPageRoute(
+      settings: RouteSettings(name: routeName),
+      builder: (_) => AddProduct());
+  }
 }
 
 class _AddProductState extends State<AddProduct> {
 
   TextEditingController locationController = new TextEditingController();
-  TextEditingController prodnameController = new TextEditingController();
-  TextEditingController proddescController = new TextEditingController();
-  TextEditingController stockController = new TextEditingController();
-  TextEditingController retailController = new TextEditingController();
-  TextEditingController countController = new TextEditingController();
-  TextEditingController wholesaleController = new TextEditingController();
+  TextEditingController nameController = new TextEditingController();
+  TextEditingController descriptionController = new TextEditingController();
+  TextEditingController stockCountController = new TextEditingController();
+  TextEditingController priceController = new TextEditingController();
+  // TextEditingController countController = new TextEditingController();
+  // TextEditingController wholesaleController = new TextEditingController();
 
   final storageRef = FirebaseStorage.instance.ref();
   final postRef = FirebaseFirestore.instance.collection('sellerPosts');
@@ -63,6 +69,7 @@ set _imageThreeFile(XFile? value) {
   String? get uid => null;
 
 
+
   uploadImageOne(imageOne) async {
     UploadTask uploadTaskOne = storageRef.child("sellerposts_$postId/post_$postIdOne.jpg").putFile(imageOne);
     TaskSnapshot storageSnapOne = await uploadTaskOne;
@@ -84,34 +91,34 @@ set _imageThreeFile(XFile? value) {
     return downloadUrlThree;
   }
 
-  createPostInFirestore({String? mediaUrlOne, 
-                    String? mediaUrlTwo, 
-                    String? mediaUrlThree, 
-                    String? myInitialCat,
-                    String? prodname, 
-                    String? proddesc, 
-                    String? stock, String? retail, String? count, String? wholesale, String? location}) {
+  createPostInFirestore({String? imageUrlOne, 
+                    String? imageUrlTwo, 
+                    String? imageUrlThree, 
+                    String? category,
+                    bool? isDeals,
+                    bool? isRecommended,
+                    String? name, 
+                    String? description, 
+                    int? stockCount, double? price, String? location}) {
+                     //String? wholesale, //String? count
     postRef
-    .doc(_auth.currentUser!.uid)
-    .collection('sellerPosts')
     .doc(postId)
     .set({
-      "postId": postId,
+      // "postId": postId,
       "ownerId": _auth.currentUser!.uid,
-      // "name": uid.sellerInfo.fname
-      "mediaUrlOne": mediaUrlOne,
-      "mediaUrlTwo": mediaUrlTwo,
-      "mediaUrlThree": mediaUrlThree,
-      "myInitialCat": myInitialCat,
-      "prodname": prodname,
-      "proddesc": proddesc,
-      "stock": stock,
-      "retail": retail,
-      "count": count,
-      "wholesale": wholesale,
+      "imageUrlOne": imageUrlOne,
+      "imageUrlTwo": imageUrlTwo,
+      "imageUrlThree": imageUrlThree,
+      "category": category,
+      "isDeals": isDeals,
+      "isRecommended": isRecommended,
+      "name": name,
+      "description": description,
+      "stockCount": stockCount,
+      "price": price,
+      // "count": count,
+      // "wholesale": wholesale,
       "location": location,
-      "time": DateTime.now(),
-      "status": 'active',
     });
   }
 
@@ -119,32 +126,34 @@ set _imageThreeFile(XFile? value) {
     setState(() {
       isUploading = true;
     });
-    String mediaUrlOne = await uploadImageOne(imageOne);
-    String mediaUrlTwo = await uploadImageTwo(imageTwo);
-    String mediaUrlThree = await uploadImageThree(imageThree);
+    String imageUrlOne = await uploadImageOne(imageOne);
+    String imageUrlTwo = await uploadImageTwo(imageTwo);
+    String imageUrlThree = await uploadImageThree(imageThree);
 
     createPostInFirestore(
-      mediaUrlOne: mediaUrlOne,
-      mediaUrlTwo: mediaUrlTwo,
-      mediaUrlThree: mediaUrlThree,
-      myInitialCat: myInitialCat,
-      prodname: prodnameController.text,
-      proddesc: proddescController.text,
-      stock: stockController.text,
-      retail: retailController.text,
-      count: countController.text,
-      wholesale: wholesaleController.text,
+      imageUrlOne: imageUrlOne,
+      imageUrlTwo: imageUrlTwo,
+      imageUrlThree: imageUrlThree,
+      category: category,
+      isDeals: isDeals,
+      isRecommended: isRecommended,
+      name: nameController.text,
+      description: descriptionController.text,
+      stockCount: int.parse(stockCountController.text),
+      price: double.parse(priceController.text),
+      // count: countController.text,
+      // wholesale: wholesaleController.text,
       location: locationController.text
     );
-    prodnameController.clear();
-    proddescController.clear();
-    stockController.clear();
-    retailController.clear();
-    countController.clear();
-    wholesaleController.clear();
+    nameController.clear();
+    descriptionController.clear();
+    stockCountController.clear();
+    priceController.clear();
+    // countController.clear();
+    // wholesaleController.clear();
     locationController.clear();
     setState(() {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => HomeSeller()));
+      Navigator.pushNamed(context, '/homeseller');
     });
   }
 
@@ -321,7 +330,7 @@ set _imageThreeFile(XFile? value) {
   }
   
 
-  var myInitialCat;
+  var category;
 
   //textfieldform state
   List<String> myCategory = [
@@ -330,6 +339,10 @@ set _imageThreeFile(XFile? value) {
     "Leafy Vegetables",
     "Root Vegetables",
   ];
+
+  bool isDeals = false;
+  bool isRecommended = false;
+
 
   @override
   Widget build(BuildContext context) {
@@ -486,6 +499,7 @@ set _imageThreeFile(XFile? value) {
             ), 
           ),
           
+          //Dropdown for category
           Container(
             child: Center(
               child: DropdownButtonHideUnderline(
@@ -499,16 +513,16 @@ set _imageThreeFile(XFile? value) {
                     border: Border.all(color: cGrey, width: 1.0)
                     ),
                   child: DropdownButton(
-                    hint: Text("Choose Product Category", style: inputBodyText.copyWith(color: cGrey)),
+                    hint: Text("Choose Product Category", style: inputBodyText.copyWith(color: Colors.black87)),
                     dropdownColor: cWhite,
                     icon: Icon(Icons.arrow_drop_down_circle_outlined, color: cGrey, size: 23),
-                    style: inputBodyText.copyWith(color: cGrey),
+                    style: inputBodyText.copyWith(color: Colors.black87),
                     onChanged: (value) {
                       setState(() {
-                        myInitialCat = value;
+                        category = value;
                       });
                     },
-                    value: myInitialCat,
+                    value: category,
                     items: myCategory.map((items) {
                       return DropdownMenuItem(value: items, child: Text(items));
                     }).toList()),
@@ -517,6 +531,74 @@ set _imageThreeFile(XFile? value) {
             ),
           ),
           SizedBox(height: 5),
+
+        //Checkboxes for field posting
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(15, 5, 0, 0),
+              child: Container(
+                child: Text("Post this product on:",
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 16,
+                      color: cBlack,
+                      ),
+                    ),
+              ),
+            ),
+            Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Checkbox(
+                        value: isDeals,
+                        activeColor: cGreen,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            isDeals = value!;
+                            print("Deals");
+                          });
+                        }),
+                      Text("Deals of the Day", 
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          color: cBlack,
+                          fontSize: 16
+                        )
+                      )
+                    ],
+                  ),
+                    Row(
+                      children: [
+                        Checkbox(
+                        value: isRecommended,
+                        activeColor: cGreen,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            isRecommended = value!;
+                            print("Recommended");
+                          });
+                        }),
+                        Text("Recommended", 
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          color: cBlack,
+                          fontSize: 16
+                        )
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+
           //Product Name
           Container(
             width: double.infinity,
@@ -536,7 +618,7 @@ set _imageThreeFile(XFile? value) {
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(15, 30, 15, 0),
                   child: TextFormField(
-                    controller: prodnameController,
+                    controller: nameController,
                     textCapitalization: TextCapitalization.words,
                     decoration: InputDecoration(
                       contentPadding: new EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
@@ -585,7 +667,7 @@ set _imageThreeFile(XFile? value) {
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(15, 30, 15, 0),
                   child: TextFormField(
-                    controller: proddescController,
+                    controller: descriptionController,
                     maxLines: 7,
                     minLines: 5,
                     textCapitalization: TextCapitalization.words,
@@ -617,7 +699,7 @@ set _imageThreeFile(XFile? value) {
             )
           ),
     
-         //Stock Count 
+         //stockCount Count 
           Container(
             width: double.infinity,
             height: 90,
@@ -636,7 +718,7 @@ set _imageThreeFile(XFile? value) {
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(15, 30, 15, 0),
                   child: TextFormField(
-                    controller: stockController,
+                    controller: stockCountController,
                     textCapitalization: TextCapitalization.words,
                     decoration: InputDecoration(
                       contentPadding: new EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
@@ -666,7 +748,7 @@ set _imageThreeFile(XFile? value) {
             )
           ),
           
-          //Retail Price
+          //price Price
           Container(
             width: double.infinity,
             height: 90,
@@ -685,7 +767,7 @@ set _imageThreeFile(XFile? value) {
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(15, 30, 15, 0),
                   child: TextFormField(
-                    controller: retailController,
+                    controller: priceController,
                     textCapitalization: TextCapitalization.words,
                     decoration: InputDecoration(
                       contentPadding: new EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
@@ -716,103 +798,103 @@ set _imageThreeFile(XFile? value) {
           ),
 
           //Minimum Count for Wholesale
-          Container(
-            child: Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(15, 10, 15, 10),
-              child: Stack(
-                children: [
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0, 15, 0, 0),
-                    child: Text(
-                      "Enter minimum count for wholesale:",
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 16,
-                        color: cBlack,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(250, 0, 0, 0),
-                    child: TextFormField(
-                      controller: countController,
-                      decoration: InputDecoration(
-                        contentPadding: new EdgeInsets.symmetric(vertical: 10.0, horizontal: 10),
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(6),
-                        borderSide: BorderSide(color: cGrey, width: 1.0)),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: cGrey, width: 1.0),
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        hintText: "Count",
-                        hintStyle: TextStyle(
-                          fontFamily: 'Poppins',
-                          color: cGrey,
-                          fontSize: 14
-                        ),
-                      ),
-                      style: TextStyle(
-                          fontFamily: 'Poppins',
-                          color: Colors.black87,
-                          fontSize: 14
-                      ),
-                      keyboardType: TextInputType.number,
-                      textInputAction: TextInputAction.next,
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
+          // Container(
+          //   child: Padding(
+          //     padding: EdgeInsetsDirectional.fromSTEB(15, 10, 15, 10),
+          //     child: Stack(
+          //       children: [
+          //         Padding(
+          //           padding: EdgeInsetsDirectional.fromSTEB(0, 15, 0, 0),
+          //           child: Text(
+          //             "Enter minimum count for wholesale:",
+          //             style: TextStyle(
+          //               fontFamily: 'Poppins',
+          //               fontSize: 16,
+          //               color: cBlack,
+          //             ),
+          //           ),
+          //         ),
+          //         Padding(
+          //           padding: EdgeInsets.fromLTRB(250, 0, 0, 0),
+          //           child: TextFormField(
+          //             controller: countController,
+          //             decoration: InputDecoration(
+          //               contentPadding: new EdgeInsets.symmetric(vertical: 10.0, horizontal: 10),
+          //               border: OutlineInputBorder(borderRadius: BorderRadius.circular(6),
+          //               borderSide: BorderSide(color: cGrey, width: 1.0)),
+          //               focusedBorder: OutlineInputBorder(
+          //                 borderSide: BorderSide(color: cGrey, width: 1.0),
+          //                 borderRadius: BorderRadius.circular(6),
+          //               ),
+          //               hintText: "Count",
+          //               hintStyle: TextStyle(
+          //                 fontFamily: 'Poppins',
+          //                 color: cGrey,
+          //                 fontSize: 14
+          //               ),
+          //             ),
+          //             style: TextStyle(
+          //                 fontFamily: 'Poppins',
+          //                 color: Colors.black87,
+          //                 fontSize: 14
+          //             ),
+          //             keyboardType: TextInputType.number,
+          //             textInputAction: TextInputAction.next,
+          //           ),
+          //         )
+          //       ],
+          //     ),
+          //   ),
+          // ),
 
-          //Wholesale Price
-          Container(
-            width: double.infinity,
-            height: 90,
-            child: Stack(
-              children: [
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(15, 5, 0, 0),
-                  child: Text("Wholesale Price",
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 16,
-                    color: cBlack,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(15, 30, 15, 0),
-                  child: TextFormField(
-                    controller: wholesaleController,
-                    textCapitalization: TextCapitalization.words,
-                    decoration: InputDecoration(
-                      contentPadding: new EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(6),
-                      borderSide: BorderSide(color: cGrey, width: 1.0)),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: cGrey, width: 1.0),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      hintText: "Input Wholesale Price in Pesos",
-                      hintStyle: TextStyle(
-                        fontFamily: 'Poppins',
-                        color: cGrey,
-                        fontSize: 14
-                      ),
-                    ),
-                    style: TextStyle(
-                        fontFamily: 'Poppins',
-                        color: Colors.black87,
-                        fontSize: 14
-                    ),
-                    keyboardType: TextInputType.number,
-                    textInputAction: TextInputAction.next,
-                  ),
-                ), 
-              ],
-            )
-          ),
+          // //Wholesale Price
+          // Container(
+          //   width: double.infinity,
+          //   height: 90,
+          //   child: Stack(
+          //     children: [
+          //       Padding(
+          //         padding: EdgeInsetsDirectional.fromSTEB(15, 5, 0, 0),
+          //         child: Text("Wholesale Price",
+          //         style: TextStyle(
+          //           fontFamily: 'Poppins',
+          //           fontSize: 16,
+          //           color: cBlack,
+          //           ),
+          //         ),
+          //       ),
+          //       Padding(
+          //         padding: EdgeInsetsDirectional.fromSTEB(15, 30, 15, 0),
+          //         child: TextFormField(
+          //           controller: wholesaleController,
+          //           textCapitalization: TextCapitalization.words,
+          //           decoration: InputDecoration(
+          //             contentPadding: new EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+          //             border: OutlineInputBorder(borderRadius: BorderRadius.circular(6),
+          //             borderSide: BorderSide(color: cGrey, width: 1.0)),
+          //             focusedBorder: OutlineInputBorder(
+          //               borderSide: BorderSide(color: cGrey, width: 1.0),
+          //               borderRadius: BorderRadius.circular(6),
+          //             ),
+          //             hintText: "Input Wholesale Price in Pesos",
+          //             hintStyle: TextStyle(
+          //               fontFamily: 'Poppins',
+          //               color: cGrey,
+          //               fontSize: 14
+          //             ),
+          //           ),
+          //           style: TextStyle(
+          //               fontFamily: 'Poppins',
+          //               color: Colors.black87,
+          //               fontSize: 14
+          //           ),
+          //           keyboardType: TextInputType.number,
+          //           textInputAction: TextInputAction.next,
+          //         ),
+          //       ), 
+          //     ],
+          //   )
+          // ),
 
           //Location
           Container(

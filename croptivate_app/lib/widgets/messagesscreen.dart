@@ -8,6 +8,12 @@ class Messagescreen extends StatefulWidget {
 
   @override
   _MessagescreenState createState() => _MessagescreenState();
+    static const String routeName = '/message';
+    static Route route() {
+    return MaterialPageRoute(
+      settings: RouteSettings(name: routeName),
+      builder: (_) => Messagescreen());
+  }
 }
 
 class _MessagescreenState extends State<Messagescreen> {

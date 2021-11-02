@@ -212,7 +212,7 @@ class ProductScreen extends StatelessWidget {
               children: [
                 ListTile(
                   title: Text(
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Turpis in eu mi bibendum neque. Risus at ultrices mi tempus imperdiet nulla malesuada pellentesque elit.",
+                    product.description,
                     style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 14,
@@ -244,7 +244,7 @@ class ProductScreen extends StatelessWidget {
               children: [
                 ListTile(
                   title: Text(
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Turpis in eu mi bibendum neque. Risus at ultrices mi tempus imperdiet nulla malesuada pellentesque elit.",
+                      "These are the recommended delivery options suited for your purchase. Arrangement of delivery schedule can be done by either of the parties involved (seller/buyer), depending on what has been agreed on:\nGrab\nLalamove\nMr. Speedy\nToktok\n\nName: Camille Abi Enzo\nLocation: Cembo, Makati City\nContact Number: 0917xxx",
                     style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 14,

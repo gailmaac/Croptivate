@@ -21,7 +21,7 @@ class BasketProductCard extends StatelessWidget {
       child: Row(
         children: [
           Image.network(
-            product.imageUrl,
+            product.imageUrlOne,
             width: 100,
             height: 80,
             fit: BoxFit.cover,

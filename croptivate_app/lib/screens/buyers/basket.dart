@@ -238,7 +238,7 @@ class _BasketScreenState extends State<BasketScreen> {
               ),
               Container(
                 height: double.infinity,
-                color: cDGreen,
+                color: cWhite,
               )
             ])));
   }
