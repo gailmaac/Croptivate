@@ -7,11 +7,12 @@ class Product extends Equatable {
   final String imageUrlOne;
   final String imageUrlTwo;
   final String imageUrlThree;
-  final int price;
+  final double price;
   final bool isDeals;
   final bool isRecommended;
   final String location;
   final int stockCount;
+  final String description;
   
   const Product({
     required this.name,
@@ -23,23 +24,25 @@ class Product extends Equatable {
     required this.isDeals,
     required this.isRecommended,
     required this.location,
-    required this.stockCount
+    required this.stockCount,
+    required this.description,
   });
 
   static Product fromSnapshot(DocumentSnapshot snap){
-    Product products = Product(
+    Product product = Product(
       name: snap['name'],
       category: snap['category'],
       imageUrlOne: snap['imageUrlOne'],
-      imageUrlTwo: snap['mediaUrlTwo'],
-      imageUrlThree: snap['mediaUrlThree'],
+      imageUrlTwo: snap['imageUrlTwo'],
+      imageUrlThree: snap['imageUrlThree'],
       price: snap['price'],
       isDeals: snap['isDeals'],
       isRecommended: snap['isRecommended'],
       location: snap['location'],
       stockCount: snap['stockCount'],
+      description: snap['description'],
       );
-      return products;
+      return product;
   }
 
   @override
@@ -47,8 +50,8 @@ class Product extends Equatable {
     name,
     category,
     imageUrlOne,
-    // imageUrlTwo,
-    // imageUrlThree,
+    imageUrlTwo,
+    imageUrlThree,
     price,
     isDeals,
     isRecommended,
@@ -68,7 +71,8 @@ class Product extends Equatable {
       isDeals: true,
       isRecommended: false,
       location: "Makati City, Philippines",
-      stockCount: 8
+      stockCount: 8,
+      description: "Product and Payment Information:\nPay manually online using the following options and send us the proof of payment afterwards.\nIf online payment is not available for you, Cash On Delivery (COD) is also available:\n\nGCash\n09171232568\nCamille Abi E\n\nPaymaya\n09171232568\nCamille Abi E\n\nUnionBank\n109421041204\nCamille Abi Enzo",
     ),
     Product(
       name: "Potato",
@@ -80,7 +84,9 @@ class Product extends Equatable {
       isDeals: true,
       isRecommended: false,
       location: "Makati City, Philippines",
-      stockCount: 10
+      stockCount: 10,
+      description: "Product and Payment Information:\nPay manually online using the following options and send us the proof of payment afterwards.\nIf online payment is not available for you, Cash On Delivery (COD) is also available:\n\nGCash\n09171232568\nCamille Abi E\n\nPaymaya\n09171232568\nCamille Abi E\n\nUnionBank\n109421041204\nCamille Abi Enzo",
+
     ),
     Product(
       name: "Chayote",
@@ -92,7 +98,8 @@ class Product extends Equatable {
       isDeals: true,
       isRecommended: false,
       location: "Makati City, Philippines",
-      stockCount: 18
+      stockCount: 18,
+      description: "Product and Payment Information:\nPay manually online using the following options and send us the proof of payment afterwards.\nIf online payment is not available for you, Cash On Delivery (COD) is also available:\n\nGCash\n09171232568\nCamille Abi E\n\nPaymaya\n09171232568\nCamille Abi E\n\nUnionBank\n109421041204\nCamille Abi Enzo",
     ),
     Product(
       name: "Pechay",
@@ -104,7 +111,8 @@ class Product extends Equatable {
       isDeals: true,
       isRecommended: false,
       location: "Makati City, Philippines",
-      stockCount: 18
+      stockCount: 18,
+      description: "Product and Payment Information:\nPay manually online using the following options and send us the proof of payment afterwards.\nIf online payment is not available for you, Cash On Delivery (COD) is also available:\n\nGCash\n09171232568\nCamille Abi E\n\nPaymaya\n09171232568\nCamille Abi E\n\nUnionBank\n109421041204\nCamille Abi Enzo",  
     ),
     Product(
       name: "Bottle Gourd",
@@ -116,7 +124,8 @@ class Product extends Equatable {
       isDeals: true,
       isRecommended: false,
       location: "Makati City, Philippines",
-      stockCount: 6
+      stockCount: 6,
+      description: "Product and Payment Information:\nPay manually online using the following options and send us the proof of payment afterwards.\nIf online payment is not available for you, Cash On Delivery (COD) is also available:\n\nGCash\n09171232568\nCamille Abi E\n\nPaymaya\n09171232568\nCamille Abi E\n\nUnionBank\n109421041204\nCamille Abi Enzo", 
     ),
     Product(
       name: "Bell Pepper",
@@ -128,7 +137,9 @@ class Product extends Equatable {
       isDeals: true,
       isRecommended: false,
       location: "Makati City, Philippines",
-      stockCount: 9
+      stockCount: 9,
+      description: "Product and Payment Information:\nPay manually online using the following options and send us the proof of payment afterwards.\nIf online payment is not available for you, Cash On Delivery (COD) is also available:\n\nGCash\n09171232568\nCamille Abi E\n\nPaymaya\n09171232568\nCamille Abi E\n\nUnionBank\n109421041204\nCamille Abi Enzo",
+
     ),
     Product(
       name: "Red Leaf Lettuce",
@@ -140,7 +151,9 @@ class Product extends Equatable {
       isDeals: true,
       isRecommended: false,
       location: "Makati City, Philippines",
-      stockCount: 12
+      stockCount: 12,
+      description: "Product and Payment Information:\nPay manually online using the following options and send us the proof of payment afterwards.\nIf online payment is not available for you, Cash On Delivery (COD) is also available:\n\nGCash\n09171232568\nCamille Abi E\n\nPaymaya\n09171232568\nCamille Abi E\n\nUnionBank\n109421041204\nCamille Abi Enzo",
+
     ),
 
     //isRecommended
@@ -154,7 +167,9 @@ class Product extends Equatable {
       isDeals: false,
       isRecommended: true,
       location: "Makati City, Philippines",
-      stockCount: 15
+      stockCount: 15,
+      description: "Product and Payment Information:\nPay manually online using the following options and send us the proof of payment afterwards.\nIf online payment is not available for you, Cash On Delivery (COD) is also available:\n\nGCash\n09171232568\nCamille Abi E\n\nPaymaya\n09171232568\nCamille Abi E\n\nUnionBank\n109421041204\nCamille Abi Enzo",
+
     ),
     Product(
       name: "Cabbage",
@@ -166,7 +181,8 @@ class Product extends Equatable {
       isDeals: false,
       isRecommended: true,
       location: "Makati City, Philippines",
-      stockCount: 13
+      stockCount: 13,
+      description: "Product and Payment Information:\nPay manually online using the following options and send us the proof of payment afterwards.\nIf online payment is not available for you, Cash On Delivery (COD) is also available:\n\nGCash\n09171232568\nCamille Abi E\n\nPaymaya\n09171232568\nCamille Abi E\n\nUnionBank\n109421041204\nCamille Abi Enzo", 
     ),
     Product(
       name: "Cauliflower",
@@ -178,7 +194,9 @@ class Product extends Equatable {
       isDeals: false,
       isRecommended: true,
       location: "Makati City, Philippines",
-      stockCount: 15
+      stockCount: 15,
+      description: "Product and Payment Information:\nPay manually online using the following options and send us the proof of payment afterwards.\nIf online payment is not available for you, Cash On Delivery (COD) is also available:\n\nGCash\n09171232568\nCamille Abi E\n\nPaymaya\n09171232568\nCamille Abi E\n\nUnionBank\n109421041204\nCamille Abi Enzo",
+
     ),
     Product(
       name: "Carrots",
@@ -190,7 +208,9 @@ class Product extends Equatable {
       isDeals: false,
       isRecommended: true,
       location: "Makati City, Philippines",
-      stockCount: 8
+      stockCount: 8,
+      description: "Product and Payment Information:\nPay manually online using the following options and send us the proof of payment afterwards.\nIf online payment is not available for you, Cash On Delivery (COD) is also available:\n\nGCash\n09171232568\nCamille Abi E\n\nPaymaya\n09171232568\nCamille Abi E\n\nUnionBank\n109421041204\nCamille Abi Enzo",
+
     ),
     Product(
       name: "Bitter Gourd",
@@ -202,7 +222,9 @@ class Product extends Equatable {
       isDeals: false,
       isRecommended: true,
       location: "Makati City, Philippines",
-      stockCount: 21
+      stockCount: 21,
+      description: "Product and Payment Information:\nPay manually online using the following options and send us the proof of payment afterwards.\nIf online payment is not available for you, Cash On Delivery (COD) is also available:\n\nGCash\n09171232568\nCamille Abi E\n\nPaymaya\n09171232568\nCamille Abi E\n\nUnionBank\n109421041204\nCamille Abi Enzo",
+ 
     ),
     Product(
       name: "Tomato",
@@ -214,7 +236,9 @@ class Product extends Equatable {
       isDeals: false,
       isRecommended: true,
       location: "Makati City, Philippines",
-      stockCount: 15
+      stockCount: 15,
+      description: "Product and Payment Information:\nPay manually online using the following options and send us the proof of payment afterwards.\nIf online payment is not available for you, Cash On Delivery (COD) is also available:\n\nGCash\n09171232568\nCamille Abi E\n\nPaymaya\n09171232568\nCamille Abi E\n\nUnionBank\n109421041204\nCamille Abi Enzo",
+
     ),
     Product(
       name: "Lady Finger",
@@ -226,7 +250,9 @@ class Product extends Equatable {
       isDeals: false,
       isRecommended: true,
       location: "Makati City, Philippines",
-      stockCount: 8
+      stockCount: 8,
+      description: "Product and Payment Information:\nPay manually online using the following options and send us the proof of payment afterwards.\nIf online payment is not available for you, Cash On Delivery (COD) is also available:\n\nGCash\n09171232568\nCamille Abi E\n\nPaymaya\n09171232568\nCamille Abi E\n\nUnionBank\n109421041204\nCamille Abi Enzo",
+
     ),
   ];
 }
