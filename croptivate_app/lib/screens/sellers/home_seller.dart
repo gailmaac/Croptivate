@@ -112,7 +112,7 @@ class _HomeSellerState extends State<HomeSeller> {
               ),
               IconButton(
                 onPressed: () {
-                  // Navigator.push(context, MaterialPageRoute(builder: (context) => UserProfile()));
+                  Navigator.pushNamed(context, '/userprofile');
                 }, 
                 icon: Icon(Icons.person_outline_rounded, )
               ),
