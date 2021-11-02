@@ -25,8 +25,8 @@ class AppRouter {
 
     switch (settings.name) {
       case '/':
-        // return HomeSeller.route();
-        return SignIn.route();
+        return HomeBuyer.route();
+        // return SignIn.route();
       case HomeBuyer.routeName:
         return HomeBuyer.route();
       case HomeSeller.routeName:
