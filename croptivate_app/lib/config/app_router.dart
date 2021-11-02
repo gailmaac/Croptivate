@@ -26,7 +26,7 @@ class AppRouter {
     switch (settings.name) {
       case '/':
         return HomeBuyer.route();
-        // return SignIn.route();
+      // return SignIn.route();
       case HomeBuyer.routeName:
         return HomeBuyer.route();
       case HomeSeller.routeName:
@@ -50,9 +50,9 @@ class AppRouter {
       case NotificationsPage.routeName:
         return NotificationsPage.route();
       case AddProduct.routeName:
-        return Messagescreen.route();
+        return AddProduct.route();
       case Messagescreen.routeName:
-        return NotificationsPage.route(); 
+        return Messagescreen.route();
       case CatalogScreen.routeName:
         return CatalogScreen.route(category: settings.arguments as Category);
       case ProductScreen.routeName:
@@ -65,12 +65,7 @@ class AppRouter {
 
   static Route _errorRoute() {
     return MaterialPageRoute(
-      settings: RouteSettings(name: '/error'),
-      builder: (_) => Scaffold(
-        appBar: AppBar(
-          title: Text("Error")
-        )
-      )
-    );
+        settings: RouteSettings(name: '/error'),
+        builder: (_) => Scaffold(appBar: AppBar(title: Text("Error"))));
   }
 }
