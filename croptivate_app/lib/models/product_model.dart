@@ -7,7 +7,7 @@ class Product extends Equatable {
   final String imageUrlOne;
   final String imageUrlTwo;
   final String imageUrlThree;
-  final double price;
+  final int price;
   final bool isDeals;
   final bool isRecommended;
   final String location;
@@ -27,19 +27,19 @@ class Product extends Equatable {
   });
 
   static Product fromSnapshot(DocumentSnapshot snap){
-    Product product = Product(
-      name: snap['prodname'],
-      category: snap['myInitialCat'],
-      imageUrlOne: snap['mediaUrlOne'],
+    Product products = Product(
+      name: snap['name'],
+      category: snap['category'],
+      imageUrlOne: snap['imageUrlOne'],
       imageUrlTwo: snap['mediaUrlTwo'],
       imageUrlThree: snap['mediaUrlThree'],
-      price: snap['retail'],
+      price: snap['price'],
       isDeals: snap['isDeals'],
       isRecommended: snap['isRecommended'],
       location: snap['location'],
-      stockCount: snap['stock'],
+      stockCount: snap['stockCount'],
       );
-      return product;
+      return products;
   }
 
   @override
@@ -47,8 +47,8 @@ class Product extends Equatable {
     name,
     category,
     imageUrlOne,
-    imageUrlTwo,
-    imageUrlThree,
+    // imageUrlTwo,
+    // imageUrlThree,
     price,
     isDeals,
     isRecommended,
