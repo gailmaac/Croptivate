@@ -29,10 +29,10 @@ class AddProduct extends StatefulWidget {
 class _AddProductState extends State<AddProduct> {
 
   TextEditingController locationController = new TextEditingController();
-  TextEditingController prodnameController = new TextEditingController();
-  TextEditingController proddescController = new TextEditingController();
-  TextEditingController stockController = new TextEditingController();
-  TextEditingController retailController = new TextEditingController();
+  TextEditingController nameController = new TextEditingController();
+  TextEditingController descriptionController = new TextEditingController();
+  TextEditingController stockCountController = new TextEditingController();
+  TextEditingController priceController = new TextEditingController();
   TextEditingController countController = new TextEditingController();
   TextEditingController wholesaleController = new TextEditingController();
 
@@ -91,15 +91,15 @@ set _imageThreeFile(XFile? value) {
     return downloadUrlThree;
   }
 
-  createPostInFirestore({String? mediaUrlOne, 
-                    String? mediaUrlTwo, 
-                    String? mediaUrlThree, 
-                    String? myInitialCat,
+  createPostInFirestore({String? imageUrlOne, 
+                    String? imageUrlTwo, 
+                    String? imageUrlThree, 
+                    String? category,
                     bool? isDeals,
                     bool? isRecommended,
-                    String? prodname, 
-                    String? proddesc, 
-                    String? stock, String? retail, String? count, String? wholesale, String? location}) {
+                    String? name, 
+                    String? description, 
+                    String? stockCount, String? price, String? count, String? wholesale, String? location}) {
     postRef
     .doc(_auth.currentUser!.uid)
     .collection('sellerPosts')
@@ -107,16 +107,16 @@ set _imageThreeFile(XFile? value) {
     .set({
       "postId": postId,
       "ownerId": _auth.currentUser!.uid,
-      "mediaUrlOne": mediaUrlOne,
-      "mediaUrlTwo": mediaUrlTwo,
-      "mediaUrlThree": mediaUrlThree,
-      "myInitialCat": myInitialCat,
+      "imageUrlOne": imageUrlOne,
+      "imageUrlTwo": imageUrlTwo,
+      "imageUrlThree": imageUrlThree,
+      "category": category,
       "isDeals": isDeals,
       "isRecommended": isRecommended,
-      "prodname": prodname,
-      "proddesc": proddesc,
-      "stock": stock,
-      "retail": retail,
+      "name": name,
+      "description": description,
+      "stockCount": stockCount,
+      "price": price,
       "count": count,
       "wholesale": wholesale,
       "location": location,
@@ -129,29 +129,29 @@ set _imageThreeFile(XFile? value) {
     setState(() {
       isUploading = true;
     });
-    String mediaUrlOne = await uploadImageOne(imageOne);
-    String mediaUrlTwo = await uploadImageTwo(imageTwo);
-    String mediaUrlThree = await uploadImageThree(imageThree);
+    String imageUrlOne = await uploadImageOne(imageOne);
+    String imageUrlTwo = await uploadImageTwo(imageTwo);
+    String imageUrlThree = await uploadImageThree(imageThree);
 
     createPostInFirestore(
-      mediaUrlOne: mediaUrlOne,
-      mediaUrlTwo: mediaUrlTwo,
-      mediaUrlThree: mediaUrlThree,
-      myInitialCat: myInitialCat,
+      imageUrlOne: imageUrlOne,
+      imageUrlTwo: imageUrlTwo,
+      imageUrlThree: imageUrlThree,
+      category: category,
       isDeals: isDeals,
       isRecommended: isRecommended,
-      prodname: prodnameController.text,
-      proddesc: proddescController.text,
-      stock: stockController.text,
-      retail: retailController.text,
+      name: nameController.text,
+      description: descriptionController.text,
+      stockCount: stockCountController.text,
+      price: priceController.text,
       count: countController.text,
       wholesale: wholesaleController.text,
       location: locationController.text
     );
-    prodnameController.clear();
-    proddescController.clear();
-    stockController.clear();
-    retailController.clear();
+    nameController.clear();
+    descriptionController.clear();
+    stockCountController.clear();
+    priceController.clear();
     countController.clear();
     wholesaleController.clear();
     locationController.clear();
@@ -333,7 +333,7 @@ set _imageThreeFile(XFile? value) {
   }
   
 
-  var myInitialCat;
+  var category;
 
   //textfieldform state
   List<String> myCategory = [
@@ -522,10 +522,10 @@ set _imageThreeFile(XFile? value) {
                     style: inputBodyText.copyWith(color: Colors.black87),
                     onChanged: (value) {
                       setState(() {
-                        myInitialCat = value;
+                        category = value;
                       });
                     },
-                    value: myInitialCat,
+                    value: category,
                     items: myCategory.map((items) {
                       return DropdownMenuItem(value: items, child: Text(items));
                     }).toList()),
@@ -535,7 +535,7 @@ set _imageThreeFile(XFile? value) {
           ),
           SizedBox(height: 5),
 
-        //Radio button for field posting
+        //Checkboxes for field posting
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -621,7 +621,7 @@ set _imageThreeFile(XFile? value) {
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(15, 30, 15, 0),
                   child: TextFormField(
-                    controller: prodnameController,
+                    controller: nameController,
                     textCapitalization: TextCapitalization.words,
                     decoration: InputDecoration(
                       contentPadding: new EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
@@ -670,7 +670,7 @@ set _imageThreeFile(XFile? value) {
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(15, 30, 15, 0),
                   child: TextFormField(
-                    controller: proddescController,
+                    controller: descriptionController,
                     maxLines: 7,
                     minLines: 5,
                     textCapitalization: TextCapitalization.words,
@@ -702,7 +702,7 @@ set _imageThreeFile(XFile? value) {
             )
           ),
     
-         //Stock Count 
+         //stockCount Count 
           Container(
             width: double.infinity,
             height: 90,
@@ -721,7 +721,7 @@ set _imageThreeFile(XFile? value) {
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(15, 30, 15, 0),
                   child: TextFormField(
-                    controller: stockController,
+                    controller: stockCountController,
                     textCapitalization: TextCapitalization.words,
                     decoration: InputDecoration(
                       contentPadding: new EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
@@ -751,7 +751,7 @@ set _imageThreeFile(XFile? value) {
             )
           ),
           
-          //Retail Price
+          //price Price
           Container(
             width: double.infinity,
             height: 90,
@@ -770,7 +770,7 @@ set _imageThreeFile(XFile? value) {
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(15, 30, 15, 0),
                   child: TextFormField(
-                    controller: retailController,
+                    controller: priceController,
                     textCapitalization: TextCapitalization.words,
                     decoration: InputDecoration(
                       contentPadding: new EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
