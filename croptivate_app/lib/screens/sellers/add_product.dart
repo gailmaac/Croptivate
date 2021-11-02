@@ -33,8 +33,8 @@ class _AddProductState extends State<AddProduct> {
   TextEditingController descriptionController = new TextEditingController();
   TextEditingController stockCountController = new TextEditingController();
   TextEditingController priceController = new TextEditingController();
-  TextEditingController countController = new TextEditingController();
-  TextEditingController wholesaleController = new TextEditingController();
+  // TextEditingController countController = new TextEditingController();
+  // TextEditingController wholesaleController = new TextEditingController();
 
   final storageRef = FirebaseStorage.instance.ref();
   final postRef = FirebaseFirestore.instance.collection('sellerPosts');
@@ -66,7 +66,7 @@ set _imageThreeFile(XFile? value) {
 
   bool isUploading = false;
 
-  // String? get uid => null;
+  String? get uid => null;
 
 
 
@@ -99,13 +99,12 @@ set _imageThreeFile(XFile? value) {
                     bool? isRecommended,
                     String? name, 
                     String? description, 
-                    String? stockCount, String? price, String? count, String? wholesale, String? location}) {
+                    int? stockCount, double? price, String? location}) {
+                     //String? wholesale, //String? count
     postRef
-    .doc(_auth.currentUser!.uid)
-    .collection('sellerPosts')
     .doc(postId)
     .set({
-      "postId": postId,
+      // "postId": postId,
       "ownerId": _auth.currentUser!.uid,
       "imageUrlOne": imageUrlOne,
       "imageUrlTwo": imageUrlTwo,
@@ -117,11 +116,9 @@ set _imageThreeFile(XFile? value) {
       "description": description,
       "stockCount": stockCount,
       "price": price,
-      "count": count,
-      "wholesale": wholesale,
+      // "count": count,
+      // "wholesale": wholesale,
       "location": location,
-      "time": DateTime.now(),
-      "status": 'active',
     });
   }
 
@@ -142,18 +139,18 @@ set _imageThreeFile(XFile? value) {
       isRecommended: isRecommended,
       name: nameController.text,
       description: descriptionController.text,
-      stockCount: stockCountController.text,
-      price: priceController.text,
-      count: countController.text,
-      wholesale: wholesaleController.text,
+      stockCount: int.parse(stockCountController.text),
+      price: double.parse(priceController.text),
+      // count: countController.text,
+      // wholesale: wholesaleController.text,
       location: locationController.text
     );
     nameController.clear();
     descriptionController.clear();
     stockCountController.clear();
     priceController.clear();
-    countController.clear();
-    wholesaleController.clear();
+    // countController.clear();
+    // wholesaleController.clear();
     locationController.clear();
     setState(() {
       Navigator.pushNamed(context, '/homeseller');
@@ -801,103 +798,103 @@ set _imageThreeFile(XFile? value) {
           ),
 
           //Minimum Count for Wholesale
-          Container(
-            child: Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(15, 10, 15, 10),
-              child: Stack(
-                children: [
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0, 15, 0, 0),
-                    child: Text(
-                      "Enter minimum count for wholesale:",
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 16,
-                        color: cBlack,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(250, 0, 0, 0),
-                    child: TextFormField(
-                      controller: countController,
-                      decoration: InputDecoration(
-                        contentPadding: new EdgeInsets.symmetric(vertical: 10.0, horizontal: 10),
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(6),
-                        borderSide: BorderSide(color: cGrey, width: 1.0)),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: cGrey, width: 1.0),
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        hintText: "Count",
-                        hintStyle: TextStyle(
-                          fontFamily: 'Poppins',
-                          color: cGrey,
-                          fontSize: 14
-                        ),
-                      ),
-                      style: TextStyle(
-                          fontFamily: 'Poppins',
-                          color: Colors.black87,
-                          fontSize: 14
-                      ),
-                      keyboardType: TextInputType.number,
-                      textInputAction: TextInputAction.next,
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
+          // Container(
+          //   child: Padding(
+          //     padding: EdgeInsetsDirectional.fromSTEB(15, 10, 15, 10),
+          //     child: Stack(
+          //       children: [
+          //         Padding(
+          //           padding: EdgeInsetsDirectional.fromSTEB(0, 15, 0, 0),
+          //           child: Text(
+          //             "Enter minimum count for wholesale:",
+          //             style: TextStyle(
+          //               fontFamily: 'Poppins',
+          //               fontSize: 16,
+          //               color: cBlack,
+          //             ),
+          //           ),
+          //         ),
+          //         Padding(
+          //           padding: EdgeInsets.fromLTRB(250, 0, 0, 0),
+          //           child: TextFormField(
+          //             controller: countController,
+          //             decoration: InputDecoration(
+          //               contentPadding: new EdgeInsets.symmetric(vertical: 10.0, horizontal: 10),
+          //               border: OutlineInputBorder(borderRadius: BorderRadius.circular(6),
+          //               borderSide: BorderSide(color: cGrey, width: 1.0)),
+          //               focusedBorder: OutlineInputBorder(
+          //                 borderSide: BorderSide(color: cGrey, width: 1.0),
+          //                 borderRadius: BorderRadius.circular(6),
+          //               ),
+          //               hintText: "Count",
+          //               hintStyle: TextStyle(
+          //                 fontFamily: 'Poppins',
+          //                 color: cGrey,
+          //                 fontSize: 14
+          //               ),
+          //             ),
+          //             style: TextStyle(
+          //                 fontFamily: 'Poppins',
+          //                 color: Colors.black87,
+          //                 fontSize: 14
+          //             ),
+          //             keyboardType: TextInputType.number,
+          //             textInputAction: TextInputAction.next,
+          //           ),
+          //         )
+          //       ],
+          //     ),
+          //   ),
+          // ),
 
-          //Wholesale Price
-          Container(
-            width: double.infinity,
-            height: 90,
-            child: Stack(
-              children: [
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(15, 5, 0, 0),
-                  child: Text("Wholesale Price",
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 16,
-                    color: cBlack,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(15, 30, 15, 0),
-                  child: TextFormField(
-                    controller: wholesaleController,
-                    textCapitalization: TextCapitalization.words,
-                    decoration: InputDecoration(
-                      contentPadding: new EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(6),
-                      borderSide: BorderSide(color: cGrey, width: 1.0)),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: cGrey, width: 1.0),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      hintText: "Input Wholesale Price in Pesos",
-                      hintStyle: TextStyle(
-                        fontFamily: 'Poppins',
-                        color: cGrey,
-                        fontSize: 14
-                      ),
-                    ),
-                    style: TextStyle(
-                        fontFamily: 'Poppins',
-                        color: Colors.black87,
-                        fontSize: 14
-                    ),
-                    keyboardType: TextInputType.number,
-                    textInputAction: TextInputAction.next,
-                  ),
-                ), 
-              ],
-            )
-          ),
+          // //Wholesale Price
+          // Container(
+          //   width: double.infinity,
+          //   height: 90,
+          //   child: Stack(
+          //     children: [
+          //       Padding(
+          //         padding: EdgeInsetsDirectional.fromSTEB(15, 5, 0, 0),
+          //         child: Text("Wholesale Price",
+          //         style: TextStyle(
+          //           fontFamily: 'Poppins',
+          //           fontSize: 16,
+          //           color: cBlack,
+          //           ),
+          //         ),
+          //       ),
+          //       Padding(
+          //         padding: EdgeInsetsDirectional.fromSTEB(15, 30, 15, 0),
+          //         child: TextFormField(
+          //           controller: wholesaleController,
+          //           textCapitalization: TextCapitalization.words,
+          //           decoration: InputDecoration(
+          //             contentPadding: new EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+          //             border: OutlineInputBorder(borderRadius: BorderRadius.circular(6),
+          //             borderSide: BorderSide(color: cGrey, width: 1.0)),
+          //             focusedBorder: OutlineInputBorder(
+          //               borderSide: BorderSide(color: cGrey, width: 1.0),
+          //               borderRadius: BorderRadius.circular(6),
+          //             ),
+          //             hintText: "Input Wholesale Price in Pesos",
+          //             hintStyle: TextStyle(
+          //               fontFamily: 'Poppins',
+          //               color: cGrey,
+          //               fontSize: 14
+          //             ),
+          //           ),
+          //           style: TextStyle(
+          //               fontFamily: 'Poppins',
+          //               color: Colors.black87,
+          //               fontSize: 14
+          //           ),
+          //           keyboardType: TextInputType.number,
+          //           textInputAction: TextInputAction.next,
+          //         ),
+          //       ), 
+          //     ],
+          //   )
+          // ),
 
           //Location
           Container(
