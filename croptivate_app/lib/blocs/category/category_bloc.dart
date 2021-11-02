@@ -37,7 +37,8 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     .listen((categories) => add(UpdateCategories(categories)));
   }
 
-  Stream<CategoryState> _mapUpdateCategoriesToState(UpdateCategories event) async* {
+  Stream<CategoryState> _mapUpdateCategoriesToState(
+      UpdateCategories event) async* {
     yield CategoryLoaded(categories: event.categories);
   }
 }
