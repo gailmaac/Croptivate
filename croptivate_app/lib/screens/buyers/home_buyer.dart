@@ -35,51 +35,53 @@ class HomeBuyer extends StatelessWidget {
           title: Align(
             alignment: AlignmentDirectional(-1, -1),
             child: Container(
-                width: 350,
-                height: 30,
-                decoration: BoxDecoration(
-                  color: Color(0xFFEEEEEE),
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: Align(
-                  alignment: AlignmentDirectional(0, 0),
-                  child: Container(
-                    width: 350,
-                    child: Stack(
-                      children: [
-                        Align(
-                          alignment: AlignmentDirectional(-10, -3.52),
-                          child: Padding(
-                            padding:
-                                EdgeInsetsDirectional.fromSTEB(10, 5, 5, 5),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: TextField(
-                                    obscureText: false,
-                                    decoration: InputDecoration(
-                                      hintText: "What are you looking for?",
-                                      hintStyle: hintBodyText,
-                                      enabledBorder: InputBorder.none,
-                                      focusedBorder: InputBorder.none,
-                                    ),
+              width: 350,
+              height: 30,
+              decoration: BoxDecoration(
+                color: Color(0xFFEEEEEE),
+                borderRadius: BorderRadius.circular(5),
+              ),
+              child: Align(
+                alignment: AlignmentDirectional(0, 0),
+                child: Container(
+                  width: 350,
+                  child: Stack(
+                    children: [
+                      Align(
+                        alignment: AlignmentDirectional(-10, -3.52),
+                        child: Padding(
+                          padding:
+                              EdgeInsetsDirectional.fromSTEB(10, 5, 5, 5),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: TextField(
+                                  obscureText: false,
+                                  decoration: InputDecoration(
+                                    hintText: "What are you looking for?",
+                                    hintStyle: hintBodyText,
+                                    enabledBorder: InputBorder.none,
+                                    focusedBorder: InputBorder.none,
                                   ),
                                 ),
-                                Align(
-                                    alignment: AlignmentDirectional(0.94, 0.16),
-                                    child: Icon(
-                                      Icons.search_rounded,
-                                      color: Color(0xA3000000),
-                                      size: 20,
-                                    ))
-                              ],
-                            ),
+                              ),
+                              Align(
+                                alignment: AlignmentDirectional(0.94, 0.16),
+                                child: Icon(
+                                  Icons.search_rounded,
+                                  color: Color(0xA3000000),
+                                  size: 20,
+                                )
+                              )
+                            ],
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                )),
+                ),
+              )
+            ),
           ),
           actions: <Widget>[
             IconButton(
