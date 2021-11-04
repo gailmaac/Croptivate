@@ -62,8 +62,8 @@ class AppRouter {
         return CatalogScreen.route(category: settings.arguments as Category);
       case ProductScreen.routeName:
         return ProductScreen.route(product: settings.arguments as Product);
-      // case UserProfile.routeName:
-      //   return UserProfile.route();
+      case UserProfile.routeName:
+        return UserProfile.route();
 
       default:
         return _errorRoute();
