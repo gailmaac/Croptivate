@@ -39,12 +39,13 @@ class Wrapper extends StatelessWidget {
     //return either Home or Authenticate Widget
     if (user == null) {
       return Authenticate();
-    }
-    getuserSeller();
-    if (seller == 1) {
-      return HomeSeller();
     } else {
-      return HomeBuyer();
+      getuserSeller();
+      if (seller == 1) {
+        return HomeSeller();
+      } else {
+        return HomeBuyer();
+      }
     }
   }
 }
