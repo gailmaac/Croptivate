@@ -147,6 +147,7 @@ class _createmessageState extends State<createmessage> {
                         subtitle: Text(resultusers[i]['cnum'].toString()),
                         onTap: () async {
                           inputData();
+                          var name = '';
                           await FirebaseFirestore.instance
                               .collection('userBuyer')
                               .get()
@@ -158,6 +159,7 @@ class _createmessageState extends State<createmessage> {
                                   resultusers[i]['cnum'];
                               if (x == y) {
                                 receiver = doc.id;
+                                name = doc['fname'] + ' ' + doc['lname'];
                               }
                             });
                           });
@@ -172,6 +174,7 @@ class _createmessageState extends State<createmessage> {
                                   resultusers[i]['cnum'];
                               if (a == b) {
                                 receiver = doc.id;
+                                name = doc['fname'] + ' ' + doc['lname'];
                               }
                             });
                           });
@@ -185,6 +188,12 @@ class _createmessageState extends State<createmessage> {
                                 ' ' +
                                 resultusers[i]['lname'],
                           });
+                          storecontact
+                              .collection('Chats')
+                              .doc(receiver)
+                              .collection('Contacts')
+                              .doc(uid)
+                              .set({'contactname': name});
                           Navigator.push(
                               context,
                               MaterialPageRoute(
