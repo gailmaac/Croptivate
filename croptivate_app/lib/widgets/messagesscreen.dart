@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:croptivate_app/pallete.dart';
 import 'package:croptivate_app/widgets/createmessage.dart';
 import 'package:croptivate_app/widgets/messages.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -37,12 +38,31 @@ class _MessagescreenState extends State<Messagescreen> {
   Widget build(BuildContext context) {
     getcontactname();
     return Scaffold(
+      backgroundColor: cWhite,
       appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Colors.green[400],
-        title: Center(
-          child: Text('Messages'),
-        ),
+        toolbarHeight: 60,
+        iconTheme: IconThemeData(color: cGreen),
+        leading: IconButton(
+          onPressed: () {
+          Navigator.pop(context);
+          },
+            icon: Icon(
+            Icons.arrow_back_ios,
+            color: cBlack,
+            size: 15,
+            ),
+          ),
+        backgroundColor: cWhite,
+        elevation: 0.0,
+        title: Text(
+              "Messages",
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                color: cGreen,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+        centerTitle: true,
       ),
       body: Container(
         child: ShowContacts(),
@@ -52,9 +72,15 @@ class _MessagescreenState extends State<Messagescreen> {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => createmessage()));
         },
-        label: const Text('Create Message'),
+        label: const Text('Create Message',
+        style: TextStyle(
+          fontFamily: 'Poppins',
+          fontSize: 13,
+          fontWeight: FontWeight.w600
+          ),
+        ),
         icon: const Icon(Icons.add),
-        backgroundColor: Colors.green[400],
+        backgroundColor: cGreen,
       ),
     );
   }
@@ -86,9 +112,9 @@ class ShowContacts extends StatelessWidget {
                 QueryDocumentSnapshot x = snapshot.data!.docs[i];
                 return SizedBox(
                   child: Container(
-                    color: Colors.amber,
+                    color: cWhite,
                     child: ListTile(
-                      leading: CircleAvatar(),
+                      leading: CircleAvatar(backgroundColor: cGreen,),
                       onTap: () {
                         Navigator.push(
                             context,
@@ -98,8 +124,8 @@ class ShowContacts extends StatelessWidget {
                                     receiver: x.id,
                                     name: x['contactname'])));
                       },
-                      title: Text(x['contactname']),
-                      tileColor: Colors.white,
+                      title: Text(x['contactname'], style: cBodyText.copyWith(color: cBlack),),
+                      tileColor: cWhite,
                     ),
                   ),
                 );
