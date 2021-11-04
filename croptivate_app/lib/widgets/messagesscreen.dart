@@ -1,9 +1,17 @@
+import 'dart:ui';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:croptivate_app/pallete.dart';
 import 'package:croptivate_app/widgets/createmessage.dart';
 import 'package:croptivate_app/widgets/messages.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+//import 'messages.dart' as messages;
+
+/*getmessagescount() async {
+  // You can now access token from token_manager from any class like this.
+  final int MessagesCount = messages.messagescount;
+}*/
 
 class Messagescreen extends StatefulWidget {
   const Messagescreen({Key? key}) : super(key: key);
@@ -44,24 +52,24 @@ class _MessagescreenState extends State<Messagescreen> {
         iconTheme: IconThemeData(color: cGreen),
         leading: IconButton(
           onPressed: () {
-          Navigator.pop(context);
+            Navigator.pop(context);
           },
-            icon: Icon(
+          icon: Icon(
             Icons.arrow_back_ios,
             color: cBlack,
             size: 15,
-            ),
           ),
+        ),
         backgroundColor: cWhite,
         elevation: 0.0,
         title: Text(
-              "Messages",
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                color: cGreen,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+          "Messages",
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            color: cGreen,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         centerTitle: true,
       ),
       body: Container(
@@ -72,12 +80,10 @@ class _MessagescreenState extends State<Messagescreen> {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => createmessage()));
         },
-        label: const Text('Create Message',
-        style: TextStyle(
-          fontFamily: 'Poppins',
-          fontSize: 13,
-          fontWeight: FontWeight.w600
-          ),
+        label: const Text(
+          'Create Message',
+          style: TextStyle(
+              fontFamily: 'Poppins', fontSize: 13, fontWeight: FontWeight.w600),
         ),
         icon: const Icon(Icons.add),
         backgroundColor: cGreen,
@@ -96,6 +102,7 @@ class ShowContacts extends StatelessWidget {
     return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('Chats/' + chats + '/Contacts')
+            .orderBy('lastTime')
             .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
@@ -107,15 +114,42 @@ class ShowContacts extends StatelessWidget {
               itemCount: snapshot.data!.docs.length,
               shrinkWrap: true,
               physics: ScrollPhysics(),
+              reverse: true,
               primary: true,
               itemBuilder: (context, i) {
                 QueryDocumentSnapshot x = snapshot.data!.docs[i];
+                String contactname = x['contactname'];
+                Timestamp ltime = x['lastTime'];
+                int lhour = x['lastHour'];
+                int lminute = x['lastMinute'];
+                int lday = x['lastDay'];
+
                 return SizedBox(
                   child: Container(
-                    color: cWhite,
+                    margin: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: x['messagescount'].toString() != '0'
+                          ? Colors.green[300]!.withOpacity(0.3)
+                          : cWhite,
+                    ),
                     child: ListTile(
-                      leading: CircleAvatar(backgroundColor: cGreen,),
-                      onTap: () {
+                      leading: CircleAvatar(backgroundColor: cGreen),
+                      onTap: () async {
+                        await FirebaseFirestore.instance
+                            .collection('Chats')
+                            .doc(chats)
+                            .collection('Contacts')
+                            .doc(x.id)
+                            .set({
+                          'contactname': contactname,
+                          'lastTime': ltime,
+                          'lastHour': lhour,
+                          'lastMinute': lminute,
+                          'lastDay': lday,
+                          'messagescount': 0,
+                        });
+
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -124,8 +158,38 @@ class ShowContacts extends StatelessWidget {
                                     receiver: x.id,
                                     name: x['contactname'])));
                       },
-                      title: Text(x['contactname'], style: cBodyText.copyWith(color: cBlack),),
+                      title: Text(
+                        x['contactname'],
+                        style: cBodyText.copyWith(color: cBlack),
+                      ),
                       tileColor: cWhite,
+                      trailing: Container(
+                        width: 100,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              x['lastHour'].toString() +
+                                  ' : ' +
+                                  x['lastMinute'].toString(),
+                              style: cBodyText.copyWith(
+                                  color: cBlack, fontSize: 10),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              x['messagescount'].toString() != '0'
+                                  ? x['messagescount'].toString()
+                                  : '',
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.red),
+                            )
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                 );

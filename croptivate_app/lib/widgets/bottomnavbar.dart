@@ -2,12 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:croptivate_app/pallete.dart';
 import 'package:croptivate_app/screens/buyers/user_profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:croptivate_app/widgets/messages.dart';
 import 'package:croptivate_app/widgets/messagesscreen.dart';
 import 'package:flutter/material.dart';
 
 class BottomNavBar extends StatelessWidget {
-const BottomNavBar({Key? key}) : super(key: key);
+  const BottomNavBar({Key? key}) : super(key: key);
 // final FirebaseAuth _auth = FirebaseAuth.instance;
 // getusers() async {
 //   var name = '';
