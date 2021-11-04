@@ -1,180 +1,138 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:croptivate_app/blocs/product/product_bloc.dart';
+import 'package:croptivate_app/models/product_model.dart';
 import 'package:croptivate_app/pallete.dart';
+import 'package:croptivate_app/screens/buyers/user_profile.dart';
+import 'package:croptivate_app/widgets/bottomnavbar.dart';
+import 'package:croptivate_app/widgets/productcard.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 
 class ProductPage extends StatefulWidget {
   const ProductPage({Key? key}) : super(key: key);
 
   @override
   _ProductPageState createState() => _ProductPageState();
+
   static const String routeName = '/prodlistings';
   static Route route() {
     return MaterialPageRoute(
-        settings: RouteSettings(name: routeName),
-        builder: (_) => ProductPage());
+        settings: RouteSettings(name: routeName), builder: (_) => ProductPage());
   }
 }
 
 class _ProductPageState extends State<ProductPage> {
-  // FirebaseAuth _auth = FirebaseAuth.instance;
-
-  // late QuerySnapshot products;
-
-  // getData() {
-  //   var userId = FirebaseAuth.instance.currentUser!.uid;
-  //   FirebaseFirestore.instance.collection('userSeller').doc(userId).get().then((results){
-  //     setState(() {
-  //       getName = results.data()!["fname"];
-  //     });
-  //   });
-  // }
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   userId = FirebaseAuth.instance.currentUser!.uid;
-  //   userEmail = FirebaseAuth.instance.currentUser!.uid;
-
-  //   FirebaseFirestore.instance.collection('sellerPosts').where('status', isEqualTo: "active")
-  //   .orderBy("time", descending: true).get().then((results){
-
-  //     setState(() {
-  //       products = results;
-  //     });
-  //   });
-
-  //   getData();
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Center(child: Text("Your Listings")),
-          backgroundColor: cGreen,
+      backgroundColor: cWhite,
+      appBar: AppBar(
+        backgroundColor: cWhite,
+        elevation: 0,
+        title: Text(
+          "Your Listings",
+          style: TextStyle(
+              color: cGreen,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1),
         ),
-        body: Stack(children: [
-          Container(
-            //color: Colors.red,
-            height: 40,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Container(
-                  padding: EdgeInsets.only(left: 60),
-                  child: Text('Product Name', style: TextStyle(fontSize: 10)),
-                ),
-                Container(
-                  padding: EdgeInsets.only(left: 60),
-                  child: Text('Price', style: TextStyle(fontSize: 10)),
-                ),
-                Container(
-                  padding: EdgeInsets.only(left: 30),
-                  child: Text('Stock', style: TextStyle(fontSize: 10)),
-                ),
-                Container(
-                  padding: EdgeInsets.only(left: 35),
-                  child: Text('Options', style: TextStyle(fontSize: 10)),
-                ),
-              ],
-            ),
+        centerTitle: true,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: cBlack,
+            size: 15,
           ),
-          Container(
-              padding: EdgeInsets.only(top: 40),
-              child: ListView.separated(
-                  separatorBuilder: (context, index) => Divider(
-                        color: Colors.yellow,
-                      ),
-                  itemCount: 2,
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      horizontalTitleGap: 8,
-                      tileColor: Colors.blue,
-                      title: Text('Camille ', style: TextStyle(fontSize: 10)),
-                      subtitle: Text('Javier', style: TextStyle(fontSize: 10)),
-                      leading: Container(
-                        height: 40,
-                        width: 40,
-                        color: Colors.pink,
-                        child: FittedBox(
-                          clipBehavior: Clip.hardEdge,
-                          alignment: Alignment.center,
-                          fit: BoxFit.fitWidth,
-                          child: Image.asset(
-                            'assets/vegetable6.jpg',
-                          ),
-                        ),
-                      ),
-                      trailing: SizedBox(
-                        child: Container(
-                            padding: EdgeInsets.only(top: 15),
-                            width: 160,
-                            //color: Colors.red,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Container(
-                                  //color: Colors.amber,
-                                  width: 55,
-                                  child: Text('100.00',
-                                      style: TextStyle(fontSize: 10)),
-                                ),
-                                Container(
-                                  //color: Colors.blueGrey,
-                                  width: 55,
-                                  child: Text('12',
-                                      style: TextStyle(fontSize: 10)),
-                                ),
-                                SizedBox(
-                                  child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        SizedBox(
-                                          child: Container(
-                                            height: 20,
-                                            //color: Colors.blue,
-                                            child: TextButton(
-                                              child: Text(
-                                                'Edit',
-                                              ),
-                                              style: TextButton.styleFrom(
-                                                  primary: Colors.white,
-                                                  backgroundColor: Colors.green,
-                                                  minimumSize: Size(0, 0),
-                                                  padding: EdgeInsets.only(
-                                                      top: 3,
-                                                      bottom: 3,
-                                                      left: 15,
-                                                      right: 15),
-                                                  textStyle: TextStyle(
-                                                      fontSize: 10,
-                                                      fontStyle:
-                                                          FontStyle.italic)),
-                                              onPressed: () {},
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          child: Container(
-                                            //color: Colors.yellow,
-                                            child: Text('more',
-                                                style: TextStyle(
-                                                    color: Colors.green,
-                                                    fontSize: 10)),
-                                          ),
-                                        )
-                                      ]),
-                                ),
-                              ],
-                            )),
-                      ),
-                      //)
-                    );
-                  })),
-        ]));
+        ),
+      ),
+      bottomNavigationBar: Container(
+            padding: EdgeInsets.only(
+              left: 30,
+              right: 30,
+              bottom: 20,
+              top: 10,
+            ),
+            height: 60,
+            decoration: BoxDecoration(color: cWhite, boxShadow: [
+              BoxShadow(
+                offset: Offset(1, 10),
+                blurRadius: 35,
+                color: cGrey.withOpacity(0.40),
+              )
+            ]),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                IconButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/message');
+                  },
+                  icon: Icon(
+                    Icons.chat_bubble_outline_rounded,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/addproduct');
+                  },
+                  icon: Icon(
+                    Icons.add_circle_outline_rounded,
+                  ),
+                ),
+                IconButton(
+                    onPressed: () {
+                      // Navigator.push(context, MaterialPageRoute(builder: (context) => UserProfile()));
+                    },
+                    icon: Icon(
+                      Icons.person_outline_rounded,
+                    )),
+              ],
+            )),
+      body: BlocBuilder<ProductBloc, ProductState>(
+        builder: (context, state) {
+          print("State: $state");
+          if (state is ProductLoading) {
+            return Center(
+              child: CircularProgressIndicator(color: cGreen,),
+            );
+          }
+          if (state is ProductLoaded) {
+            return GridView.builder(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: 0.95, vertical: 16.0),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 1, childAspectRatio: 2.4),
+              itemCount: state.products.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Center(
+                    child: ProductCard(
+                      product: state.products[index],
+                      widthFactor: 1.1,
+                      leftPosition: 150,
+                      topPosition: 75,
+                      heightofBox: 60,
+                      widthValue: 200,
+                      isFavorite: true,
+                    ),
+                  ),
+                );
+              },
+            );
+          }
+          else {return Text("Something went wrong.");}
+        },
+      )
+    );
   }
 }
+
+
