@@ -1,5 +1,6 @@
 import 'package:croptivate_app/blocs/basket/basket_bloc.dart';
 import 'package:croptivate_app/blocs/favorites/favorites_bloc.dart';
+import 'package:croptivate_app/blocs/product/product_bloc.dart';
 import 'package:croptivate_app/models/product_model.dart';
 import 'package:croptivate_app/pallete.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ class ProductCard extends StatelessWidget {
   final Product product;
   final double widthFactor;
   final bool isFavorite;
+  // final bool isDelete;
   final double leftPosition;
   final double topPosition;
   final double heightofBox;
@@ -20,6 +22,7 @@ class ProductCard extends StatelessWidget {
       required this.product,
       this.widthFactor = 2.5,
       this.isFavorite = false,
+      // this.isDelete = false,
       this.leftPosition = 5,
       this.topPosition = 120,
       this.heightofBox = 80,
@@ -136,7 +139,7 @@ class ProductCard extends StatelessWidget {
                               );
                             },
                           )
-                        : SizedBox(),
+                        : SizedBox()
                   ],
                 ),
               ),
