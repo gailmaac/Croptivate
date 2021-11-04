@@ -58,8 +58,7 @@ class BottomNavBar extends StatelessWidget {
             ),
             IconButton(
                 onPressed: () {
-                  //Navigator.push(context,
-                  //  MaterialPageRoute(builder: (context) => UserProfile()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => UserProfile()));
                 },
                 icon: Icon(
                   Icons.person_outline_rounded,
