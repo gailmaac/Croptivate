@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:croptivate_app/blocs/basket/basket_bloc.dart';
 import 'package:croptivate_app/models/product_model.dart';
 import 'package:croptivate_app/models/basket_model.dart';
@@ -8,6 +9,7 @@ import 'package:croptivate_app/widgets/basketprodcard_wid.dart';
 import 'package:croptivate_app/widgets/basketproductcard.dart';
 import 'package:croptivate_app/widgets/bottomnavbar.dart';
 import 'package:croptivate_app/widgets/ordersummary.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,7 +19,7 @@ class BasketScreen extends StatefulWidget {
 
   @override
   _BasketScreenState createState() => _BasketScreenState();
-
+  
   static const String routeName = '/basket';
   static Route route() {
     return MaterialPageRoute(
@@ -30,7 +32,7 @@ List<Tab> tabs = [
   Tab(child: Text("Current Orders".toUpperCase())),
   Tab(child: Text("Order History".toUpperCase())),
 ];
-
+final FirebaseAuth _auth = FirebaseAuth.instance;
 class _BasketScreenState extends State<BasketScreen> {
   @override
   Widget build(BuildContext context) {
@@ -90,7 +92,19 @@ class _BasketScreenState extends State<BasketScreen> {
                   children: <Widget>[
                     ElevatedButton(
                         style: ElevatedButton.styleFrom(primary: cGreen),
-                        onPressed: () {
+                        onPressed: () async {
+                          var name = '';
+                          await FirebaseFirestore.instance
+                          .collection('userBuyer')
+                          .get()
+                          .then((querySnapshot){
+                            querySnapshot.docs.forEach((doc) { 
+                              if (_auth.currentUser?.uid == doc.id) {
+                                name = doc['fname'] + ' ' + doc['lname'];
+                                print(name);
+                              } else { print("something went wrong");}
+                            });
+                          });
                           Navigator.pushNamed(context, '/checkout');
                         },
                         child: Padding(
