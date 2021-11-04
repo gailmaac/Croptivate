@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:croptivate_app/pallete.dart';
+import 'package:croptivate_app/widgets/backgroundimage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 
 class Messages extends StatefulWidget {
   final sender;
@@ -37,47 +39,76 @@ class _MessagesState extends State<Messages> {
   Widget build(BuildContext context) {
     getcontactname();
     return Scaffold(
+      backgroundColor: cWhite,
       appBar: AppBar(
-          leading: IconButton(
-                onPressed: () {
-                Navigator.pushReplacementNamed(context, '/message');
-                },
-                  icon: Icon(
-                  Icons.arrow_back_ios,
-                  color: cBlack,
-                  size: 15,
-                  ),
-                ),
-          title: Center(
-            child: Text(widget.name)
+        toolbarHeight: 60,
+        iconTheme: IconThemeData(color: cGreen),
+        leading: IconButton(
+          onPressed: () {
+          Navigator.pop(context);
+          },
+            icon: Icon(
+            Icons.arrow_back_ios,
+            color: cBlack,
+            size: 15,
+            ),
           ),
-          backgroundColor: Colors.green[400]),
-          
+        backgroundColor: cWhite,
+        elevation: 0.0,
+        title: Text(
+              widget.name,
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                color: cGreen,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+        centerTitle: true,
+      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Container(
-            height: 390,
-            child: SingleChildScrollView(
-              physics: ScrollPhysics(),
-              reverse: true,
-              child: Showmessages(
-                sender: widget.sender,
-                receiver: widget.receiver,
+          Expanded(
+            child: Container(
+              color: cWhite,
+              height: double.infinity,
+              child: SingleChildScrollView(
+                physics: ScrollPhysics(),
+                reverse: true,
+                child: Showmessages(
+                  sender: widget.sender,
+                  receiver: widget.receiver,
+                ),
               ),
             ),
           ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                      border: Border(
-                          top: BorderSide(color: Colors.green, width: 0.2))),
-                  child: TextField(
-                    controller: msg,
-                    decoration: InputDecoration(hintText: 'Enter Message...'),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: cWhite,
+                        border: Border(
+                            top: BorderSide(color: cGreen, width: 0.2),
+                            bottom: BorderSide(color: cGreen, width: 0.2),
+                        )
+                      ),
+                    child: TextField(
+                      controller: msg,
+                      decoration: InputDecoration(
+                        hintText: 'Enter Message...', 
+                        hintStyle: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 14, 
+                          color: Colors.black45, 
+                          fontWeight: FontWeight.w500,
+                        )),
+                    ),
                   ),
                 ),
               ),
@@ -113,7 +144,7 @@ class _MessagesState extends State<Messages> {
                   msg.clear();
                 },
                 icon: Icon(Icons.send),
-                color: Colors.teal,
+                color: cGreen,
               )
             ],
           )
@@ -155,12 +186,22 @@ class Showmessages extends StatelessWidget {
                       : CrossAxisAlignment.start,
                   children: [
                     Container(
+                      
                         padding:
-                            EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                          
                         color: sender == x['sender']
                             ? Colors.green[300]!.withOpacity(0.2)
-                            : Colors.blue[300]!.withOpacity(0.2),
-                        child: Text(x['message'])),
+                            : Colors.blue[300]!.withOpacity(0.2),),
+                        child: Text(x['message'], 
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.black
+                              ),)),
                   ],
                 ),
               );
