@@ -7,6 +7,7 @@ import 'package:croptivate_app/screens/buyers/home_buyer.dart';
 import 'package:croptivate_app/widgets/basketprodcard_wid.dart';
 import 'package:croptivate_app/widgets/basketproductcard.dart';
 import 'package:croptivate_app/widgets/bottomnavbar.dart';
+import 'package:croptivate_app/widgets/ordersummary.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -89,7 +90,9 @@ class _BasketScreenState extends State<BasketScreen> {
                   children: <Widget>[
                     ElevatedButton(
                         style: ElevatedButton.styleFrom(primary: cGreen),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/checkout');
+                        },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 10,
@@ -155,77 +158,7 @@ class _BasketScreenState extends State<BasketScreen> {
                                 thickness: 1,
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 30, vertical: 10),
-                              child: Column(
-                                children: [
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text("Subtotal",
-                                          style: TextStyle(
-                                              color: cBlack,
-                                              fontSize: 22,
-                                              fontFamily: 'Poppins',
-                                              fontWeight: FontWeight.bold)),
-                                      Text('\₱${state.basket.subtotalString}',
-                                          style: TextStyle(
-                                              color: cBlack,
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold)),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text("Shipping Fee",
-                                          style: TextStyle(
-                                              color: cBlack,
-                                              fontSize: 22,
-                                              fontFamily: 'Poppins',
-                                              fontWeight: FontWeight.bold)),
-                                      Text('\₱${state.basket.shippingFeeString}',
-                                          style: TextStyle(
-                                              color: cBlack,
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold)),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 35,
-                                  ),
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text("Total",
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 28,
-                                              fontFamily: 'Poppins',
-                                              fontWeight: FontWeight.bold)),
-                                      Text('\₱${state.basket.totalString}',
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 28,
-                                              fontWeight: FontWeight.bold)),
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
+                            OrderSummary(),
                           ],
                         ),
                       ],
