@@ -1009,7 +1009,7 @@ set _imageThreeFile(XFile? value) {
               ),
               IconButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, UserProfile.route);
+                  Navigator.pushNamed(context, '/userprofileseller');
                 }, 
                 icon: Icon(Icons.person_outline_rounded, )
               ),
