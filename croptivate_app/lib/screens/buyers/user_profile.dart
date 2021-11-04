@@ -1,8 +1,6 @@
-import 'package:croptivate_app/models/edituser.dart';
 import 'package:croptivate_app/pallete.dart';
 import 'package:croptivate_app/screens/authentication/sign_in.dart';
 import 'package:croptivate_app/screens/sellers/edit_profile.dart';
-import 'package:croptivate_app/utils/user_preferences.dart';
 import 'package:croptivate_app/widgets/profile_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +22,6 @@ class _UserProfileState extends State<UserProfile> {
   @override
   Widget build(BuildContext context) {
     
-    final userOne = UserPreferences.imUser;
 
 
 
