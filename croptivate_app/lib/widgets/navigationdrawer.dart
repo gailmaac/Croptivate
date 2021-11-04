@@ -1,4 +1,5 @@
 import 'package:croptivate_app/pallete.dart';
+import 'package:croptivate_app/screens/authentication/sign_in.dart';
 import 'package:croptivate_app/screens/sellers/home_seller.dart';
 import 'package:croptivate_app/screens/sellers/notifications.dart';
 import 'package:croptivate_app/screens/sellers/orders.dart';
@@ -6,6 +7,7 @@ import 'package:croptivate_app/screens/sellers/product_listings.dart';
 import 'package:croptivate_app/screens/sellers/settings.dart';
 import 'package:croptivate_app/services/auth.dart';
 import 'package:croptivate_app/shared/loading.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +20,7 @@ class NavigationDrawerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return loading ? Loading() : Drawer( 
+    return Drawer( 
       child: Material(
         color: cWhite,
         child: ListView(
@@ -48,9 +50,9 @@ class NavigationDrawerWidget extends StatelessWidget {
             buildMenuItem(
               text: "Sign Out",
               icon: Icons.logout_rounded,
-              onClicked: () async{
-                loading = true;
+              onClicked: () async {
                 await _auth.signOut();
+                Navigator.push(context, MaterialPageRoute(builder: (context) => SignIn()));
               }
             ),
           ],
@@ -92,7 +94,8 @@ void selectedItem(BuildContext context, int index) {
       Navigator.pushNamed(context, '/notifications');
       break;
     case 1:
-      Navigator.pushNamed(context, '/prodlistings');
+      Navigator.push(context,
+      MaterialPageRoute(builder: (context) => ProductPage()));
       break;
     case 2:
       Navigator.pushNamed(context, '/homeseller');
