@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:croptivate_app/pallete.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -37,8 +38,21 @@ class _MessagesState extends State<Messages> {
     getcontactname();
     return Scaffold(
       appBar: AppBar(
-          title: Center(child: Text(widget.name)),
+          leading: IconButton(
+                onPressed: () {
+                Navigator.popAndPushNamed(context, '/message');
+                },
+                  icon: Icon(
+                  Icons.arrow_back_ios,
+                  color: cBlack,
+                  size: 15,
+                  ),
+                ),
+          title: Center(
+            child: Text(widget.name)
+          ),
           backgroundColor: Colors.green[400]),
+          
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.stretch,
