@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:croptivate_app/models/user_model_buyer.dart';
 import 'package:croptivate_app/pallete.dart';
 import 'package:croptivate_app/screens/authentication/sign_in.dart';
 import 'package:croptivate_app/screens/sellers/edit_profile.dart';
 import 'package:croptivate_app/services/auth.dart';
 import 'package:croptivate_app/widgets/profile_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:croptivate_app/shared/loading.dart';
@@ -207,22 +209,40 @@ import 'package:croptivate_app/services/database.dart';
 // }
 
 class UserProfile extends StatefulWidget {
-  static const String routeName = '/userprofilebuyer';
-
-  static Route route() {
-    return MaterialPageRoute(
-        settings: RouteSettings(name: routeName), builder: (_) => UserProfile());
-  }
-
+  const UserProfile({Key? key}) : super(key: key);
 
   @override
   _UserProfileState createState() => _UserProfileState();
+  static const String routeName = '/userprofilebuyer';
+  static Route route() {
+    return MaterialPageRoute(
+        settings: RouteSettings(name: routeName),
+        builder: (_) => UserProfile());
+  }
 }
 
   bool loading = false;
+  String resultuser = '';
 
 class _UserProfileState extends State<UserProfile> {
   @override
+
+final FirebaseAuth _auth = FirebaseAuth.instance;
+//getting user from firebase
+getusers() {
+  var name = '';
+  FirebaseFirestore.instance.collection('userBuyer').get().then((querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        if (_auth.currentUser?.uid == doc.id) {
+          name = doc['fname'] + ' ' + doc['lname'];
+          print(name);
+          
+        }
+      });
+    });
+  }
+
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -259,16 +279,9 @@ class _UserProfileState extends State<UserProfile> {
       body: ListView(
         // physics: BouncingScrollPhysics(),
         children: [
-          // ProfileWidget(
-          //   imagePath: userOne.imagePath,
-          //   onClicked: () async {
-              
-          //   }
-          // ),
-          // const SizedBox(height: 24),
           Column(
             children: [
-              
+              getusers()
             ],
           ),
           const SizedBox(height: 24),
@@ -284,20 +297,20 @@ class _UserProfileState extends State<UserProfile> {
     );
   }
 
-  Widget buildName(User user) => Column(
-    children: [
-      Text(
-        user.fname + ' ' +  user.lname,
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontFamily: 'Poppins',
-          color: cBlack,
-          fontSize: 24
-        ),
-      ),
-      const SizedBox(height: 4),
-    ],
-  );
+  // Widget buildName(User user) => Column(
+  //   children: [
+  //     Text(
+  //       user.fname + ' ' +  user.lname,
+  //       style: TextStyle(
+  //         fontWeight: FontWeight.bold,
+  //         fontFamily: 'Poppins',
+  //         color: cBlack,
+  //         fontSize: 24
+  //       ),
+  //     ),
+  //     const SizedBox(height: 4),
+  //   ],
+  // );
   
 
   //Track Order Button
