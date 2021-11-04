@@ -17,6 +17,7 @@ import 'package:croptivate_app/screens/sellers/home_seller.dart';
 import 'package:croptivate_app/screens/sellers/notifications.dart';
 import 'package:croptivate_app/screens/sellers/product_listings.dart';
 import 'package:croptivate_app/screens/splashscreen.dart';
+import 'package:croptivate_app/screens/wrapper.dart';
 import 'package:croptivate_app/widgets/messagesscreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -27,8 +28,10 @@ class AppRouter {
 
     switch (settings.name) {
       case '/':
-        return HomeBuyer.route();
-      // return SignIn.route();
+        // return HomeBuyer.route();
+      return Wrapper.route();
+      case SignIn.routeName:
+        return SignIn.route();
       case HomeBuyer.routeName:
         return HomeBuyer.route();
       case HomeSeller.routeName:
