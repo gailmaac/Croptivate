@@ -101,7 +101,9 @@ class ProductCard extends StatelessWidget {
 
                                     final snackBar = SnackBar(
                                           content: Text(
-                                              "Item was added to your Basket!"));
+                                              "Item was added to your Basket!"),
+                                          duration: Duration(
+                                            seconds: 1, milliseconds: 100));
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(snackBar);
                               },
@@ -123,7 +125,9 @@ class ProductCard extends StatelessWidget {
 
                                       final snackBar = SnackBar(
                                           content: Text(
-                                              "Item was removed to your Favorites!"));
+                                              "Item was removed to your Favorites!"),
+                                          duration: Duration(
+                                            seconds: 1, milliseconds: 100));
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(snackBar);
                                     },

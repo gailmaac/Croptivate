@@ -1,5 +1,6 @@
 import 'package:croptivate_app/pallete.dart';
 import 'package:croptivate_app/screens/buyers/user_profile.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class BottomNavBar extends StatelessWidget {
@@ -7,8 +8,10 @@ class BottomNavBar extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
+  
   @override
   Widget build(BuildContext context) {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
     return Container(
       padding: EdgeInsets.only(
         left: 30,
@@ -50,7 +53,7 @@ class BottomNavBar extends StatelessWidget {
           ),
           IconButton(
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => UserProfile()));
+              Navigator.pushNamed(context, '/userprofilebuyer');
             }, 
             icon: Icon(Icons.person_outline_rounded, )
           ),
