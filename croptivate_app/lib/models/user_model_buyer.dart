@@ -34,3 +34,11 @@ static User fromSnapshot(DocumentSnapshot snap) {
   ];
 }
 
+List<User> user = [
+  User(
+    cnumber: 09154825692,
+    fname: "Juan",
+    lname: "Dela Cruz",
+    loc: "7124 General Ricarte St. South Cembo, Makati City"
+    )
+];
