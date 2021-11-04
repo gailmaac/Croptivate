@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:croptivate_app/pallete.dart';
 import 'package:croptivate_app/screens/buyers/user_profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,9 +7,19 @@ import 'package:croptivate_app/widgets/messagesscreen.dart';
 import 'package:flutter/material.dart';
 
 class BottomNavBar extends StatelessWidget {
-  const BottomNavBar({
-    Key? key,
-  }) : super(key: key);
+const BottomNavBar({Key? key}) : super(key: key);
+// final FirebaseAuth _auth = FirebaseAuth.instance;
+// getusers() async {
+//   var name = '';
+//   await FirebaseFirestore.instance.collection('userBuyer').get().then((querySnapshot) {
+//       querySnapshot.docs.forEach((doc) {
+//         if (_auth.currentUser?.uid == doc.id) {
+//           name = doc['fname'] + ' ' + doc['lname'];
+//           print(name);
+//         }
+//       });
+//     });
+//   }
 
   @override
   Widget build(BuildContext context) {
@@ -58,8 +69,8 @@ class BottomNavBar extends StatelessWidget {
             ),
             IconButton(
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => UserProfile()));
-                },
+                Navigator.pushNamed(context, '/userprofilebuyer');
+              },
                 icon: Icon(
                   Icons.person_outline_rounded,
                 )),
