@@ -364,14 +364,14 @@ set _imageThreeFile(XFile? value) {
           ),
         backgroundColor: cWhite,
         elevation: 0.0,
-        title: Text("Add Product",
-        style: TextStyle(
-          color: cGreen,
-          fontFamily: 'Poppins',
-          fontSize: 22,
-          fontWeight: FontWeight.w500
-          ),
-        ),
+        title: Text(
+              "Add Product",
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                color: cGreen,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
         centerTitle: true,
         actions: <Widget> [
           TextButton(
