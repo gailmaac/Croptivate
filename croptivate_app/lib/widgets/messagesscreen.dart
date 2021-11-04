@@ -169,16 +169,6 @@ class ShowContacts extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Text(
-                              x['lastHour'].toString() +
-                                  ' : ' +
-                                  x['lastMinute'].toString(),
-                              style: cBodyText.copyWith(
-                                  color: cBlack, fontSize: 10),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
                               x['messagescount'].toString() != '0'
                                   ? x['messagescount'].toString()
                                   : '',
@@ -186,7 +176,17 @@ class ShowContacts extends StatelessWidget {
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.red),
-                            )
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              x['lastHour'].toString() +
+                                  ' : ' +
+                                  x['lastMinute'].toString(),
+                              style: cBodyText.copyWith(
+                                  color: cBlack, fontSize: 10),
+                            ),
                           ],
                         ),
                       ),
