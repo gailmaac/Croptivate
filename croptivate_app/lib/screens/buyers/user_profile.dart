@@ -214,11 +214,7 @@ class UserProfile extends StatefulWidget {
   @override
   _UserProfileState createState() => _UserProfileState();
   static const String routeName = '/userprofilebuyer';
-  static Route route() {
-    return MaterialPageRoute(
-        settings: RouteSettings(name: routeName),
-        builder: (_) => UserProfile());
-  }
+ 
 }
 
   bool loading = false;
@@ -229,18 +225,18 @@ class _UserProfileState extends State<UserProfile> {
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 //getting user from firebase
-getusers() {
-  var name = '';
-  FirebaseFirestore.instance.collection('userBuyer').get().then((querySnapshot) {
-      querySnapshot.docs.forEach((doc) {
-        if (_auth.currentUser?.uid == doc.id) {
-          name = doc['fname'] + ' ' + doc['lname'];
-          print(name);
+// getusers() {
+//   var name = '';
+//   FirebaseFirestore.instance.collection('userBuyer').get().then((querySnapshot) {
+//       querySnapshot.docs.forEach((doc) {
+//         if (_auth.currentUser?.uid == doc.id) {
+//           name = doc['fname'] + ' ' + doc['lname'];
+//           print(name);
           
-        }
-      });
-    });
-  }
+//         }
+//       });
+//     });
+//   }
 
 
   Widget build(BuildContext context) {
@@ -281,7 +277,7 @@ getusers() {
         children: [
           Column(
             children: [
-              getusers()
+              // getusers()
             ],
           ),
           const SizedBox(height: 24),
@@ -404,6 +400,7 @@ getusers() {
   Widget signOutButton() {
     return TextButton(
       onPressed: () async {
+        await _auth.signOut();
         Navigator.push(context, MaterialPageRoute(builder: (context) => SignIn()));
       }, 
       child: Container(
