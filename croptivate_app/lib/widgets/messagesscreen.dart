@@ -128,10 +128,11 @@ class ShowContacts extends StatelessWidget {
                   child: Container(
                     margin: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: x['messagescount'].toString() != '0'
-                            ? cWhite
-                            : Colors.green[300]!.withOpacity(0.3)),
+                      borderRadius: BorderRadius.circular(12),
+                      color: x['messagescount'].toString() != '0'
+                          ? Colors.green[300]!.withOpacity(0.3)
+                          : cWhite,
+                    ),
                     child: ListTile(
                       leading: CircleAvatar(backgroundColor: cGreen),
                       onTap: () async {
