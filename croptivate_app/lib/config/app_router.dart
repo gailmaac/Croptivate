@@ -8,6 +8,7 @@ import 'package:croptivate_app/screens/authentication/register_seller.dart';
 import 'package:croptivate_app/screens/authentication/sign_in.dart';
 import 'package:croptivate_app/screens/buyers/basket.dart';
 import 'package:croptivate_app/screens/buyers/catalog.dart';
+import 'package:croptivate_app/screens/buyers/checkoutscreen.dart';
 import 'package:croptivate_app/screens/buyers/favorites.dart';
 import 'package:croptivate_app/screens/buyers/home_buyer.dart';
 import 'package:croptivate_app/screens/buyers/product_screen.dart';
@@ -58,6 +59,8 @@ class AppRouter {
         return AddProduct.route();
       case Messagescreen.routeName:
         return Messagescreen.route();
+      case CheckoutScreen.routeName:
+        return CheckoutScreen.route();
       case CatalogScreen.routeName:
         return CatalogScreen.route(category: settings.arguments as Category);
       case ProductScreen.routeName:
