@@ -61,19 +61,19 @@ class _HomeSellerState extends State<HomeSeller> {
         body: TabBarView(children: [
           Container(
             height: double.infinity,
-            color: Colors.brown[800],
+            color: cWhite,
           ),
           Container(
             height: double.infinity,
-            color: cDGreen,
+            color: cWhite,
           ),
           Container(
             height: double.infinity,
-            color: cGrey,
+            color: cWhite,
           ),
           Container(
             height: double.infinity,
-            color: cBlack,
+            color: cWhite,
           ),
         ]),
         bottomNavigationBar: Container(
