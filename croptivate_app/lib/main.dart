@@ -57,6 +57,7 @@ class MyApp extends StatelessWidget {
 
           onGenerateRoute: AppRouter.onGenerateRoute,
           initialRoute: SplashScreen.routeName,
+          // initialRoute: SplashScreen.routeName,
 
           // routes: {
           //   'ForgotPassword' : (context) => ForgotPassword(),
