@@ -1,5 +1,6 @@
 import 'package:croptivate_app/models/category.dart';
 import 'package:croptivate_app/models/product_model.dart';
+import 'package:croptivate_app/models/user_model_buyer.dart';
 import 'package:croptivate_app/screens/authentication/account_categories.dart';
 import 'package:croptivate_app/screens/authentication/forgot_password.dart';
 import 'package:croptivate_app/screens/authentication/register_buyer.dart';
@@ -10,6 +11,7 @@ import 'package:croptivate_app/screens/buyers/catalog.dart';
 import 'package:croptivate_app/screens/buyers/favorites.dart';
 import 'package:croptivate_app/screens/buyers/home_buyer.dart';
 import 'package:croptivate_app/screens/buyers/product_screen.dart';
+import 'package:croptivate_app/screens/buyers/user_profile.dart';
 import 'package:croptivate_app/screens/sellers/add_product.dart';
 import 'package:croptivate_app/screens/sellers/home_seller.dart';
 import 'package:croptivate_app/screens/sellers/notifications.dart';
@@ -57,6 +59,8 @@ class AppRouter {
         return CatalogScreen.route(category: settings.arguments as Category);
       case ProductScreen.routeName:
         return ProductScreen.route(product: settings.arguments as Product);
+      // case UserProfile.routeName:
+      //   return UserProfile.route(user: settings.arguments as User);
 
       default:
         return _errorRoute();
