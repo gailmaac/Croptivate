@@ -105,46 +105,79 @@ class _createmessageState extends State<createmessage> {
   Widget build(BuildContext context) {
     print(' omg ' + users.length.toString());
     return Scaffold(
+      backgroundColor: cWhite,
       appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: Center(child: Text('Create Message')),
-          backgroundColor: Colors.green[400]),
+        toolbarHeight: 60,
+        iconTheme: IconThemeData(color: cGreen),
+        leading: IconButton(
+          onPressed: () {
+          Navigator.pop(context);
+          },
+            icon: Icon(
+            Icons.arrow_back_ios,
+            color: cBlack,
+            size: 15,
+            ),
+          ),
+        backgroundColor: cWhite,
+        elevation: 0.0,
+        title: Text(
+              "Create Message",
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                color: cGreen,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+        centerTitle: true,
+      ),
       body: Container(
         padding: EdgeInsets.only(top: 10),
         //color: Colors.green[100],
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Container(
-                padding: EdgeInsets.only(left: 16, right: 16),
-                decoration: BoxDecoration(
-                  color: Colors.grey[500]!.withOpacity(0.5),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Center(
-                  child: TextField(
-                    controller: _searchto,
-                    decoration: InputDecoration(
-                      fillColor: Colors.green[200],
-                      border: InputBorder.none,
-                      hintText: "To:",
-                      hintStyle: inputBodyText,
-                    ),
-                    style: cBodyText,
-                    keyboardType: TextInputType.name,
-                    textInputAction: TextInputAction.next,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Container(
+                  padding: EdgeInsets.only(left: 16, right: 16),
+                  decoration: BoxDecoration(
+                    color: cGrey.withOpacity(0.23),
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                )),
+                  child: Center(
+                    child: TextField(
+                      controller: _searchto,
+                      decoration: InputDecoration(
+                        fillColor: cWhite,
+                        border: InputBorder.none,
+                        hintText: "To:",
+                        hintStyle: inputBodyText.copyWith(color: cBlack),
+                      ),
+                      style: cBodyText.copyWith(color: cBlack),
+                      keyboardType: TextInputType.name,
+                      textInputAction: TextInputAction.next,
+                    ),
+                  )),
+            ),
             Expanded(
                 child: ListView.builder(
                     itemCount: resultusers.length,
                     itemBuilder: (context, i) {
                       return ListTile(
-                        title: Text(resultusers[i]['lname'].toString() +
+                        title: Text(resultusers[i]['fname'].toString() +
                             ' ' +
-                            resultusers[i]['lname'].toString()),
-                        tileColor: Colors.green[200],
-                        subtitle: Text(resultusers[i]['cnum'].toString()),
+                            resultusers[i]['lname'].toString(),
+                            style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 16, 
+                              color: Colors.black, 
+                              fontWeight: FontWeight.w500)
+                            ),
+                        tileColor: cWhite,
+                        subtitle: Text(resultusers[i]['cnum'].toString(), 
+                                    style: smallBodyText.copyWith(color: Colors.black45)
+                                  ),
                         onTap: () async {
                           inputData();
                           var name = '';
