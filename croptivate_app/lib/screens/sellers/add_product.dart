@@ -707,7 +707,7 @@ set _imageThreeFile(XFile? value) {
               children: [
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(15, 5, 0, 0),
-                  child: Text("Stocks",
+                  child: Text("Stock",
                   style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 16,
