@@ -69,7 +69,8 @@ const BottomNavBar({Key? key}) : super(key: key);
             ),
             IconButton(
                 onPressed: () {
-                Navigator.pushNamed(context, '/userprofilebuyer');
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => UserProfile()));
               },
                 icon: Icon(
                   Icons.person_outline_rounded,
