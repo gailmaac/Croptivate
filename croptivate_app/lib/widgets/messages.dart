@@ -40,7 +40,7 @@ class _MessagesState extends State<Messages> {
       appBar: AppBar(
           leading: IconButton(
                 onPressed: () {
-                Navigator.pushNamed(context, '/message');
+                Navigator.pushReplacementNamed(context, '/message');
                 },
                   icon: Icon(
                   Icons.arrow_back_ios,
