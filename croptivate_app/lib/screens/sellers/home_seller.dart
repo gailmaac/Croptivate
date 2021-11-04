@@ -96,8 +96,7 @@ class _HomeSellerState extends State<HomeSeller> {
               children: <Widget>[
                 IconButton(
                   onPressed: () {
-                    /* Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Messages()));*/
+                    Navigator.pushNamed(context, '/message');
                   },
                   icon: Icon(
                     Icons.chat_bubble_outline_rounded,
@@ -105,8 +104,7 @@ class _HomeSellerState extends State<HomeSeller> {
                 ),
                 IconButton(
                   onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => AddProduct()));
+                    Navigator.pushNamed(context, '/addproduct');
                   },
                   icon: Icon(
                     Icons.add_circle_outline_rounded,
