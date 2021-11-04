@@ -28,8 +28,8 @@ class AppRouter {
 
     switch (settings.name) {
       case '/':
-        // return HomeBuyer.route();
-      return Wrapper.route();
+        return HomeBuyer.route();
+      // return Wrapper.route();
       case SignIn.routeName:
         return SignIn.route();
       case HomeBuyer.routeName:
@@ -63,7 +63,7 @@ class AppRouter {
       case ProductScreen.routeName:
         return ProductScreen.route(product: settings.arguments as Product);
       // case UserProfile.routeName:
-      //   return UserProfile.route(user: settings.arguments as User);
+      //   return UserProfile.route();
 
       default:
         return _errorRoute();
