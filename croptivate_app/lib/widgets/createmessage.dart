@@ -111,24 +111,24 @@ class _createmessageState extends State<createmessage> {
         iconTheme: IconThemeData(color: cGreen),
         leading: IconButton(
           onPressed: () {
-          Navigator.pop(context);
+            Navigator.pop(context);
           },
-            icon: Icon(
+          icon: Icon(
             Icons.arrow_back_ios,
             color: cBlack,
             size: 15,
-            ),
           ),
+        ),
         backgroundColor: cWhite,
         elevation: 0.0,
         title: Text(
-              "Create Message",
-              style: TextStyle(
-                fontFamily: 'Poppins',
-                color: cGreen,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+          "Create Message",
+          style: TextStyle(
+            fontFamily: 'Poppins',
+            color: cGreen,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         centerTitle: true,
       ),
       body: Container(
@@ -165,19 +165,19 @@ class _createmessageState extends State<createmessage> {
                     itemCount: resultusers.length,
                     itemBuilder: (context, i) {
                       return ListTile(
-                        title: Text(resultusers[i]['fname'].toString() +
-                            ' ' +
-                            resultusers[i]['lname'].toString(),
+                        title: Text(
+                            resultusers[i]['fname'].toString() +
+                                ' ' +
+                                resultusers[i]['lname'].toString(),
                             style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 16, 
-                              color: Colors.black, 
-                              fontWeight: FontWeight.w500)
-                            ),
+                                fontFamily: 'Poppins',
+                                fontSize: 16,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500)),
                         tileColor: cWhite,
-                        subtitle: Text(resultusers[i]['cnum'].toString(), 
-                                    style: smallBodyText.copyWith(color: Colors.black45)
-                                  ),
+                        subtitle: Text(resultusers[i]['cnum'].toString(),
+                            style:
+                                smallBodyText.copyWith(color: Colors.black45)),
                         onTap: () async {
                           inputData();
                           var name = '';
@@ -220,13 +220,14 @@ class _createmessageState extends State<createmessage> {
                             'contactname': resultusers[i]['fname'] +
                                 ' ' +
                                 resultusers[i]['lname'],
+                            'messagescount': 0
                           });
                           storecontact
                               .collection('Chats')
                               .doc(receiver)
                               .collection('Contacts')
                               .doc(uid)
-                              .set({'contactname': name});
+                              .set({'contactname': name, 'messagescount': 0});
                           Navigator.push(
                               context,
                               MaterialPageRoute(
