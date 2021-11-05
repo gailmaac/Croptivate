@@ -1,12 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:croptivate_app/pallete.dart';
 import 'package:croptivate_app/screens/buyers/user_profile.dart';
+import 'package:croptivate_app/services/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:croptivate_app/widgets/messagesscreen.dart';
 import 'package:flutter/material.dart';
 
-class BottomNavBar extends StatelessWidget {
-  const BottomNavBar({Key? key}) : super(key: key);
 // final FirebaseAuth _auth = FirebaseAuth.instance;
 // getusers() async {
 //   var name = '';
@@ -15,10 +14,49 @@ class BottomNavBar extends StatelessWidget {
 //         if (_auth.currentUser?.uid == doc.id) {
 //           name = doc['fname'] + ' ' + doc['lname'];
 //           print(name);
-//         }
-//       });
-//     });
-//   }
+
+class BottomNavBar extends StatefulWidget {
+  const BottomNavBar({Key? key}) : super(key: key);
+
+  @override
+  _BottomNavBarState createState() => _BottomNavBarState();
+}
+
+class _BottomNavBarState extends State<BottomNavBar> {
+  bool loading = false;
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  String uid = '';
+  List allcontacts = [];
+  int Notifs = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    getContacts();
+    countnotifs();
+  }
+
+  countnotifs() {
+    int y = 0;
+    for (var x in allcontacts) {
+      y += int.parse(x['messagescount']);
+    }
+    setState(() {
+      Notifs = y;
+    });
+  }
+
+  getContacts() async {
+    await FirebaseFirestore.instance
+        .collection('Chats')
+        .doc(uid)
+        .collection('Contacts')
+        .doc()
+        .get()
+        .then((doc) {
+      allcontacts.add(doc.data());
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +94,7 @@ class BottomNavBar extends StatelessWidget {
               },
               icon: Icon(
                 Icons.chat_bubble_outline_rounded,
+                //color: Notifs > 0 ? Colors.red : cBlack,
               ),
             ),
             IconButton(
@@ -68,9 +107,9 @@ class BottomNavBar extends StatelessWidget {
             ),
             IconButton(
                 onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => UserProfile()));
-              },
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => UserProfile()));
+                },
                 icon: Icon(
                   Icons.person_outline_rounded,
                 )),
