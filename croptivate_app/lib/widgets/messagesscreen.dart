@@ -158,6 +158,7 @@ class ShowContacts extends StatelessWidget {
                                     receiver: x.id,
                                     name: x['contactname'])));
                       },
+                      onLongPress: () {},
                       title: Text(
                         x['contactname'],
                         style: cBodyText.copyWith(color: cBlack),
