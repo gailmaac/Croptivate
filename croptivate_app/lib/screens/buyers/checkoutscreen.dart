@@ -51,7 +51,7 @@ getUser() async {
 
   @override
   Widget build(BuildContext context) {
-    getUser();
+
     return Scaffold(
       backgroundColor: cWhite,
       appBar: AppBar(
