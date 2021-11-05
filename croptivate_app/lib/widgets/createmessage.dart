@@ -228,6 +228,7 @@ class _createmessageState extends State<createmessage> {
                               .collection('Contacts')
                               .doc(uid)
                               .set({'contactname': name, 'messagescount': 0});
+                          Navigator.pop(context);
                           Navigator.push(
                               context,
                               MaterialPageRoute(
