@@ -27,6 +27,7 @@ class RegisterSeller extends StatefulWidget {
 
 class _RegisterSellerState extends State<RegisterSeller> {
 
+  TextEditingController _email = new TextEditingController();
   TextEditingController fname = new TextEditingController();
   TextEditingController lname = new TextEditingController();
   TextEditingController loc = new TextEditingController();
@@ -136,6 +137,7 @@ class _RegisterSellerState extends State<RegisterSeller> {
                           ),
                           child: Center(
                             child: TextFormField(
+                              controller: _email,
                               validator: (val) => val!.isEmpty ? 'Enter a valid Email Address' : null, 
                               onChanged: (val) {
                                 setState(() => email = val);
