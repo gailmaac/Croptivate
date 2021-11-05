@@ -158,7 +158,78 @@ class ShowContacts extends StatelessWidget {
                                     receiver: x.id,
                                     name: x['contactname'])));
                       },
-                      onLongPress: () {},
+                      onLongPress: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return SimpleDialog(
+                                  title: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 10),
+                                child: Column(
+                                  children: [
+                                    Text("Do you want to delete message?",
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            fontFamily: 'Poppins',
+                                            fontWeight: FontWeight.w700,
+                                            color: cBrown)),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        SimpleDialogOption(
+                                            child: Text("Yes",
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    fontFamily: 'Poppins',
+                                                    fontWeight: FontWeight.w700,
+                                                    color: cGreen)),
+                                            onPressed: () {
+                                              Navigator.pop(context);
+
+                                              FirebaseFirestore.instance
+                                                  .collection('Chats')
+                                                  .doc(chats)
+                                                  .collection('Contacts')
+                                                  .doc(x.id)
+                                                  .collection('Messages')
+                                                  .get()
+                                                  .then((querySnapshot) {
+                                                querySnapshot.docs
+                                                    .forEach((element) {
+                                                  element.data().clear();
+                                                });
+                                              });
+
+                                              FirebaseFirestore.instance
+                                                  .collection('Chats')
+                                                  .doc(chats)
+                                                  .collection('Contacts')
+                                                  .doc(x.id)
+                                                  .delete();
+                                            }),
+                                        SimpleDialogOption(
+                                          child: Text("No",
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  fontFamily: 'Poppins',
+                                                  fontWeight: FontWeight.w700,
+                                                  color: cGreen)),
+                                          onPressed: () =>
+                                              Navigator.pop(context),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 10)
+                                  ],
+                                ),
+                              ));
+                            });
+                      },
                       title: Text(
                         x['contactname'],
                         style: cBodyText.copyWith(color: cBlack),
