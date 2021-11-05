@@ -63,7 +63,7 @@ class CheckoutScreen extends StatelessWidget {
               ElevatedButton(
                   style: ElevatedButton.styleFrom(primary: cGreen),
                   onPressed: () {
-                    Navigator.pushNamed(context, '/checkout');
+                    Navigator.pushNamed(context, '/reference');
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
@@ -263,7 +263,7 @@ class CheckoutScreen extends StatelessWidget {
                                                     color: cBrown)
                                                 ),
                                                 SizedBox(height: 10,),
-                                                Text("By using Cash On Delivery Method, please send me a message and let us discuss about the delivery courier that offers Cash On Delivery service.",
+                                                Text("By using Cash On Delivery Method, please send me a message and let us discuss about the delivery courier that offers Cash On Delivery service.\n\nDisclaimer: There will be an additional fee for purchase service.",
                                                 style: TextStyle(
                                                     fontSize: 13,
                                                     fontFamily: 'Poppins',
@@ -352,7 +352,7 @@ class CheckoutScreen extends StatelessWidget {
                                                     color: cBrown)
                                                 ),
                                                 SizedBox(height: 10,),
-                                                Text("By using E-Wallet Payment Method, Pay Manually through GCash:\n\nGCash\n091718xxxx\nCamille Abi Enzo\n\nOnce I have received your payment, I will send you the link of your delivery in order for you to track your delivery.",
+                                                Text("By using E-Wallet Payment Method, Pay Manually through GCash:\n\nGCash\n091718xxxx\nCamille Abi Enzo",
                                                 style: TextStyle(
                                                     fontSize: 13,
                                                     fontFamily: 'Poppins',
@@ -441,7 +441,7 @@ class CheckoutScreen extends StatelessWidget {
                                                     color: cBrown)
                                                 ),
                                                 SizedBox(height: 10,),
-                                                Text("By using Bank Transfer Payment Method, Pay Manually through UnionBank:\n\nUnionBank\n1096xxxx\nCamille Abi Enzo\n\nOnce I have received your payment, I will send you the link of your delivery in order for you to track your delivery.",
+                                                Text("By using Bank Transfer Payment Method, Pay Manually through UnionBank:\n\nUnionBank\n1096xxxx\nCamille Abi Enzo",
                                                 style: TextStyle(
                                                     fontSize: 13,
                                                     fontFamily: 'Poppins',

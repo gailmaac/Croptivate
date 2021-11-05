@@ -26,7 +26,7 @@ class NavigationDrawerWidget extends StatelessWidget {
         child: ListView(
           padding: padding,
           children: <Widget>[
-            const SizedBox(height: 260,),
+            const SizedBox(height: 300,),
             buildMenuItem(
               text: "Notifications",
               icon: Icons.notifications_none_rounded,
@@ -45,16 +45,16 @@ class NavigationDrawerWidget extends StatelessWidget {
               onClicked: () => selectedItem(context, 2),
             ),
             const SizedBox(height: 300,),
-            Divider(color: Colors.black38,),
-            const SizedBox(height: 10,),
-            buildMenuItem(
-              text: "Sign Out",
-              icon: Icons.logout_rounded,
-              onClicked: () async {
-                await _auth.signOut();
-                Navigator.push(context, MaterialPageRoute(builder: (context) => SignIn()));
-              }
-            ),
+            // Divider(color: Colors.black38,),
+            // const SizedBox(height: 10,),
+            // buildMenuItem(
+            //   text: "Sign Out",
+            //   icon: Icons.logout_rounded,
+            //   onClicked: () async {
+            //     await _auth.signOut();
+            //     Navigator.push(context, MaterialPageRoute(builder: (context) => SignIn()));
+            //   }
+            // ),
           ],
         ),
         ),

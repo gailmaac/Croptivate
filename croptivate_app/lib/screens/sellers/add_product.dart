@@ -1037,8 +1037,8 @@ set _imageThreeFile(XFile? value) {
     '${placemark.country}';
 
     print(completeAddress);
-    String formattedAddress = '${placemark.locality}, ${placemark.country}';
-    locationController.text = completeAddress;
+    String formattedAddress = '${placemark.thoroughfare}, ${placemark.locality}, ${placemark.country}';
+    locationController.text = formattedAddress;
   }
 
 }
