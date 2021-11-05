@@ -1,12 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:croptivate_app/blocs/basket/basket_bloc.dart';
 import 'package:croptivate_app/blocs/favorites/favorites_bloc.dart';
 import 'package:croptivate_app/pallete.dart';
 import 'package:croptivate_app/widgets/bottomnavbar.dart';
 import 'package:croptivate_app/widgets/ordersummary.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class CheckoutScreen extends StatelessWidget {
+
+class CheckoutScreen extends StatefulWidget {
   const CheckoutScreen({ Key? key }) : super(key: key);
 
   static const String routeName = '/checkout';
@@ -16,7 +19,39 @@ class CheckoutScreen extends StatelessWidget {
   }
 
   @override
+  _CheckoutScreenState createState() => _CheckoutScreenState();
+}
+
+final FirebaseAuth _auth = FirebaseAuth.instance;
+class _CheckoutScreenState extends State<CheckoutScreen> {
+
+    var name = '';
+    String loc = '';
+    String num = '';
+
+getUser() async {
+    
+    await FirebaseFirestore.instance
+    .collection('userBuyer')
+    .get()
+    .then((querySnapshot){
+      querySnapshot.docs.forEach((doc) { 
+        if (_auth.currentUser?.uid == doc.id) {
+          name = doc['fname'] + ' ' + doc['lname'];
+          loc = doc['loc'];
+          num = doc['cnum'];
+          print(name);
+          print(loc);
+          print(num);
+        } 
+
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    getUser();
     return Scaffold(
       backgroundColor: cWhite,
       appBar: AppBar(
@@ -117,7 +152,7 @@ class CheckoutScreen extends StatelessWidget {
                         children: [
                           Icon(Icons.pin_drop_rounded, color: cGreen),
                           SizedBox(width: 10),
-                          Text("Gail Macayan",
+                          Text(name,
                             style: TextStyle(
                               fontFamily: 'Poppins',
                               fontWeight: FontWeight.w900,
