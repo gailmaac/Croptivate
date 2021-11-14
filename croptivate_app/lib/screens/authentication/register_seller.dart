@@ -34,6 +34,8 @@ class _RegisterSellerState extends State<RegisterSeller> {
   // TextEditingController shopname = new TextEditingController();
   // TextEditingController shopdesc = new TextEditingController();
   TextEditingController cnum = new TextEditingController();
+  TextEditingController confirmpassword = new TextEditingController();
+  TextEditingController _password = new TextEditingController();
 
   final AuthService _auth = AuthService(); 
   final _formKey = GlobalKey<FormState>();
@@ -135,7 +137,15 @@ class _RegisterSellerState extends State<RegisterSeller> {
                           ),
                           child: Center(
                             child: TextFormField(
-                              validator: (val) => val!.length < 8 ? 'Password must contain 8 or more characters.' : null, 
+                              controller: _password,
+                              validator: (val) {
+                              if(val!.length < 8){
+                                return 'Password must contain 8 or more characters.';
+                              }
+                              if(val.isEmpty) {
+                                return "Please enter password.";
+                              }
+                            }, 
                               onChanged: (val) {
                                 setState(() => password = val);
                               },
@@ -166,7 +176,15 @@ class _RegisterSellerState extends State<RegisterSeller> {
                         ),
                         child: Center(
                           child: TextFormField(
-                            validator: (val) => val!.length < 8 ? 'Password must contain 8 or more characters.' : null, 
+                            validator: (val) {
+                              if(val!.isEmpty) {
+                                return "Please enter password.";
+                              }
+                              if(val != _password.value.text) {
+                                return "Password do not match.";
+                              }
+                              return null;
+                            }, 
                             onChanged: (val) {
                               setState(() => password = val);
                             },
