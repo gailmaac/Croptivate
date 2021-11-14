@@ -29,6 +29,9 @@ class _RegisterBuyerState extends State<RegisterBuyer> {
   TextEditingController loc = new TextEditingController();
   TextEditingController cnum = new TextEditingController();
 
+  
+  TextEditingController confirmpassword = new TextEditingController();
+  TextEditingController _password = new TextEditingController();
   final AuthService _auth = AuthService(); 
   final _formKey = GlobalKey<FormState>();
   bool loading = false;
@@ -84,7 +87,13 @@ class _RegisterBuyerState extends State<RegisterBuyer> {
                         ),
                         child: Center(
                           child: TextFormField(
-                            validator: (val) => val!.isEmpty ? 'Enter a valid Email Address' : null, 
+                            validator: (val) {
+                              if (val!.isEmpty) {
+                                return "Please enter your email address.";
+                              }
+                              if(!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]").hasMatch(val)){
+                                return "Please enter a valid email address.";
+                              }                            }, 
                             onChanged: (val) {
                               setState(() => email = val);
                               },
@@ -114,7 +123,16 @@ class _RegisterBuyerState extends State<RegisterBuyer> {
                         ),
                         child: Center(
                           child: TextFormField(
-                            validator: (val) => val!.length < 8 ? 'Password must contain 8 or more characters.' : null, 
+                            controller: _password,
+                            validator: (val) {
+                              if(val!.length < 8){
+                                return 'Password must contain 8 or more characters.';
+                              }
+                              if(val.isEmpty) {
+                                return "Please enter password.";
+                              }
+                              
+                            },
                             onChanged: (val) {
                               setState(() => password = val);
                             },
@@ -144,10 +162,16 @@ class _RegisterBuyerState extends State<RegisterBuyer> {
                         ),
                         child: Center(
                           child: TextFormField(
-                            validator: (val) => val!.length < 8 ? 'Password must contain 8 or more characters.' : null, 
-                            onChanged: (val) {
-                              setState(() => password = val);
-                            },
+                            controller: confirmpassword,
+                            validator: (val) {
+                              if(val!.isEmpty) {
+                                return "Please enter password.";
+                              }
+                              if(val != _password.value.text) {
+                                return "Password do not match.";
+                              }
+                              return null;
+                            }, 
                             decoration: InputDecoration(
                               border: InputBorder.none,
                               hintText: "Confirm Password",
