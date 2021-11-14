@@ -106,30 +106,25 @@ class _BottomNavBarState extends State<BottomNavBar> {
               ),
             ),
             IconButton(
-<<<<<<< HEAD
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => UserProfile()));
-                },
-=======
-                onPressed: () async {
-                  var name = '';
-                  var address = '';
-                          await FirebaseFirestore.instance
-                          .collection('userBuyer')
-                          .get()
-                          .then((querySnapshot){
-                            querySnapshot.docs.forEach((doc) { 
-                              if (_auth.currentUser?.uid == doc.id) {
-                                name = doc['fname'] + ' ' + doc['lname'];
-                                print(name);
-                              } else { print("something went wrong");}
-                            });
-                          });
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => UserProfile()));
+              onPressed: () {
+                Navigator.pushNamed(context, '/userprofilebuyer');
               },
->>>>>>> bd2e8426a748192c12d5e14032eac2f38e39b4af
+              //   onPressed: () async {
+              //     var name = '';
+              //     var address = '';
+              //             await FirebaseFirestore.instance
+              //             .collection('userBuyer')
+              //             .get()
+              //             .then((querySnapshot){
+              //               querySnapshot.docs.forEach((doc) { 
+              //                 if (_auth.currentUser?.uid == doc.id) {
+              //                   name = doc['fname'] + ' ' + doc['lname'];
+              //                   print(name);
+              //                 } else { print("something went wrong");}
+              //               });
+              //             });
+              //   Navigator.pushNamed(context, '/userprofilebuyer');
+              // },  
                 icon: Icon(
                   Icons.person_outline_rounded,
                 )),
