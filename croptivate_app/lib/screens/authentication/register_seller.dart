@@ -152,9 +152,40 @@ class _RegisterSellerState extends State<RegisterSeller> {
                           )
                         ),
                       ), 
+
+                      //Re-enter Password
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: Container(
+                        height: size.height * 0.06,
+                        width: size.width * 0.9,
+                        padding: EdgeInsets.only(left: 16, right: 16),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[500]!.withOpacity(0.5),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Center(
+                          child: TextFormField(
+                            validator: (val) => val!.length < 8 ? 'Password must contain 8 or more characters.' : null, 
+                            onChanged: (val) {
+                              setState(() => password = val);
+                            },
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: "Confirm Password",
+                              hintStyle: inputBodyText,
+                            ),
+                            obscureText: true,
+                            style: cBodyText,
+                            keyboardType: TextInputType.visiblePassword,
+                            textInputAction: TextInputAction.next,
+                          ),
+                        )
+                      ),
+                    ), 
                       
                       SizedBox(height:10),
-                      //Sign Up Button
+                      //Set Up Button
                       Container(
                         height: size.height * 0.07,
                         width: size.width * 0.8,
