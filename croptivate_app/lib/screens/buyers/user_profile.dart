@@ -214,7 +214,12 @@ class UserProfile extends StatefulWidget {
   @override
   _UserProfileState createState() => _UserProfileState();
   static const String routeName = '/userprofilebuyer';
- 
+  static Route route() {
+  return MaterialPageRoute(
+    settings: RouteSettings(name: routeName),
+    builder: (_) => UserProfile());
+  }
+
 }
 
   bool loading = false;
