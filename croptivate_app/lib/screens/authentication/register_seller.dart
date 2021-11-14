@@ -6,7 +6,7 @@ import 'package:croptivate_app/services/database.dart';
 import 'package:croptivate_app/shared/loading.dart';
 import 'package:croptivate_app/widgets/backgroundimage.dart';
 import 'package:croptivate_app/widgets/heading_account.dart';
-import 'package:croptivate_app/widgets/subtext.dart';
+import 'package:croptivate_app/widgets/subtextemailpass.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -31,8 +31,8 @@ class _RegisterSellerState extends State<RegisterSeller> {
   TextEditingController fname = new TextEditingController();
   TextEditingController lname = new TextEditingController();
   TextEditingController loc = new TextEditingController();
-  TextEditingController shopname = new TextEditingController();
-  TextEditingController shopdesc = new TextEditingController();
+  // TextEditingController shopname = new TextEditingController();
+  // TextEditingController shopdesc = new TextEditingController();
   TextEditingController cnum = new TextEditingController();
 
   final AuthService _auth = AuthService(); 
@@ -54,8 +54,8 @@ class _RegisterSellerState extends State<RegisterSeller> {
   String _fname = '';
   String _lname = '';
   String _loc = '';
-  String _shopname = '';
-  String _shopdesc = '';
+  // String _shopname = '';
+  // String _shopdesc = '';
   String _cnum = '';
 
   String error = '';
@@ -88,41 +88,9 @@ class _RegisterSellerState extends State<RegisterSeller> {
                           ),
                         ),),
                       HeadingCreateAccount(acctype: "Welcome, Seller!"),
-                      SubText(),
-                      SizedBox(height: 10),
-                        
-                      //dropdown for seller type
-                      Container(
-                        child: Center(
-                          child: DropdownButtonHideUnderline(
-                            child: Container(
-                              height: size.height * 0.06,
-                              width: size.width * 0.9,
-                              padding: EdgeInsets.only(left: 16, right: 16),
-                              decoration: BoxDecoration(
-                                color: Colors.grey[500]!.withOpacity(0.5),
-                                borderRadius: BorderRadius.circular(12),
-                                ),
-                              child: DropdownButton(
-                                hint: Text("Choose Seller Type", style: inputBodyText),
-                                dropdownColor: Colors.grey[500]!.withOpacity(0.5),
-                                icon: Icon(Icons.arrow_drop_down_circle_outlined, color: cWhite, size: 23),
-                                style: inputBodyText,
-                                onChanged: (value) {
-                                  setState(() {
-                                    myInitialItem = value;
-                                  });
-                                },
-                                value: myInitialItem,
-                                items: myItems.map((items) {
-                                  return DropdownMenuItem(value: items, child: Text(items));
-                                }).toList()),
-                            ),
-                          ) 
-                        ),
-                      ),
-                      
-                      SizedBox(height:5),
+                      SubTextEmPass(),
+                      SizedBox(height: 50),
+
                       
                       //email address
                       Padding(
@@ -184,191 +152,6 @@ class _RegisterSellerState extends State<RegisterSeller> {
                           )
                         ),
                       ), 
-                    
-                      //First Name
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5),
-                        child: Container(
-                          height: size.height * 0.06,
-                          width: size.width * 0.9,
-                          padding: EdgeInsets.only(left: 16, right: 16),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[500]!.withOpacity(0.5),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Center(
-                            child: TextFormField(
-                              controller: fname,
-                              validator: (val) => val!.isEmpty ? 'Please enter your first name' : null, 
-                              onChanged: (val) {
-                                  setState(() => _fname = val);
-                                },
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: "First Name",
-                                hintStyle: inputBodyText,
-                              ),
-                              style: cBodyText,
-                              keyboardType: TextInputType.name,
-                              textInputAction: TextInputAction.next,
-                            ),
-                          )
-                        ),
-                      ), 
-                      
-                      //Last Name
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5),
-                        child: Container(
-                          height: size.height * 0.06,
-                          width: size.width * 0.9,
-                          padding: EdgeInsets.only(left: 16, right: 16),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[500]!.withOpacity(0.5),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Center(
-                            child: TextFormField(
-                              controller: lname,
-                              validator: (val) => val!.isEmpty ? 'Please enter your last name' : null, 
-                              onChanged: (val) {
-                                setState(() => _lname = val);
-                              },
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: "Last Name",
-                                hintStyle: inputBodyText,
-                              ),
-                              style: cBodyText,
-                              keyboardType: TextInputType.name,
-                              textInputAction: TextInputAction.next,
-                            ),
-                          )
-                        ),
-                      ), 
-              
-                      //Location
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5),
-                        child: Container(
-                          height: size.height * 0.06,
-                          width: size.width * 0.9,
-                          padding: EdgeInsets.only(left: 16, right: 16),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[500]!.withOpacity(0.5),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Center(
-                            child: TextFormField(
-                              controller: loc,
-                              validator: (val) => val!.isEmpty ? 'Please enter your address' : null, 
-                              onChanged: (val) {
-                                  setState(() => _loc = val);
-                                },
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: "Where are you located?",
-                                hintStyle: inputBodyText,
-                              ),
-                              style: cBodyText,
-                              keyboardType: TextInputType.text,
-                              textInputAction: TextInputAction.next,
-                            ),
-                          )
-                        ),
-                      ), 
-                      
-                      //Shop name
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5),
-                        child: Container(
-                          height: size.height * 0.06,
-                          width: size.width * 0.9,
-                          padding: EdgeInsets.only(left: 16, right: 16),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[500]!.withOpacity(0.5),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Center(
-                            child: TextFormField(
-                              controller: shopname,
-                              validator: (val) => val!.isEmpty ? 'Input your shop name' : null, 
-                              onChanged: (val) {
-                                  setState(() => _shopname = val);
-                                },
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: "Name of your Shop",
-                                hintStyle: inputBodyText,
-                              ),
-                              style: cBodyText,
-                              keyboardType: TextInputType.name,
-                              textInputAction: TextInputAction.next,
-                            ),
-                          )
-                        ),
-                      ), 
-                      
-                      // Shop Description
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5),
-                        child: Container(
-                          height: size.height * 0.06,
-                          width: size.width * 0.9,
-                          padding: EdgeInsets.only(left: 16, right: 16),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[500]!.withOpacity(0.5),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Center(
-                            child: TextFormField(
-                              controller: shopdesc,
-                              onChanged: (val) {
-                                  setState(() => _shopdesc = val);
-                                },
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: "Shop Description",
-                                hintStyle: inputBodyText,
-                              ),
-                              style: cBodyText,
-                              keyboardType: TextInputType.multiline,
-                              textInputAction: TextInputAction.next,
-                            ),
-                          )
-                        ),
-                      ), 
-                    
-                      //Contact number
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5),
-                        child: Container(
-                          height: size.height * 0.06,
-                          width: size.width * 0.9,
-                          padding: EdgeInsets.only(left: 16, right: 16),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[500]!.withOpacity(0.5),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Center(
-                            child: TextFormField(
-                              controller: cnum,
-                              validator: (val) => val!.length < 11 ? 'Contact number must have 11 characters.' : null, 
-                              onChanged: (val) {
-                                setState(() => _cnum = val);
-                              },
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: "Contact Number",
-                                hintStyle: inputBodyText,
-                              ),
-                              style: cBodyText,
-                              keyboardType: TextInputType.number,
-                              textInputAction: TextInputAction.done,
-                            ),
-                          )
-                        ),
-                      ), 
                       
                       SizedBox(height:10),
                       //Sign Up Button
@@ -384,27 +167,22 @@ class _RegisterSellerState extends State<RegisterSeller> {
                               setState(() {
                                 loading = true;
                               });
-                              Map <String, dynamic> sellerCollection = {
-                              'myInitialItem' : myInitialItem,
-                              'fname' : fname.text,
-                              'lname' : lname.text,
-                              'loc' : loc.text,
-                              'shopname' : shopname.text,
-                              'shopdesc' : shopdesc.text,
-                              'cnum' : cnum.text};
-                              dynamic result = await _auth.registerSeller(email, password, sellerCollection);
+                              dynamic result = await _auth.registerSeller(email, password);
                               
                               if (result == null) {
                                 setState(() {
                                   error = "Please supply valid Email";
                                   loading = false;
-                                } );
+                                });
+                              }
+                              else {
+                                Navigator.pushNamed(context, '/setupseller');
                               }
                             }
-                            Navigator.pushNamed(context, '/homeseller');
+                            
                           },
                           child: Text(
-                            "Sign Up",
+                            "Set Up Profile",
                             style: cBodyText.copyWith(fontWeight: FontWeight.bold),
                           ),
                         ),
