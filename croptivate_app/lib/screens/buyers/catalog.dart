@@ -5,6 +5,7 @@ import 'package:croptivate_app/pallete.dart';
 import 'package:croptivate_app/screens/buyers/user_profile.dart';
 import 'package:croptivate_app/widgets/bottomnavbar.dart';
 import 'package:croptivate_app/widgets/productcard.dart';
+import 'package:croptivate_app/widgets/productwidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -53,22 +54,27 @@ class CatalogScreen extends StatelessWidget {
         bottomNavigationBar: BottomNavBar(),
         body: BlocBuilder<ProductBloc, ProductState>(
           builder: (context, state) {
-            return GridView.builder(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2, childAspectRatio: 0.8),
-                itemCount: categoryProducts.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Center(
-                    child: ProductCard(
-                      product: categoryProducts[index],
-                    ),
-                  );
-                });
+            if (state is ProductLoading) {
+              return Center(
+                child: CircularProgressIndicator(
+                  color: cGreen,
+                )
+              );
+            }
+
+            if (state is ProductLoaded) {
+              return ProductWidget(
+                products: state.products
+                  .where((product) => product.category == category.name)
+                  .toList());
+            }
+
+            else {
+              return Text("Sorry");
+            }
           },
         )
-        // ProductCard(product: Product.products[0],),
         );
   }
 }
+
