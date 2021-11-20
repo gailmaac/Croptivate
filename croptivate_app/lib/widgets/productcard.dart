@@ -80,12 +80,22 @@ class ProductCard extends StatelessWidget {
                                 fontWeight: FontWeight.bold),
                           ),
                           Text(
+                            '${product.weightCount} ${product.weight}',
+                            style: TextStyle(
+                                fontFamily: 'Poppins',
+                                color: Colors.black26,
+                                fontSize: 13,
+                                fontWeight: FontWeight.normal),
+                          ),
+                          SizedBox(height: 5),
+                          Text(
                             '\₱${product.price}',
                             style: TextStyle(
                                 color: Colors.black26,
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold),
                           ),
+                          
                         ],
                       ),
                     ),
