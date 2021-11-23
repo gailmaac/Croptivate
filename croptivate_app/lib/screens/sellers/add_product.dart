@@ -31,6 +31,7 @@ class _AddProductState extends State<AddProduct> {
   TextEditingController locationController = new TextEditingController();
   TextEditingController nameController = new TextEditingController();
   TextEditingController descriptionController = new TextEditingController();
+  TextEditingController weightCountController = new TextEditingController();
   TextEditingController stockCountController = new TextEditingController();
   TextEditingController priceController = new TextEditingController();
   // TextEditingController countController = new TextEditingController();
@@ -99,8 +100,11 @@ set _imageThreeFile(XFile? value) {
                     bool? isRecommended,
                     String? name, 
                     String? description, 
-                    int? stockCount, double? price, String? location}) {
-                     //String? wholesale, //String? count
+                    String? weight,
+                    int? weightCount,
+                    int? stockCount, 
+                    double? price, }) {
+                     //String? wholesale, //String? count String? location
     postRef
     .doc(postId)
     .set({
@@ -114,11 +118,13 @@ set _imageThreeFile(XFile? value) {
       "isRecommended": isRecommended,
       "name": name,
       "description": description,
+      "weightCount": weightCount,
+      "weight": weight,
       "stockCount": stockCount,
       "price": price,
       // "count": count,
       // "wholesale": wholesale,
-      "location": location,
+      // "location": location,
     });
   }
 
@@ -139,19 +145,22 @@ set _imageThreeFile(XFile? value) {
       isRecommended: isRecommended,
       name: nameController.text,
       description: descriptionController.text,
+      weight: weight,
+      weightCount: int.parse(weightCountController.text),
       stockCount: int.parse(stockCountController.text),
       price: double.parse(priceController.text),
       // count: countController.text,
       // wholesale: wholesaleController.text,
-      location: locationController.text
+      // location: locationController.text
     );
     nameController.clear();
     descriptionController.clear();
+    weightCountController.clear();
     stockCountController.clear();
     priceController.clear();
     // countController.clear();
     // wholesaleController.clear();
-    locationController.clear();
+    // locationController.clear();
     setState(() {
       Navigator.pushNamed(context, '/homeseller');
     });
@@ -331,6 +340,7 @@ set _imageThreeFile(XFile? value) {
   
 
   var category;
+  var weight;
 
   //textfieldform state
   List<String> myCategory = [
@@ -338,6 +348,12 @@ set _imageThreeFile(XFile? value) {
     "Climbers and Creepers",
     "Leafy Vegetables",
     "Root Vegetables",
+  ];
+
+  List<String> weightVar = [
+    "kg",
+    "grams",
+    "pieces",
   ];
 
   bool isDeals = false;
@@ -699,6 +715,95 @@ set _imageThreeFile(XFile? value) {
             )
           ),
     
+        //Item weight dropdown and dropdown for variation
+        Column(
+          children: [
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(15, 5, 0, 0),
+              child: Container(
+                width: double.infinity,
+                child: Text("Item Weight",
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 16,
+                    color: cBlack,
+                  ),
+                ),
+              ),
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(15, 5, 0, 0),
+                  child: Container(
+                    width: 230,
+                    child: TextFormField(
+                      controller: weightCountController,
+                      textCapitalization: TextCapitalization.words,
+                      decoration: InputDecoration(
+                        contentPadding: new EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(6),
+                        borderSide: BorderSide(color: cGrey, width: 1.0)),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: cGrey, width: 1.0),
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        hintText: "Input Item Weight",
+                        hintStyle: TextStyle(
+                          fontFamily: 'Poppins',
+                          color: cGrey,
+                          fontSize: 14
+                        ),
+                      ),
+                      style: TextStyle(
+                          fontFamily: 'Poppins',
+                          color: Colors.black87,
+                          fontSize: 14
+                      ),
+                      keyboardType: TextInputType.number,
+                      textInputAction: TextInputAction.next,
+                    ),
+                  ),
+                ),
+                //dropdown for weight variation
+                Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(12, 5, 0, 0),
+                  child: Container(
+                    child: DropdownButtonHideUnderline(
+                      child: Container(
+                        height: 49,
+                        width: 120,
+                        padding: EdgeInsets.only(left: 16, right: 16),
+                        decoration: BoxDecoration(
+                          color: cWhite,
+                          borderRadius: BorderRadius.circular(6),
+                          border: Border.all(color: cGrey, width: 1.0)
+                          ),
+                        child: DropdownButton(
+                          hint: Text("weight", style: inputBodyText.copyWith(color: Colors.black87)),
+                          dropdownColor: cWhite,
+                          icon: Icon(Icons.arrow_drop_down_circle_outlined, color: cGrey, size: 23),
+                          style: inputBodyText.copyWith(color: Colors.black87),
+                          onChanged: (value) {
+                            setState(() {
+                              weight = value;
+                            });
+                          },
+                          value: weight,
+                          items: weightVar.map((items) {
+                            return DropdownMenuItem(value: items, child: Text(items));
+                          }).toList()),
+                      ),
+                    ),
+                  ),
+                ) 
+              ],
+            ),
+          ],
+        ),
+        SizedBox(height: 10),
+
          //stockCount Count 
           Container(
             width: double.infinity,
@@ -897,78 +1002,78 @@ set _imageThreeFile(XFile? value) {
           // ),
 
           //Location
-          Container(
-            width: double.infinity,
-            height: 90,
-            child: Stack(
-              children: [
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(15, 5, 0, 0),
-                  child: Text("Location",
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 16,
-                    color: cBlack,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(15, 30, 15, 0),
-                  child: TextFormField(
-                    controller: locationController,
-                    textCapitalization: TextCapitalization.words,
-                    decoration: InputDecoration(
-                      contentPadding: new EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(6),
-                      borderSide: BorderSide(color: cGrey, width: 1.0)),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: cGrey, width: 1.0),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      hintText: "Input Location",
-                      hintStyle: TextStyle(
-                        fontFamily: 'Poppins',
-                        color: cGrey,
-                        fontSize: 14
-                      ),
-                    ),
-                    style: TextStyle(
-                        fontFamily: 'Poppins',
-                        color: Colors.black87,
-                        fontSize: 14
-                    ),
-                    keyboardType: TextInputType.number,
-                    textInputAction: TextInputAction.next,
-                  ),
-                ), 
-              ],
-            )
-          ),
+          // Container(
+          //   width: double.infinity,
+          //   height: 90,
+          //   child: Stack(
+          //     children: [
+          //       Padding(
+          //         padding: EdgeInsetsDirectional.fromSTEB(15, 5, 0, 0),
+          //         child: Text("Location",
+          //         style: TextStyle(
+          //           fontFamily: 'Poppins',
+          //           fontSize: 16,
+          //           color: cBlack,
+          //           ),
+          //         ),
+          //       ),
+          //       Padding(
+          //         padding: EdgeInsetsDirectional.fromSTEB(15, 30, 15, 0),
+          //         child: TextFormField(
+          //           controller: locationController,
+          //           textCapitalization: TextCapitalization.words,
+          //           decoration: InputDecoration(
+          //             contentPadding: new EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+          //             border: OutlineInputBorder(borderRadius: BorderRadius.circular(6),
+          //             borderSide: BorderSide(color: cGrey, width: 1.0)),
+          //             focusedBorder: OutlineInputBorder(
+          //               borderSide: BorderSide(color: cGrey, width: 1.0),
+          //               borderRadius: BorderRadius.circular(6),
+          //             ),
+          //             hintText: "Input Location",
+          //             hintStyle: TextStyle(
+          //               fontFamily: 'Poppins',
+          //               color: cGrey,
+          //               fontSize: 14
+          //             ),
+          //           ),
+          //           style: TextStyle(
+          //               fontFamily: 'Poppins',
+          //               color: Colors.black87,
+          //               fontSize: 14
+          //           ),
+          //           keyboardType: TextInputType.number,
+          //           textInputAction: TextInputAction.next,
+          //         ),
+          //       ), 
+          //     ],
+          //   )
+          // ),
 
           //Location Button
-          Container(
-            width: 250,
-            height: 40,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              color: cGreen
-            ),
-            child: TextButton.icon(
-              onPressed: getLocation,
-              icon: Icon(
-                Icons.location_pin,
-                color: cWhite,
-                size: 20), 
-              label: Text("Use your curent location",
-                style: TextStyle(
-                  color: cWhite,
-                  fontFamily: 'Poppins',
-                  fontSize: 16,
-                ),
-              ),
-            ), 
-          ),
+          // Container(
+          //   width: 250,
+          //   height: 40,
+          //   alignment: Alignment.center,
+          //   decoration: BoxDecoration(
+          //     borderRadius: BorderRadius.circular(16),
+          //     color: cGreen
+          //   ),
+          //   child: TextButton.icon(
+          //     onPressed: getLocation,
+          //     icon: Icon(
+          //       Icons.location_pin,
+          //       color: cWhite,
+          //       size: 20), 
+          //     label: Text("Use your curent location",
+          //       style: TextStyle(
+          //         color: cWhite,
+          //         fontFamily: 'Poppins',
+          //         fontSize: 16,
+          //       ),
+          //     ),
+          //   ), 
+          // ),
           SizedBox(height: 10)
         ],
       ),

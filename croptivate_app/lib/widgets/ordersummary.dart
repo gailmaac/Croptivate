@@ -19,16 +19,16 @@ class OrderSummary extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Subtotal".toUpperCase(),
+                  Text("Total".toUpperCase(),
                       style: TextStyle(
                           color: cBlack,
-                          fontSize: 18,
+                          fontSize: 24,
                           fontFamily: 'Poppins',
-                          fontWeight: FontWeight.bold)),
+                          fontWeight: FontWeight.w900)),
                   Text('\₱${state.basket.subtotalString}',
                       style: TextStyle(
                           color: cBlack,
-                          fontSize: 18,
+                          fontSize: 24,
                           fontWeight: FontWeight.bold)),
                 ],
               ),
@@ -39,39 +39,39 @@ class OrderSummary extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("Shipping Fee".toUpperCase(),
-                      style: TextStyle(
-                          color: cBlack,
-                          fontSize: 18,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.bold)),
-                  Text('\₱${state.basket.shippingFeeString}',
-                      style: TextStyle(
-                          color: cBlack,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold)),
+                  // Text("Shipping Fee".toUpperCase(),
+                  //     style: TextStyle(
+                  //         color: cBlack,
+                  //         fontSize: 18,
+                  //         fontFamily: 'Poppins',
+                  //         fontWeight: FontWeight.bold)),
+                  // Text('\₱${state.basket.shippingFeeString}',
+                  //     style: TextStyle(
+                  //         color: cBlack,
+                  //         fontSize: 18,
+                  //         fontWeight: FontWeight.bold)),
                 ],
               ),
               SizedBox(
-                height: 20,
+                height: 10,
               ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("Total".toUpperCase(),
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 24,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w900)),
-                  Text('\₱${state.basket.totalString}',
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold)),
-                ],
-              )
+              // Row(
+              //   crossAxisAlignment: CrossAxisAlignment.start,
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: [
+              //     Text("Total".toUpperCase(),
+              //         style: TextStyle(
+              //             color: Colors.black,
+              //             fontSize: 24,
+              //             fontFamily: 'Poppins',
+              //             fontWeight: FontWeight.w900)),
+              //     Text('\₱${state.basket.totalString}',
+              //         style: TextStyle(
+              //             color: Colors.black,
+              //             fontSize: 24,
+              //             fontWeight: FontWeight.bold)),
+              //   ],
+              // )
             ],
           ),
         );

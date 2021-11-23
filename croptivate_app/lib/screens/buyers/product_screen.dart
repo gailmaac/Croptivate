@@ -272,6 +272,14 @@ class ProductScreen extends StatelessWidget {
                                   fontWeight: FontWeight.bold),
                             ),
                             Text(
+                            '${product.weightCount} ${product.weight}',
+                            style: TextStyle(
+                                fontFamily: 'Poppins',
+                                color: Colors.black26,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w700),
+                            ),
+                            Text(
                               'Stock: ${product.stockCount}',
                               style: TextStyle(
                                   fontFamily: 'Poppins',
@@ -280,7 +288,7 @@ class ProductScreen extends StatelessWidget {
                                   fontWeight: FontWeight.bold),
                             ),
                             Text(
-                              product.location,
+                              "Loc:Makati City, Philippines",
                               style: TextStyle(
                                   fontFamily: 'Poppins',
                                   fontSize: 14,
@@ -301,6 +309,66 @@ class ProductScreen extends StatelessWidget {
               ],
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Divider(
+              thickness: 1,
+            ),
+          ),
+
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25),
+                child: CircleAvatar(
+                  backgroundColor: cGreen,
+                ),
+              ),
+              Container(
+                child: Text(
+                  "Profile Name",
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 16,
+                    color: cBlack
+                  )
+                ),
+              ),
+              Padding(
+                padding: EdgeInsetsDirectional.only(start: 125),
+                child: Container(
+                  height: 33,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: cGrey,
+                      width: 1,
+                    ),
+                    borderRadius: BorderRadius.circular(6)
+                  ),
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/shopprofile');
+                    },
+                    child: Text(
+                      "View Shop",
+                      style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 12,
+                      color: cGreen
+                      )
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Divider(
+              thickness: 1,
+            ),
+          ),
+          SizedBox(height: 10),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: ExpansionTile(
@@ -333,35 +401,35 @@ class ProductScreen extends StatelessWidget {
           SizedBox(
             height: 10,
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: ExpansionTile(
-              initiallyExpanded: false,
-              collapsedIconColor: cGreen,
-              iconColor: cGreen,
-              title: Text(
-                "Delivery Information",
-                textAlign: TextAlign.justify,
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 20,
-                  color: cGreen,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              children: [
-                ListTile(
-                  title: Text(
-                    "These are the recommended delivery options suited for your purchase. Arrangement of delivery schedule can be done by either of the parties involved (seller/buyer), depending on what has been agreed on:\nGrab\nLalamove\nMr. Speedy\nToktok\n\nName: Camille Abi Enzo\nLocation: Cembo, Makati City\nContact Number: 0917xxx",
-                    style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 14,
-                        color: Colors.black54),
-                  ),
-                )
-              ],
-            ),
-          )
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 20),
+          //   child: ExpansionTile(
+          //     initiallyExpanded: false,
+          //     collapsedIconColor: cGreen,
+          //     iconColor: cGreen,
+          //     title: Text(
+          //       "Delivery Information",
+          //       textAlign: TextAlign.justify,
+          //       style: TextStyle(
+          //         fontFamily: 'Poppins',
+          //         fontSize: 20,
+          //         color: cGreen,
+          //         fontWeight: FontWeight.bold,
+          //       ),
+          //     ),
+          //     children: [
+          //       ListTile(
+          //         title: Text(
+          //           "These are the recommended delivery options suited for your purchase. Arrangement of delivery schedule can be done by either of the parties involved (seller/buyer), depending on what has been agreed on:\nGrab\nLalamove\nMr. Speedy\nToktok\n\nName: Camille Abi Enzo\nLocation: Cembo, Makati City\nContact Number: 0917xxx",
+          //           style: TextStyle(
+          //               fontFamily: 'Poppins',
+          //               fontSize: 14,
+          //               color: Colors.black54),
+          //         ),
+          //       )
+          //     ],
+          //   ),
+          // )
         ]));
   }
 }

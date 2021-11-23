@@ -4,6 +4,7 @@ import 'package:croptivate_app/shared/loading.dart';
 import 'package:croptivate_app/widgets/backgroundimage.dart';
 import 'package:croptivate_app/widgets/heading_account.dart';
 import 'package:croptivate_app/widgets/subtext.dart';
+import 'package:croptivate_app/widgets/subtextemailpass.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -28,6 +29,9 @@ class _RegisterBuyerState extends State<RegisterBuyer> {
   TextEditingController loc = new TextEditingController();
   TextEditingController cnum = new TextEditingController();
 
+  
+  TextEditingController confirmpassword = new TextEditingController();
+  TextEditingController _password = new TextEditingController();
   final AuthService _auth = AuthService(); 
   final _formKey = GlobalKey<FormState>();
   bool loading = false;
@@ -67,8 +71,8 @@ class _RegisterBuyerState extends State<RegisterBuyer> {
                         ),
                       ),),
                     HeadingCreateAccount(acctype: "Welcome, Buyer!"),
-                    SubText(),
-                    SizedBox(height: 10),
+                    SubTextEmPass(),
+                    SizedBox(height: 50),
                       
                     //Email Address
                     Padding(
@@ -83,7 +87,13 @@ class _RegisterBuyerState extends State<RegisterBuyer> {
                         ),
                         child: Center(
                           child: TextFormField(
-                            validator: (val) => val!.isEmpty ? 'Enter a valid Email Address' : null, 
+                            validator: (val) {
+                              if (val!.isEmpty) {
+                                return "Please enter your email address.";
+                              }
+                              if(!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]").hasMatch(val)){
+                                return "Please enter a valid email address.";
+                              }                            }, 
                             onChanged: (val) {
                               setState(() => email = val);
                               },
@@ -113,7 +123,16 @@ class _RegisterBuyerState extends State<RegisterBuyer> {
                         ),
                         child: Center(
                           child: TextFormField(
-                            validator: (val) => val!.length < 8 ? 'Password must contain 8 or more characters.' : null, 
+                            controller: _password,
+                            validator: (val) {
+                              if(val!.length < 8){
+                                return 'Password must contain 8 or more characters.';
+                              }
+                              if(val.isEmpty) {
+                                return "Please enter password.";
+                              }
+                              
+                            },
                             onChanged: (val) {
                               setState(() => password = val);
                             },
@@ -130,8 +149,7 @@ class _RegisterBuyerState extends State<RegisterBuyer> {
                         )
                       ),
                     ), 
-                    
-                    //First Name
+                    //Re-enter Password
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5),
                       child: Container(
@@ -144,115 +162,32 @@ class _RegisterBuyerState extends State<RegisterBuyer> {
                         ),
                         child: Center(
                           child: TextFormField(
-                            controller: fname,
-                            onChanged: (val) {
-                                setState(() => _fname = val);
-                              },
+                            controller: confirmpassword,
+                            validator: (val) {
+                              if(val!.isEmpty) {
+                                return "Please enter password.";
+                              }
+                              if(val != _password.value.text) {
+                                return "Password do not match.";
+                              }
+                              return null;
+                            }, 
                             decoration: InputDecoration(
                               border: InputBorder.none,
-                              hintText: "First Name",
+                              hintText: "Confirm Password",
                               hintStyle: inputBodyText,
                             ),
+                            obscureText: true,
                             style: cBodyText,
-                            keyboardType: TextInputType.name,
+                            keyboardType: TextInputType.visiblePassword,
                             textInputAction: TextInputAction.next,
                           ),
                         )
                       ),
                     ), 
-                    
-                    
-                    //Last Name
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: Container(
-                        height: size.height * 0.06,
-                        width: size.width * 0.9,
-                        padding: EdgeInsets.only(left: 16, right: 16),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[500]!.withOpacity(0.5),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Center(
-                          child: TextFormField(
-                            controller: lname,
-                            onChanged: (val) {
-                                setState(() => _lname = val);
-                              },
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintText: "Last Name",
-                              hintStyle: inputBodyText,
-                            ),
-                            style: cBodyText,
-                            keyboardType: TextInputType.name,
-                            textInputAction: TextInputAction.next,
-                          ),
-                        )
-                      ),
-                    ), 
-                    
-                    //Location
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: Container(
-                        height: size.height * 0.06,
-                        width: size.width * 0.9,
-                        padding: EdgeInsets.only(left: 16, right: 16),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[500]!.withOpacity(0.5),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Center(
-                          child: TextFormField(
-                            controller: loc,
-                            onChanged: (val) {
-                                setState(() => _loc = val);
-                              },
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintText: "Complete Address",
-                              hintStyle: inputBodyText,
-                            ),
-                            style: cBodyText,
-                            keyboardType: TextInputType.text,
-                            textInputAction: TextInputAction.next,
-                          ),
-                        )
-                      ),
-                    ), 
-                    
-                    //Contact number
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: Container(
-                        height: size.height * 0.06,
-                        width: size.width * 0.9,
-                        padding: EdgeInsets.only(left: 16, right: 16),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[500]!.withOpacity(0.5),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Center(
-                          child: TextFormField(
-                            controller: cnum,
-                            onChanged: (val) {
-                                setState(() => _cnum = val);
-                              },
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintText: "Contact Number",
-                              hintStyle: inputBodyText,
-                            ),
-                            style: cBodyText,
-                            keyboardType: TextInputType.number,
-                            textInputAction: TextInputAction.next,
-                          ),
-                        )
-                      ),
-                    ), 
-                    
+
                     SizedBox(height:10),
+                    //Set Up Button
                     Container(
                       height: size.height * 0.07,
                       width: size.width * 0.8,
@@ -265,23 +200,21 @@ class _RegisterBuyerState extends State<RegisterBuyer> {
                             setState(() {
                               loading = true;
                             });
-                            Map <String, dynamic> buyerCollection = {
-                              'fname' : fname.text,
-                              'lname' : lname.text,
-                              'loc' : loc.text,
-                              'cnum' : cnum.text};
-                            dynamic result = await _auth.registerBuyer(email, password, buyerCollection);
+                            dynamic result = await _auth.registerBuyer(email, password);
+
                             if (result == null) {
                               setState(() {
                                 error = "Please supply valid Email";
                                 loading = false;
                               });
                             }
+                            else {
+                              Navigator.pushNamed(context, '/setupbuyer');
+                            }
                           }
-                          Navigator.pushNamed(context, '/homebuyer');
                         },
                         child: Text(
-                          "Sign Up",
+                          "Set Up Profile",
                           style: cBodyText.copyWith(fontWeight: FontWeight.bold),
                         ),
                       ),
