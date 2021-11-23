@@ -5,6 +5,7 @@ import 'package:croptivate_app/pallete.dart';
 import 'package:croptivate_app/screens/buyers/user_profile.dart';
 import 'package:croptivate_app/widgets/bottomnavbar.dart';
 import 'package:croptivate_app/widgets/productcard.dart';
+import 'package:croptivate_app/widgets/productlistcard.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -88,7 +89,7 @@ class _ProductPageState extends State<ProductPage> {
                 ),
                 IconButton(
                     onPressed: () {
-                      // Navigator.push(context, MaterialPageRoute(builder: (context) => UserProfile()));
+                      Navigator.pushNamed(context, '/userprofileseller');
                     },
                     icon: Icon(
                       Icons.person_outline_rounded,
@@ -97,7 +98,6 @@ class _ProductPageState extends State<ProductPage> {
             )),
       body: BlocBuilder<ProductBloc, ProductState>(
         builder: (context, state) {
-          print("State: $state");
           if (state is ProductLoading) {
             return Center(
               child: CircularProgressIndicator(color: cGreen,),
@@ -114,14 +114,14 @@ class _ProductPageState extends State<ProductPage> {
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Center(
-                    child: ProductCard(
+                    child: ProductListCard(
                       product: state.products[index],
                       widthFactor: 1.1,
                       leftPosition: 150,
-                      topPosition: 75,
-                      heightofBox: 60,
-                      widthValue: 200,
-                      isFavorite: true,
+                      topPosition: 70,
+                      heightofBox: 70,
+                      widthValue: 205,
+                      isRemoved: true,
                     ),
                   ),
                 );

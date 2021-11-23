@@ -1,10 +1,7 @@
 import 'package:croptivate_app/blocs/product/product_bloc.dart';
 import 'package:croptivate_app/models/category.dart';
-import 'package:croptivate_app/models/product_model.dart';
 import 'package:croptivate_app/pallete.dart';
-import 'package:croptivate_app/screens/buyers/user_profile.dart';
 import 'package:croptivate_app/widgets/bottomnavbar.dart';
-import 'package:croptivate_app/widgets/productcard.dart';
 import 'package:croptivate_app/widgets/productwidget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,9 +20,6 @@ class CatalogScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<Product> categoryProducts = Product.products
-        .where((product) => product.category == category.name)
-        .toList();
     return Scaffold(
         backgroundColor: cWhite,
         appBar: AppBar(

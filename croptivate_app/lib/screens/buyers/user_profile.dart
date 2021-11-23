@@ -249,7 +249,7 @@ final FirebaseAuth _auth = FirebaseAuth.instance;
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: Text("My Profile", 
+        title: Text("My Profile Buyer", 
         style: TextStyle(
             fontFamily: 'Poppins',
             color: cGreen,

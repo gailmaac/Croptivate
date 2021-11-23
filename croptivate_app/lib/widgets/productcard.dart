@@ -149,7 +149,7 @@ class ProductCard extends StatelessWidget {
                               );
                             },
                           )
-                        : SizedBox()
+                        : SizedBox(),
                   ],
                 ),
               ),

@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:croptivate_app/models/product_model.dart';
 import 'package:croptivate_app/pallete.dart';
 import 'package:croptivate_app/screens/buyers/user_profile.dart';
+import 'package:croptivate_app/screens/sellers/add_product.dart';
 import 'package:croptivate_app/screens/sellers/home_seller.dart';
 import 'package:croptivate_app/widgets/imagewidget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,19 +16,18 @@ import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 
-class AddProduct extends StatefulWidget {
+class EditProduct extends StatefulWidget {
+  final Product product;
 
+  const EditProduct({Key? key, required this.product}) : super(key: key);
+  
   @override
-  _AddProductState createState() => _AddProductState();
-    static const String routeName = '/addproduct';
-    static Route route() {
-    return MaterialPageRoute(
-      settings: RouteSettings(name: routeName),
-      builder: (_) => AddProduct());
-  }
+  _EditProductState createState() => _EditProductState();
+
+    
 }
 
-class _AddProductState extends State<AddProduct> {
+class _EditProductState extends State<EditProduct> {
 
   TextEditingController locationController = new TextEditingController();
   TextEditingController nameController = new TextEditingController();
@@ -37,8 +38,21 @@ class _AddProductState extends State<AddProduct> {
   // TextEditingController countController = new TextEditingController();
   // TextEditingController wholesaleController = new TextEditingController();
 
+  void initState() {
+    super.initState();
+    nameController.text = widget.product.name.toString();
+    descriptionController.text = widget.product.description.toString();
+    weightCountController.text = widget.product.weightCount.toString();
+    stockCountController.text = widget.product.stockCount.toString();
+    priceController.text = widget.product.price.toString();
+    isDeals = widget.product.isDeals;
+    isRecommended = widget.product.isRecommended;
+    category = widget.product.category;
+    weight = widget.product.weight;
+  }
+
   final storageRef = FirebaseStorage.instance.ref();
-  final postRef = FirebaseFirestore.instance.collection('sellerPosts');
+  final CollectionReference postRef = FirebaseFirestore.instance.collection('sellerPosts');
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   final picUrl = '';
@@ -92,7 +106,7 @@ set _imageThreeFile(XFile? value) {
     return downloadUrlThree;
   }
 
-  createPostInFirestore({String? imageUrlOne, 
+  updatePostInFirestore({String? imageUrlOne, 
                     String? imageUrlTwo, 
                     String? imageUrlThree, 
                     String? category,
@@ -107,7 +121,7 @@ set _imageThreeFile(XFile? value) {
                      //String? wholesale, //String? count String? location
     postRef
     .doc(postId)
-    .set({
+    .update({
       // "postId": postId,
       "ownerId": _auth.currentUser!.uid,
       "imageUrlOne": imageUrlOne,
@@ -128,15 +142,16 @@ set _imageThreeFile(XFile? value) {
     });
   }
 
-  handleSubmit() async {
+  handleUpdate() async {
     setState(() {
       isUploading = true;
     });
+    
     String imageUrlOne = await uploadImageOne(imageOne);
     String imageUrlTwo = await uploadImageTwo(imageTwo);
     String imageUrlThree = await uploadImageThree(imageThree);
 
-    createPostInFirestore(
+    updatePostInFirestore(
       imageUrlOne: imageUrlOne,
       imageUrlTwo: imageUrlTwo,
       imageUrlThree: imageUrlThree,
@@ -149,23 +164,16 @@ set _imageThreeFile(XFile? value) {
       weightCount: int.parse(weightCountController.text),
       stockCount: int.parse(stockCountController.text),
       price: double.parse(priceController.text),
-      // count: countController.text,
-      // wholesale: wholesaleController.text,
-      // location: locationController.text
     );
     nameController.clear();
     descriptionController.clear();
     weightCountController.clear();
     stockCountController.clear();
     priceController.clear();
-    // countController.clear();
-    // wholesaleController.clear();
-    // locationController.clear();
     setState(() {
       Navigator.pushNamed(context, '/homeseller');
     });
   }
-
 
   Future chooseImageOne(ImageSource source) async {
 
@@ -381,7 +389,7 @@ set _imageThreeFile(XFile? value) {
         backgroundColor: cWhite,
         elevation: 0.0,
         title: Text(
-              "Add Product",
+              "Edit Product",
               style: TextStyle(
                 fontFamily: 'Poppins',
                 color: cGreen,
@@ -396,11 +404,9 @@ set _imageThreeFile(XFile? value) {
                 setState(() {
                   isUploading = true;
                 });
-                handleSubmit(); 
-              }
-              // isUploading ? null : () => 
-            },
-            child: Text("Post",
+                handleUpdate();
+            }},
+            child: Text("Save",
             style: TextStyle(
               fontFamily: 'Poppins',
               fontSize: 20,
@@ -448,21 +454,21 @@ set _imageThreeFile(XFile? value) {
                           InkWell(
                             onTap: () {
                               selectImageOne(context);
+                              
                             },
                             child: imageOne == null ? Container(
                               height: 90,
                               width: 90,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: AssetImage("assets/addimage.png")
-                                ),
-                                color: Colors.transparent, 
-                                borderRadius: BorderRadius.circular(12), 
-                                border: Border.all(
-                                  width: 1, 
-                                  color: cGrey),
-                                ),
-                            ) :  Container(
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: Image.network(
+                                  widget.product.imageUrlOne,
+                                  fit: BoxFit.cover,
+                                  width: 90,
+                                  height: 90,
+                                )
+                              )
+                            ) : Container(
                               height: 90,
                               width: 90,
                               child: ClipRRect(
@@ -474,7 +480,7 @@ set _imageThreeFile(XFile? value) {
                                   height: 90,
                                 )
                               )
-                            )
+                            )  
                           ),
                             SizedBox(width: 20),
                           
@@ -484,6 +490,18 @@ set _imageThreeFile(XFile? value) {
                               selectImageTwo(context);
                             },
                             child: imageTwo == null ? Container(
+                              height: 90,
+                              width: 90,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: Image.network(
+                                  widget.product.imageUrlTwo,
+                                  fit: BoxFit.cover,
+                                  width: 90,
+                                  height: 90,
+                                )
+                              )
+                            ) : Container(
                               height: 90,
                               width: 90,
                               decoration: BoxDecoration(
@@ -496,19 +514,7 @@ set _imageThreeFile(XFile? value) {
                                   width: 1, 
                                   color: cGrey),
                                 ),
-                            ) :  Container(
-                              height: 90,
-                              width: 90,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(12),
-                                child: Image.file(
-                                  File(imageTwo!.path),
-                                  fit: BoxFit.cover,
-                                  width: 90,
-                                  height: 90,
-                                )
-                              )
-                            )
+                            )  
                           ),
                             SizedBox(width: 20),
       
@@ -521,6 +527,18 @@ set _imageThreeFile(XFile? value) {
                             child: imageThree == null ? Container(
                               height: 90,
                               width: 90,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(12),
+                                child: Image.network(
+                                  widget.product.imageUrlThree,
+                                  fit: BoxFit.cover,
+                                  width: 90,
+                                  height: 90,
+                                )
+                              )
+                            ) : Container(
+                              height: 90,
+                              width: 90,
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                   image: AssetImage("assets/addimage.png")
@@ -531,19 +549,7 @@ set _imageThreeFile(XFile? value) {
                                   width: 1, 
                                   color: cGrey),
                                 ),
-                            ) :  Container(
-                              height: 90,
-                              width: 90,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(12),
-                                child: Image.file(
-                                  File(imageThree!.path),
-                                  fit: BoxFit.cover,
-                                  width: 90,
-                                  height: 90,
-                                )
-                              )
-                            )
+                            )  
                           ),
                         ],
                       ),
@@ -944,10 +950,26 @@ set _imageThreeFile(XFile? value) {
                 ],
               )
             ),
-            SizedBox(height: 10)
+            SizedBox(height: 10),
+
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(primary: cGreen),
+              onPressed: () {
+
+              },
+            child: Text("Delete Product",
+              style: TextStyle(
+                fontFamily: 'Poppins',
+                fontSize: 16,
+                color: cWhite,
+                ),
+              ),
+            ),
+            SizedBox(height: 10,)
           ],
         ),
       ),
+
     ),
     
     bottomNavigationBar: Container(
@@ -979,7 +1001,7 @@ set _imageThreeFile(XFile? value) {
               ),
               IconButton(
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => AddProduct()));
+                  Navigator.pushNamed(context, '/addproduct');
                 }, 
                 icon: Icon(Icons.add_circle_outline_rounded, ),
               ),
