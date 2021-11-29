@@ -196,7 +196,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       color: cBlack.withOpacity(0.23)),
                 ],
               ),
-              height: 230,
+              height: 190,
               width: double.infinity,
               child: Padding(
                 padding:
@@ -245,31 +245,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 35),
                       child: Text(
-                        "Makati City",
-                        style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w400,
-                            color: cBlack,
-                            fontSize: 15),
-                      ),
-                    ),
-                    SizedBox(height: 5),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 35),
-                      child: Text(
-                        "1214",
-                        style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.w400,
-                            color: cBlack,
-                            fontSize: 15),
-                      ),
-                    ),
-                    SizedBox(height: 5),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 35),
-                      child: Text(
-                        num,
+                        "+63"+ num,
                         style: TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w400,
@@ -1323,7 +1299,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           color: cBlack.withOpacity(0.23)),
                     ],
                   ),
-                  height: 205,
+                  height: 150,
                   width: double.infinity,
                   child: Padding(
                       padding: const EdgeInsets.symmetric(
