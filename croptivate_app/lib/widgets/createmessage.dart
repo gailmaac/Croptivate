@@ -87,11 +87,11 @@ class _createmessageState extends State<createmessage> {
     var showresults = [];
     if (_searchto.text != '') {
       users.forEach((doc) {
-        var name = doc['fname'].toString().toLowerCase() +
+        var name = doc['first name'].toString().toLowerCase() +
             ' ' +
-            doc['lname'].toString().toLowerCase() +
+            doc['last name'].toString().toLowerCase() +
             ' ' +
-            doc['cnum'].toString();
+            doc['contact number'].toString();
         if (name.contains(_searchto.text)) {
           showresults.add(doc);
         }
@@ -165,17 +165,20 @@ class _createmessageState extends State<createmessage> {
                     itemCount: resultusers.length,
                     itemBuilder: (context, i) {
                       return ListTile(
+                        leading: CircleAvatar(backgroundColor: cGreen),
                         title: Text(
-                            resultusers[i]['fname'].toString() +
+                            resultusers[i]['first name'].toString() +
                                 ' ' +
-                                resultusers[i]['lname'].toString(),
+                                resultusers[i]['last name'].toString(),
                             style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 16,
                                 color: Colors.black,
                                 fontWeight: FontWeight.w500)),
                         tileColor: cWhite,
-                        subtitle: Text(resultusers[i]['cnum'].toString(),
+                        subtitle: Text(
+                            resultusers[i]['contact number'].toString() +
+                                resultusers[i]['location'].toString(),
                             style:
                                 smallBodyText.copyWith(color: Colors.black45)),
                         onTap: () async {
@@ -186,13 +189,16 @@ class _createmessageState extends State<createmessage> {
                               .get()
                               .then((querySnapshot) {
                             querySnapshot.docs.forEach((doc) {
-                              var x = doc['fname'] + doc['lname'] + doc['cnum'];
-                              var y = resultusers[i]['fname'] +
-                                  resultusers[i]['lname'] +
-                                  resultusers[i]['cnum'];
+                              var x = doc['first name'] +
+                                  doc['last name'] +
+                                  doc['contact number'].toString();
+                              var y = resultusers[i]['first name'] +
+                                  resultusers[i]['last name'] +
+                                  resultusers[i]['contact number'].toString();
                               if (x == y) {
                                 receiver = doc.id;
-                                name = doc['fname'] + ' ' + doc['lname'];
+                                name =
+                                    doc['first name'] + ' ' + doc['last name'];
                               }
                             });
                           });
@@ -201,13 +207,16 @@ class _createmessageState extends State<createmessage> {
                               .get()
                               .then((querySnapshot) {
                             querySnapshot.docs.forEach((doc) {
-                              var a = doc['fname'] + doc['lname'] + doc['cnum'];
-                              var b = resultusers[i]['fname'] +
-                                  resultusers[i]['lname'] +
-                                  resultusers[i]['cnum'];
+                              var a = doc['first name'] +
+                                  doc['last name'] +
+                                  doc['contact number'].toString();
+                              var b = resultusers[i]['first name'] +
+                                  resultusers[i]['last name'] +
+                                  resultusers[i]['contact number'].toString();
                               if (a == b) {
                                 receiver = doc.id;
-                                name = doc['fname'] + ' ' + doc['lname'];
+                                name =
+                                    doc['first name'] + ' ' + doc['last name'];
                               }
                             });
                           });
@@ -217,17 +226,22 @@ class _createmessageState extends State<createmessage> {
                               .collection('Contacts')
                               .doc(receiver)
                               .set({
-                            'contactname': resultusers[i]['fname'] +
+                            'contactname': resultusers[i]['first name'] +
                                 ' ' +
-                                resultusers[i]['lname'],
-                            'messagescount': 0
+                                resultusers[i]['last name'],
+                            'messagescount': 0,
+                            'Profile Picture': '',
                           });
                           storecontact
                               .collection('Chats')
                               .doc(receiver)
                               .collection('Contacts')
                               .doc(uid)
-                              .set({'contactname': name, 'messagescount': 0});
+                              .set({
+                            'contactname': name,
+                            'messagescount': 0,
+                            'Profile Picture': '',
+                          });
                           Navigator.pop(context);
                           Navigator.push(
                               context,
@@ -235,9 +249,9 @@ class _createmessageState extends State<createmessage> {
                                   builder: (context) => Messages(
                                         sender: uid,
                                         receiver: receiver,
-                                        name: resultusers[i]['fname'] +
+                                        name: resultusers[i]['first name'] +
                                             ' ' +
-                                            resultusers[i]['lname'],
+                                            resultusers[i]['last name'],
                                       )));
                         },
                       );
