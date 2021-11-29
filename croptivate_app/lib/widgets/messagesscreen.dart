@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -5,6 +6,7 @@ import 'package:croptivate_app/pallete.dart';
 import 'package:croptivate_app/widgets/createmessage.dart';
 import 'package:croptivate_app/widgets/messages.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 //import 'messages.dart' as messages;
 
@@ -34,13 +36,20 @@ class _MessagescreenState extends State<Messagescreen> {
     try {
       Buyers.snapshots().forEach((element) {
         element.docs.forEach((doc) {
-          print(doc['fname'] + ' ' + doc['lname'] + ' ' + doc.id);
+          print(doc['first name'] + ' ' + doc['last name'] + ' ' + doc.id);
         });
       });
     } catch (e) {
       print(e.toString());
     }
   }
+
+  /*Future<Widget> _getImage(BuildContext context, String imageName) async {
+    Image image;
+    await FireStorageService.loadImage(context, imageName).then((value) {
+      image = Image.network(value.toString(),fit: BoxFit.scaleDown);
+    });
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -123,6 +132,7 @@ class ShowContacts extends StatelessWidget {
                 int lhour = x['lastHour'];
                 int lminute = x['lastMinute'];
                 int lday = x['lastDay'];
+                String profilepic = x['Profile Picture'];
 
                 return SizedBox(
                   child: Container(
@@ -134,7 +144,16 @@ class ShowContacts extends StatelessWidget {
                           : cWhite,
                     ),
                     child: ListTile(
-                      leading: CircleAvatar(backgroundColor: cGreen),
+                      leading: CircleAvatar(
+                        radius: 80.0,
+                        child: ClipOval(
+                            child: Image.network(
+                          profilepic,
+                          fit: BoxFit.cover,
+                          width: 160.0,
+                          height: 160.0,
+                        )),
+                      ),
                       onTap: () async {
                         await FirebaseFirestore.instance
                             .collection('Chats')
@@ -269,3 +288,10 @@ class ShowContacts extends StatelessWidget {
         });
   }
 }
+
+/*class FireStorageService extends ChangeNotifier {
+  FireStorageService();
+  static Future<dynamic> loadImage(BuildContext context, String Image) async {
+    return await FirebaseStorage.instance.ref().child(Image).getDownloadURL();
+  }
+}*/
