@@ -33,7 +33,7 @@ class Messages extends StatefulWidget {
 }
 
 class _MessagesState extends State<Messages> {
-  TextEditingController msg = TextEditingController();
+  TextEditingController _msg = TextEditingController();
   final StoreMessages = FirebaseFirestore.instance;
   final storecontact = FirebaseFirestore.instance;
   final Buyers = FirebaseFirestore.instance.collection('userBuyer');
@@ -41,6 +41,40 @@ class _MessagesState extends State<Messages> {
   String LastTime = '';
   String contactname = '';
   String sendername = '';
+  bool TextEmpty = true;
+  String profilePicRec = '';
+  String profilePicSen = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _msg.addListener(_ontypeChanged);
+  }
+
+  @override
+  void dispose() {
+    _msg.removeListener(_ontypeChanged);
+    _msg.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    //usersloaded = getusers();
+  }
+
+  _ontypeChanged() {
+    if (_msg.text.isEmpty) {
+      setState(() {
+        TextEmpty = true;
+      });
+    } else {
+      setState(() {
+        TextEmpty = false;
+      });
+    }
+  }
 
   Future getcontactname() async {
     try {
@@ -117,7 +151,7 @@ class _MessagesState extends State<Messages> {
                             bottom: BorderSide(color: cGreen, width: 0.2),
                           )),
                       child: TextField(
-                        controller: msg,
+                        controller: _msg,
                         decoration: InputDecoration(
                             hintText: 'Enter Message...',
                             hintStyle: TextStyle(
@@ -130,109 +164,146 @@ class _MessagesState extends State<Messages> {
                     ),
                   ),
                 ),
-                IconButton(
-                  onPressed: () async {
-                    String contact = widget.receiver;
-                    String sender = widget.sender;
-                    int messagescount = 0;
-                    if (msg.text.isNotEmpty) {
-                      StoreMessages.collection('Chats/' +
-                              sender +
-                              '/Contacts/' +
-                              contact +
-                              '/Messages')
-                          .doc()
-                          .set({
-                        "message": msg.text.trim(),
-                        "sender": widget.sender,
-                        "time": DateTime.now(),
-                      });
+                TextEmpty == true
+                    ? SizedBox(
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: 40,
+                              child: TextButton(
+                                onPressed: () {},
+                                child:
+                                    Icon(Icons.camera, size: 20, color: cGrey),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 40,
+                              child: TextButton(
+                                onPressed: () {},
+                                child: Icon(Icons.picture_in_picture,
+                                    size: 20, color: cGrey),
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    : IconButton(
+                        onPressed: () async {
+                          String contact = widget.receiver;
+                          String sender = widget.sender;
+                          int messagescount = 0;
+                          if (_msg.text.isNotEmpty) {
+                            StoreMessages.collection('Chats/' +
+                                    sender +
+                                    '/Contacts/' +
+                                    contact +
+                                    '/Messages')
+                                .doc()
+                                .set({
+                              "message": _msg.text.trim(),
+                              "sender": widget.sender,
+                              "time": DateTime.now(),
+                            });
 
-                      StoreMessages.collection('Chats/' +
-                              contact +
-                              '/Contacts/' +
-                              sender +
-                              '/Messages')
-                          .doc()
-                          .set({
-                        "message": msg.text.trim(),
-                        "sender": widget.sender,
-                        "time": DateTime.now(),
-                      });
-                      msg.clear();
+                            StoreMessages.collection('Chats/' +
+                                    contact +
+                                    '/Contacts/' +
+                                    sender +
+                                    '/Messages')
+                                .doc()
+                                .set({
+                              "message": _msg.text.trim(),
+                              "sender": widget.sender,
+                              "time": DateTime.now(),
+                            });
+                            _msg.clear();
 
-                      await FirebaseFirestore.instance
-                          .collection('userSeller')
-                          .get()
-                          .then((querySnapshot) {
-                        querySnapshot.docs.forEach((doc) {
-                          if (doc.id == widget.receiver) {
-                            contactname = doc['fname'] + ' ' + doc['lname'];
+                            await FirebaseFirestore.instance
+                                .collection('userSeller')
+                                .get()
+                                .then((querySnapshot) {
+                              querySnapshot.docs.forEach((doc) {
+                                if (doc.id == widget.receiver) {
+                                  contactname = doc['first name'] +
+                                      ' ' +
+                                      doc['last name'];
+                                  profilePicRec = doc['Profile Picture'];
+                                }
+                                if (doc.id == widget.sender) {
+                                  sendername = doc['first name'] +
+                                      ' ' +
+                                      doc['last name'];
+                                  profilePicSen = doc['Profile Picture'];
+                                }
+                              });
+                            });
+
+                            await FirebaseFirestore.instance
+                                .collection('userBuyer')
+                                .get()
+                                .then((querySnapshot) {
+                              querySnapshot.docs.forEach((doc) {
+                                if (doc.id == widget.receiver) {
+                                  contactname = doc['first name'] +
+                                      ' ' +
+                                      doc['last name'];
+                                  profilePicRec = doc['Profile Picture'];
+                                }
+                                if (doc.id == widget.sender) {
+                                  sendername = doc['first name'] +
+                                      ' ' +
+                                      doc['last name'];
+                                  profilePicSen = doc['Profile Picture'];
+                                }
+                              });
+                            });
+                            await storecontact
+                                .collection('Chats')
+                                .doc(widget.sender)
+                                .collection('Contacts')
+                                .doc(widget.receiver)
+                                .set({
+                              'contactname': contactname,
+                              'lastTime': DateTime.now(),
+                              'lastHour': DateTime.now().hour,
+                              'lastMinute': DateTime.now().minute,
+                              'lastDay': DateTime.now().day,
+                              'messagescount': messagescount,
+                              'Profile Picture': profilePicRec,
+                            });
+
+                            await FirebaseFirestore.instance
+                                .collection('Chats')
+                                .doc(widget.receiver)
+                                .collection('Contacts')
+                                .doc(widget.sender)
+                                .get()
+                                .then((doc) {
+                              if (doc.id == widget.sender) {
+                                messagescount = doc['messagescount'];
+                                print(messagescount);
+                              }
+                            });
+
+                            await storecontact
+                                .collection('Chats')
+                                .doc(widget.receiver)
+                                .collection('Contacts')
+                                .doc(widget.sender)
+                                .set({
+                              'contactname': sendername,
+                              'lastTime': DateTime.now(),
+                              'lastHour': DateTime.now().hour,
+                              'lastMinute': DateTime.now().minute,
+                              'lastDay': DateTime.now().day,
+                              'messagescount': messagescount + 1,
+                              'Profile Picture': profilePicSen,
+                            });
                           }
-                          if (doc.id == widget.sender) {
-                            sendername = doc['fname'] + ' ' + doc['lname'];
-                          }
-                        });
-                      });
-
-                      await FirebaseFirestore.instance
-                          .collection('userBuyer')
-                          .get()
-                          .then((querySnapshot) {
-                        querySnapshot.docs.forEach((doc) {
-                          if (doc.id == widget.receiver) {
-                            contactname = doc['fname'] + ' ' + doc['lname'];
-                          }
-                          if (doc.id == widget.sender) {
-                            sendername = doc['fname'] + ' ' + doc['lname'];
-                          }
-                        });
-                      });
-                      await storecontact
-                          .collection('Chats')
-                          .doc(widget.sender)
-                          .collection('Contacts')
-                          .doc(widget.receiver)
-                          .set({
-                        'contactname': contactname,
-                        'lastTime': DateTime.now(),
-                        'lastHour': DateTime.now().hour,
-                        'lastMinute': DateTime.now().minute,
-                        'lastDay': DateTime.now().day,
-                        'messagescount': messagescount,
-                      });
-
-                      await FirebaseFirestore.instance
-                          .collection('Chats')
-                          .doc(widget.receiver)
-                          .collection('Contacts')
-                          .doc(widget.sender)
-                          .get()
-                          .then((doc) {
-                        if (doc.id == widget.sender) {
-                          messagescount = doc['messagescount'];
-                          print(messagescount);
-                        }
-                      });
-
-                      await storecontact
-                          .collection('Chats')
-                          .doc(widget.receiver)
-                          .collection('Contacts')
-                          .doc(widget.sender)
-                          .set({
-                        'contactname': sendername,
-                        'lastTime': DateTime.now(),
-                        'lastHour': DateTime.now().hour,
-                        'lastMinute': DateTime.now().minute,
-                        'lastDay': DateTime.now().day,
-                        'messagescount': messagescount + 1,
-                      });
-                    }
-                  },
-                  icon: Icon(Icons.send),
-                  color: cGreen,
-                )
+                        },
+                        icon: Icon(Icons.send),
+                        color: cGreen,
+                      )
               ])
         ],
       ),
@@ -266,31 +337,46 @@ class Showmessages extends StatelessWidget {
             itemBuilder: (context, i) {
               QueryDocumentSnapshot x = snapshot.data!.docs[i];
               return ListTile(
-                title: Column(
-                  crossAxisAlignment: sender == x['sender']
-                      ? CrossAxisAlignment.end
-                      : CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color: sender == x['sender']
-                              ? Colors.green[300]!.withOpacity(0.2)
-                              : Colors.blue[300]!.withOpacity(0.2),
+                  horizontalTitleGap: 0,
+                  leading: sender != x['sender']
+                      ? CircleAvatar(
+                          backgroundColor: cGreen,
+                          radius: 15,
+                        )
+                      : CircleAvatar(
+                          backgroundColor: cWhite,
+                          radius: 15,
                         ),
-                        child: Text(
-                          x['message'],
-                          style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.black),
-                        )),
-                  ],
-                ),
-              );
+                  title: Column(
+                    crossAxisAlignment: sender == x['sender']
+                        ? CrossAxisAlignment.end
+                        : CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: sender == x['sender']
+                                ? Colors.green[300]!.withOpacity(0.2)
+                                : Colors.blue[300]!.withOpacity(0.2),
+                          ),
+                          child: Text(
+                            x['message'],
+                            style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.black),
+                          )),
+                    ],
+                  ),
+                  trailing: sender == x['sender']
+                      ? CircleAvatar(
+                          backgroundColor: cGreen,
+                          radius: 10,
+                        )
+                      : CircleAvatar(backgroundColor: cWhite, radius: 10));
             });
       },
     );
