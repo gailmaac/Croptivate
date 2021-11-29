@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:croptivate_app/pallete.dart';
+import 'package:croptivate_app/widgets/backgroundimage.dart';
+import 'package:croptivate_app/widgets/backgroundimageref.dart';
+import 'package:croptivate_app/widgets/ordersummary.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -25,6 +28,7 @@ class _ReferenceScreenState extends State<ReferenceScreen> {
   String loc = '';
   String PM = '';
   String DO = '';
+  String date = '';
 
   @override
   void initState() {
@@ -45,6 +49,7 @@ class _ReferenceScreenState extends State<ReferenceScreen> {
           print('meron');
           setState(() {
             buyer = doc['Buyer'];
+            date = doc['Date ordered'];
             loc = doc['location'];
             PM = doc['Payment Method'];
             DO = doc['Delivery Option'];
@@ -62,12 +67,12 @@ class _ReferenceScreenState extends State<ReferenceScreen> {
     return Scaffold(
       backgroundColor: cWhite,
       appBar: AppBar(
-        backgroundColor: cWhite,
-        elevation: 0,
+        backgroundColor: cGreen,
+        elevation: 1,
         title: Text(
-          "Reference ID",
+          "Order Reference",
           style: TextStyle(
-              color: cGreen,
+              color: cWhite,
               fontFamily: 'Poppins',
               fontWeight: FontWeight.bold,
               letterSpacing: 1),
@@ -75,55 +80,139 @@ class _ReferenceScreenState extends State<ReferenceScreen> {
         centerTitle: true,
         automaticallyImplyLeading: false,
       ),
-      body: Container(
-        child: Column(children: [
-          Center(
-            child: Text(
-              referenceID,
-              style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                  color: Colors.black),
+      body: Stack(
+        children: [
+          BackgroundImageRef(image: "assets/ref-bg.png"),
+          Container(
+          child: Column(
+            children: [
+            Padding(
+              padding: EdgeInsets.fromLTRB(0, 120, 0, 10),
+              child: Container(
+                child: Text(
+                  "Reference Number",
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 20,
+                    color: cBrown,
+                    fontWeight: FontWeight.bold
+                  ),
+                )
+              ),
             ),
-          ),
-          Center(
-            child: Text(
-              buyer,
-              style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                  color: Colors.black),
+            Center(
+              child: Text(
+                referenceID,
+                style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 24,
+                    fontWeight: FontWeight.w600,
+                    color: cBlack),
+              ),
             ),
-          ),
-          Center(
-            child: Text(
-              PM,
-              style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                  color: Colors.black),
+            Center(
+              child: Text(
+                "Date Ordered: " + date,
+                style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400,
+                    color: cBlack),
+              ),
             ),
-          ),
-          Center(
-            child: Text(
-              DO,
-              style: TextStyle(
+            SizedBox(height: 20),
+      
+            Container(
+              child: Text(
+                "Ordered By:",
+                style: TextStyle(
                   fontFamily: 'Poppins',
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                  color: Colors.black),
+                  fontSize: 20,
+                  color: cBrown,
+                  fontWeight: FontWeight.bold
+                ),
+              )
             ),
-          )
-        ]),
+            Center(
+              child: Text(
+                buyer,
+                style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.black),
+              ),
+            ),
+            SizedBox(height: 20),
+            Container(
+              child: Text(
+                "Payment Method",
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 20,
+                  color: cBrown,
+                  fontWeight: FontWeight.bold
+                ),
+              )
+            ),
+            Center(
+              child: Text(
+                PM,
+                style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.black),
+              ),
+            ),
+
+            SizedBox(height: 20),
+            Container(
+              child: Text(
+                "Delivery Options",
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 20,
+                  color: cBrown,
+                  fontWeight: FontWeight.bold
+                ),
+              )
+            ),
+            Center(
+              child: Text(
+                DO,
+                style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.black),
+              ),
+            ),
+            SizedBox(height: 60,),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 50),
+              child: Divider(thickness: 1, height: 20,),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+              child: OrderSummary(),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 50),
+              child: Divider(thickness: 1,),
+            )
+          ]),
+        ),
+        ]
       ),
       bottomNavigationBar: TextButton(
         onPressed: () {
           Navigator.pop(context);
         },
-        child: Text('OK'),
+        child: Text('Close', 
+        style: TextStyle(
+          color: cGreen, 
+          fontSize: 18)),
       ),
     );
   }
