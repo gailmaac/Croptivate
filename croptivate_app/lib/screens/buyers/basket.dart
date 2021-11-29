@@ -93,18 +93,25 @@ class _BasketScreenState extends State<BasketScreen> {
                     ElevatedButton(
                         style: ElevatedButton.styleFrom(primary: cGreen),
                         onPressed: () async {
-                          var name = '';
-                          await FirebaseFirestore.instance
-                          .collection('userBuyer')
-                          .get()
-                          .then((querySnapshot){
-                            querySnapshot.docs.forEach((doc) { 
-                              if (_auth.currentUser?.uid == doc.id) {
-                                name = doc['fname'] + ' ' + doc['lname'];
-                                print(name);
-                              } else { print("something went wrong");}
-                            });
-                          });
+                          // var name = '';
+                          // String loc = '';
+                          // String num = '';
+                          // await FirebaseFirestore.instance
+                          // .collection('userBuyer')
+                          // .get()
+                          // .then((querySnapshot){
+                          //   querySnapshot.docs.forEach((doc) { 
+                          //     if (_auth.currentUser?.uid == doc.id) {
+                          //       name = doc['fname'] + ' ' + doc['lname'];
+                          //       loc = doc['loc'];
+                          //       num = doc['cnum'];
+                          //       print(name);
+                          //       print(loc);
+                          //       print(num);
+                          //     } 
+
+                          //   });
+                          // });
                           Navigator.pushNamed(context, '/checkout');
                         },
                         child: Padding(
