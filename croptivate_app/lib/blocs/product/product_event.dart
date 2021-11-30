@@ -18,3 +18,12 @@ class UpdateProducts extends ProductEvent {
   @override 
   List<Object> get props => [products];
 }
+
+class RemoveProducts extends ProductEvent {
+  final List<Product> products;
+
+  RemoveProducts(this.products);
+
+  @override 
+  List<Object> get props => [products];
+}
