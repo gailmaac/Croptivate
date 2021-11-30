@@ -28,6 +28,9 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       if (event is UpdateProducts) {
         yield* _mapUpdateProductsToState(event);
       }
+      if (event is RemoveProducts) {
+        yield* _mapRemoveProductsToState(event, state);
+      }
     }
 
   Stream<ProductState> _mapLoadProductsToState() async* {
@@ -40,5 +43,20 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
   Stream<ProductState> _mapUpdateProductsToState(
       UpdateProducts event) async* {
     yield ProductLoaded(products: event.products);
+  }
+
+  Stream<ProductState> _mapRemoveProductsToState(
+      RemoveProducts event,
+      ProductState state) 
+    async* {
+      if(state is ProductLoaded) {
+        try {
+          yield ProductLoaded(
+            products: List
+            .from(state.products)
+            ..remove(event.products)
+          );
+        } catch (_) {}
+      }
   }
 }
