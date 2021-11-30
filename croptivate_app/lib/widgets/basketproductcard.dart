@@ -39,6 +39,10 @@ class BasketProductCard extends StatelessWidget {
                     fontWeight: FontWeight.bold),
               ),
               Text(
+                '${product.stockCount} Stocks',
+                style: TextStyle(fontSize: 16, color: cBlack),
+              ),
+              Text(
                 '\₱${product.price}',
                 style: TextStyle(fontSize: 16, color: cBlack),
               ),
