@@ -245,7 +245,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 35),
                       child: Text(
-                        "+63"+ num,
+                        "+63" + num,
                         style: TextStyle(
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.w400,
@@ -1285,7 +1285,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         ],
                       )))),
 
-          //Delivery method/options
+          //Order Summary
           Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               child: Container(
@@ -1299,7 +1299,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           color: cBlack.withOpacity(0.23)),
                     ],
                   ),
-                  height: 150,
+                  height: 250,
                   width: double.infinity,
                   child: Padding(
                       padding: const EdgeInsets.symmetric(
@@ -1322,6 +1322,77 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                       color: cBrown,
                                       fontSize: 19),
                                 ),
+                              ),
+                              Text("Items Ordered",
+                                  style: TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.w900,
+                                      color: cBrown,
+                                      fontSize: 16)),
+                              BlocBuilder<BasketBloc, BasketState>(
+                                builder: (context, state) {
+                                  if (state is BasketLoading) {
+                                    return Center(
+                                      child: CircularProgressIndicator(
+                                          color: cGreen),
+                                    );
+                                  }
+
+                                  if (state is BasketLoaded) {
+                                    return ListView.builder(
+                                        shrinkWrap: true,
+                                        itemCount: state.basket
+                                            .productQuantity(
+                                                state.basket.products)
+                                            .keys
+                                            .length,
+                                        itemBuilder: (context, index) {
+                                          return Container(
+                                            color: cWhite,
+                                            child: Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 20, vertical: 10),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    '${state.basket.productQuantity(state.basket.products).values.elementAt(index)}x',
+                                                      style: TextStyle(
+                                                          fontFamily: 'Poppins',
+                                                          fontWeight:
+                                                              FontWeight.w900,
+                                                          color: cBlack,
+                                                          fontSize: 16,
+                                                          letterSpacing: 3)),
+                                                  Text(
+                                                    '${state.basket.productQuantity(state.basket.products).keys.elementAt(index).name}',
+                                                    textAlign: TextAlign.left,
+                                                      style: TextStyle(
+                                                        fontFamily: 'Poppins',
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        color: cBlack,
+                                                        fontSize: 16,
+                                                      )),
+                                                  Text(
+                                                    '\₱${state.basket.productQuantity(state.basket.products).keys.elementAt(index).price}',
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        color: cBlack,
+                                                        fontSize: 16,
+                                                      )),
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                        });
+                                  } else {
+                                    return (Text("Sorry"));
+                                  }
+                                },
                               ),
                               OrderSummary(),
                             ],
