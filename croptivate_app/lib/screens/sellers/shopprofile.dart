@@ -1,5 +1,6 @@
 import 'package:croptivate_app/blocs/product/product_bloc.dart';
 import 'package:croptivate_app/pallete.dart';
+import 'package:croptivate_app/widgets/bottomnavbar.dart';
 import 'package:croptivate_app/widgets/productcarousel.dart';
 import 'package:croptivate_app/widgets/sectiontitle.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +32,7 @@ class SellerShop extends StatelessWidget {
                 size: 15,
               ),
             ),
+      
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -147,7 +149,131 @@ class SellerShop extends StatelessWidget {
                   SizedBox(width: 160),
                   Container(
                     child: TextButton(
-                      onPressed: () {}, 
+                      onPressed: () {
+                        showDialog(
+                        context: context, 
+                        builder: (context){
+                          return SimpleDialog(
+                            title: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text("Shop Name",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.w700,
+                                      color: cBrown)
+                                  ),
+                                  SizedBox(height: 30,),
+
+                                  Row(
+                                    children: [
+                                      Icon(Icons.location_on_outlined,
+                                      color: cGreen),
+                                      SizedBox(width: 10,),
+                                      Text("Shop Address",
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontFamily: 'Poppins',
+                                          fontWeight: FontWeight.w700,
+                                          color: cBlack)
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 20,),
+                                  Row(
+                                    children: [
+                                      Icon(Icons.access_time_rounded,
+                                      color: cGreen),
+                                      SizedBox(width: 10,),
+                                      Text("Opening Times",
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          fontFamily: 'Poppins',
+                                          fontWeight: FontWeight.w700,
+                                          color: cBlack)
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 20,),
+                                  Center(
+                                    child: SimpleDialogOption(
+                                      child: Text("Close",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontFamily: 'Poppins',
+                                        fontWeight: FontWeight.w700,
+                                        color: cGreen)
+                                    ),
+                                      onPressed: () => Navigator.pop(context),
+                                    ),
+                                  ),
+                                  SizedBox(height: 10)
+                                ],
+                              ),
+                            ) 
+                            // title: Column(
+                            //   crossAxisAlignment: CrossAxisAlignment.start,
+                            //   children: [
+                            //     Padding(
+                            //       padding: EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+                            //       child: Text(
+                            //       "Shop Name",
+                            //         style: TextStyle(
+                            //           fontFamily: 'Poppins',
+                            //           fontSize: 30,
+                            //           fontWeight: FontWeight.w700,
+                            //           color: cDGreen
+                            //         ),
+                            //       ),
+                            //     ),
+                            //     SizedBox(height: 50,),
+                            //     Padding(
+                            //       padding: EdgeInsets.symmetric( horizontal: 15),
+                            //       child: Row(
+                            //         children: [
+                            //           Icon(Icons.location_on_outlined,
+                            //           color: cGreen),
+                            //           SizedBox(width: 10,),
+                            //           Text(
+                            //             "Shop Address",
+                            //             style: TextStyle(
+                            //               fontFamily: 'Poppins',
+                            //               fontSize: 20,
+                            //               fontWeight: FontWeight.w500,
+                            //               color: cBlack
+                            //             ),
+                            //           )
+                            //         ],
+                            //       ),
+                            //     ),
+                                
+                            //     Padding(
+                            //       padding: EdgeInsets.symmetric(vertical: 20, horizontal: 15),
+                            //       child: Row(
+                            //         children: [
+                            //           Icon(Icons.access_time_rounded,
+                            //           color: cGreen),
+                            //           SizedBox(width: 10,),
+                            //           Text(
+                            //             "Opening Times",
+                            //             style: TextStyle(
+                            //               fontFamily: 'Poppins',
+                            //               fontSize: 20,
+                            //               fontWeight: FontWeight.w500,
+                            //               color: cBlack
+                            //             ),
+                            //           )
+                            //         ],
+                            //       ),
+                            //     ),
+                            //   ],
+                            // )
+                          );
+                        });
+                      }, 
                       child: Text(
                         "View",
                           style: TextStyle(
@@ -163,7 +289,7 @@ class SellerShop extends StatelessWidget {
               ),
             ),
             SizedBox(height: 10,),
-            SectionTitle(title: "Deals of the Day"),
+            SectionTitle(title: "All Vegetable Products"),
             BlocBuilder<ProductBloc, ProductState>(
               builder: (context, state) {
                 if (state is ProductLoading) {
@@ -176,9 +302,9 @@ class SellerShop extends StatelessWidget {
 
                 if (state is ProductLoaded) {
                   return ProductCarousel(
-                    products: state.products
-                        .where((product) => product.isDeals)
-                        .toList());
+                    products: state.products.toList());
+                        // .where((product) => product.isDeals)
+                        // .toList());
                 }
                 
                 else {
@@ -235,7 +361,7 @@ class SellerShop extends StatelessWidget {
               },
             ),
 
-            SectionTitle(title: "Leaf Vegetables"),
+            SectionTitle(title: "Leafy Vegetables"),
             BlocBuilder<ProductBloc, ProductState>(
               builder: (context, state) {
                 if (state is ProductLoading) {
@@ -249,7 +375,7 @@ class SellerShop extends StatelessWidget {
                 if (state is ProductLoaded) {
                   return ProductCarousel(
                     products: state.products
-                        .where((product) => product.category == "Leaf Vegetables")
+                        .where((product) => product.category == "Leafy Vegetables")
                         .toList());
                 }
                 
@@ -284,7 +410,8 @@ class SellerShop extends StatelessWidget {
             ),
           ],
         ),
-      )
+      ),
+      bottomNavigationBar: BottomNavBar(),
     );
   }
 }
