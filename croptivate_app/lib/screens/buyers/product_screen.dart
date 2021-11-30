@@ -297,7 +297,7 @@ class ProductScreen extends StatelessWidget {
                             ),
                           ],
                         ),
-                        SizedBox(width: 105),
+                        SizedBox(width: 95),
                         Text(
                           '\₱${product.price}',
                           style: TextStyle(fontSize: 25, color: cBlack),
