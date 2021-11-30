@@ -25,6 +25,7 @@ class OrderSummary extends StatelessWidget {
                           fontSize: 24,
                           fontFamily: 'Poppins',
                           fontWeight: FontWeight.w900)),
+                  SizedBox(width: 110),
                   Text('\₱${state.basket.subtotalString}',
                       style: TextStyle(
                           color: cBlack,
