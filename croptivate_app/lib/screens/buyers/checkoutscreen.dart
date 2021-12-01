@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:croptivate_app/blocs/basket/basket_bloc.dart';
+import 'package:croptivate_app/blocs/basketdata/basketdata_bloc.dart';
 import 'package:croptivate_app/blocs/favorites/favorites_bloc.dart';
 import 'package:croptivate_app/pallete.dart';
 import 'package:croptivate_app/screens/buyers/referencescreen.dart';
@@ -108,77 +109,95 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              ElevatedButton(
-                  style: ElevatedButton.styleFrom(primary: cGreen),
-                  onPressed: () {
-                    setState(() {
-                      dateOrdered = DateTime.now().toString();
-                    });
+              BlocBuilder<BasketdataBloc, BasketdataState>(
+                builder: (context, state) {
+                  if (state is BasketdataLoading) {
+                    return Center(
+                      child: CircularProgressIndicator(
+                        color: cGreen
+                      )
+                    );
+                  }
+                  if (state is BasketdataLoaded) {
+                    return ElevatedButton(
+                      style: ElevatedButton.styleFrom(primary: cGreen),
+                      onPressed: () {
+                        context.read<BasketdataBloc>().add(ConfirmBasketdata(basketData: state.basketData));
+                        setState(() {
+                          dateOrdered = DateTime.now().toString();
+                        });
 
-                    if (PM != '' && DO != '') {
-                      StoreOrder.collection('Orders').doc().set({
-                        "location": loc,
-                        "Payment Method": PM,
-                        "Delivery Option": DO,
-                        "Date ordered": dateOrdered,
-                        "Buyer": _auth.currentUser!.uid,
-                        "Seller": '',
-                        "To Ship": 'true',
-                        "Shipping": 'false',
-                        "Refunded": 'false',
-                      });
-                      Navigator.pop(context);
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  ReferenceScreen(dateordered: dateOrdered)));
-                    } else {
-                      showDialog(
-                          context: context,
-                          builder: (context) {
-                            return SimpleDialog(
-                                title: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 10),
-                              child: Column(
-                                children: [
-                                  Text("Please fill in necessary fields",
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          fontFamily: 'Poppins',
-                                          fontWeight: FontWeight.w700,
-                                          color: cBrown)),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  SimpleDialogOption(
-                                      child: Text("OK",
+                        if (PM != '' && DO != '') {
+                          StoreOrder.collection('Orders').doc().set({
+                            "location": loc,
+                            "Payment Method": PM,
+                            "Delivery Option": DO,
+                            "Date ordered": dateOrdered,
+                            "Buyer": _auth.currentUser!.uid,
+                            "Seller": '',
+                            "To Ship": 'true',
+                            "Shipping": 'false',
+                            "Refunded": 'false',
+                          });
+                          Navigator.pop(context);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ReferenceScreen(
+                                      dateordered: dateOrdered)));
+                        } else {
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return SimpleDialog(
+                                    title: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 10),
+                                  child: Column(
+                                    children: [
+                                      Text("Please fill in necessary fields",
                                           style: TextStyle(
                                               fontSize: 15,
                                               fontFamily: 'Poppins',
                                               fontWeight: FontWeight.w700,
-                                              color: cGreen)),
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      }),
-                                  SizedBox(height: 10)
-                                ],
-                              ),
-                            ));
-                          });
-                    }
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                    ),
-                    child: Text("PLACE ORDER NOW",
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontFamily: 'Poppins',
-                            fontWeight: FontWeight.bold)),
-                  ))
+                                              color: cBrown)),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      SimpleDialogOption(
+                                          child: Text("OK",
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  fontFamily: 'Poppins',
+                                                  fontWeight: FontWeight.w700,
+                                                  color: cGreen)),
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          }),
+                                      SizedBox(height: 10)
+                                    ],
+                                  ),
+                                ));
+                              });
+                        }
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                        ),
+                        child: Text("PLACE ORDER NOW",
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.bold)),
+                      ));
+                  }
+                  else {
+                    return Text("Sorry");
+                  }
+                  
+                },
+              )
             ],
           )),
       body: SingleChildScrollView(
@@ -1299,7 +1318,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           color: cBlack.withOpacity(0.23)),
                     ],
                   ),
-                  height: 250,
                   width: double.infinity,
                   child: Padding(
                       padding: const EdgeInsets.symmetric(
@@ -1358,7 +1376,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                                         .spaceBetween,
                                                 children: [
                                                   Text(
-                                                    '${state.basket.productQuantity(state.basket.products).values.elementAt(index)}x',
+                                                      '${state.basket.productQuantity(state.basket.products).values.elementAt(index)}x',
                                                       style: TextStyle(
                                                           fontFamily: 'Poppins',
                                                           fontWeight:
@@ -1367,8 +1385,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                                           fontSize: 16,
                                                           letterSpacing: 3)),
                                                   Text(
-                                                    '${state.basket.productQuantity(state.basket.products).keys.elementAt(index).name}',
-                                                    textAlign: TextAlign.left,
+                                                      '${state.basket.productQuantity(state.basket.products).keys.elementAt(index).name}',
+                                                      textAlign: TextAlign.left,
                                                       style: TextStyle(
                                                         fontFamily: 'Poppins',
                                                         fontWeight:
@@ -1377,7 +1395,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                                         fontSize: 16,
                                                       )),
                                                   Text(
-                                                    '\₱${state.basket.productQuantity(state.basket.products).keys.elementAt(index).price}',
+                                                      '\₱${state.basket.productQuantity(state.basket.products).keys.elementAt(index).price}',
                                                       style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.w600,
@@ -1394,10 +1412,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                   }
                                 },
                               ),
+                              SizedBox(height: 10),
                               OrderSummary(),
                             ],
                           ),
-                          SizedBox(height: 10),
                         ],
                       )))),
         ]),
