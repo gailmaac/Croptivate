@@ -1,9 +1,11 @@
 import 'package:croptivate_app/blocs/basket/basket_bloc.dart';
+import 'package:croptivate_app/blocs/basketdata/basketdata_bloc.dart';
 import 'package:croptivate_app/blocs/category/category_bloc.dart';
 import 'package:croptivate_app/blocs/favorites/favorites_bloc.dart';
 import 'package:croptivate_app/blocs/product/product_bloc.dart';
 import 'package:croptivate_app/config/app_router.dart';
 import 'package:croptivate_app/models/user.dart';
+import 'package:croptivate_app/repository/basket/basketdata_repository.dart';
 import 'package:croptivate_app/repository/category/category_repository.dart';
 import 'package:croptivate_app/repository/product/product_repository.dart';
 import 'package:croptivate_app/screens/splashscreen.dart';
@@ -40,6 +42,7 @@ class MyApp extends StatelessWidget {
         providers: [
           BlocProvider(create: (_) => FavoritesBloc()..add(StartFavorites())),
           BlocProvider(create: (_) => BasketBloc()..add(BasketStarted())),
+          BlocProvider(create: (context) => BasketdataBloc(basketBloc: context.read<BasketBloc>(), basketDataRepository: BasketDataRepository())),
           BlocProvider(
             create: (_) => CategoryBloc(
               categoryRepository: CategoryRepository(),
