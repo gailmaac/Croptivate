@@ -147,7 +147,7 @@ class _BasketScreenState extends State<BasketScreen> {
                               child: Column(
                                 children: [
                                   SizedBox(
-                                      height: 400,
+                                      height: 530,
                                       child: ListView.builder(
                                           itemCount: state.basket
                                           .productQuantity(state.basket.products)
