@@ -291,8 +291,8 @@ final FirebaseAuth _auth = FirebaseAuth.instance;
           // const SizedBox(height: 10),
           // myFavsbutton(),
           // const SizedBox(height: 10),
-          // startSellbutton(),
-          // const SizedBox(height: 170),
+          Ordersbutton(),
+          const SizedBox(height: 50),
           signOutButton()
         ],
       ),
@@ -374,7 +374,7 @@ final FirebaseAuth _auth = FirebaseAuth.instance;
   }
 
 //Start Selling Button
-  Widget startSellbutton() {
+  Widget Ordersbutton() {
     return TextButton(
       onPressed: () {
 
@@ -386,7 +386,7 @@ final FirebaseAuth _auth = FirebaseAuth.instance;
             Icon(Icons.storefront_outlined, color: cGreen),
             SizedBox(width: 30),
             Text(
-                "Start Selling",
+                "My Orders",
               style: TextStyle(fontSize: 20,
               color: cBlack,
               fontFamily: 'Poppins',
