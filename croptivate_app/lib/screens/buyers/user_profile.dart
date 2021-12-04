@@ -377,7 +377,7 @@ final FirebaseAuth _auth = FirebaseAuth.instance;
   Widget Ordersbutton() {
     return TextButton(
       onPressed: () {
-
+        Navigator.pushNamed(context, '/myorders');
       }, 
       child: Container(
         padding: EdgeInsets.all(20),
