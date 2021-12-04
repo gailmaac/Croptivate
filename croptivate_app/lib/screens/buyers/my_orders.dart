@@ -120,6 +120,7 @@ class _MyOrdersState extends State<MyOrders> {
 
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
                               "To Ship",
@@ -130,9 +131,8 @@ class _MyOrdersState extends State<MyOrders> {
                                 color: cGreen
                               )
                             ),
-                              Padding(
-                                padding: EdgeInsets.fromLTRB(50, 0, 5, 0),
-                                child: ElevatedButton(
+                            SizedBox(width: 20),
+                            ElevatedButton(
                                 style: ElevatedButton.styleFrom(primary: cGreen),
                                 onPressed: (){}, 
                                 child: Text(
@@ -144,7 +144,6 @@ class _MyOrdersState extends State<MyOrders> {
                                   ),
                                 )
                             ),
-                              )
                           ] 
                         )
                       ],
