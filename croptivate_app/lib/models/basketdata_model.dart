@@ -1,11 +1,13 @@
 import 'package:croptivate_app/models/product_model.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class BasketData extends Equatable {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   final List<Product>? products;
   final String? total;
 
-  const BasketData({
+  BasketData({
     required this.products,
     required this.total,
   });
@@ -18,7 +20,10 @@ class BasketData extends Equatable {
   ];
 
   Map<String, Object> toDocument() {
+
+
     return {
+      'buyerId': _auth.currentUser!.uid,
       'products': products!.map((product) => product.name).toList(),
       'productPrice': products!.map((product) => product.price).toList(),
       'total': total!,
