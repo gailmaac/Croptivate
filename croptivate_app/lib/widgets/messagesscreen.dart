@@ -146,12 +146,14 @@ class ShowContacts extends StatelessWidget {
                     child: ListTile(
                       leading: CircleAvatar(
                         radius: 80.0,
-                        child: Image.network(
+                        backgroundColor: cGreen
+                        /*child: Image.network(
                           profilepic,
                           fit: BoxFit.cover,
                           width: 80.0,
                           height: 80.0,
-                        ),
+                        )*/
+                        ,
                       ),
                       onTap: () async {
                         await FirebaseFirestore.instance
