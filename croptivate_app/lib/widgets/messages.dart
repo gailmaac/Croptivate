@@ -1,9 +1,14 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:croptivate_app/pallete.dart';
 import 'package:croptivate_app/widgets/backgroundimage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:path/path.dart' as Path;
 
 /*int _messagescount = 0;
 int get messagescount => _messagescount;
@@ -33,6 +38,12 @@ class Messages extends StatefulWidget {
 }
 
 class _MessagesState extends State<Messages> {
+  late CollectionReference imgRef;
+  late firebase_storage.Reference ref;
+  late File _img;
+  bool imageEmpty = true;
+  final picker = ImagePicker();
+
   TextEditingController _msg = TextEditingController();
   final StoreMessages = FirebaseFirestore.instance;
   final storecontact = FirebaseFirestore.instance;
@@ -49,6 +60,7 @@ class _MessagesState extends State<Messages> {
   void initState() {
     super.initState();
     _msg.addListener(_ontypeChanged);
+    imgRef = FirebaseFirestore.instance.collection('ImageURLs');
   }
 
   @override
@@ -86,6 +98,51 @@ class _MessagesState extends State<Messages> {
     } catch (e) {
       print(e.toString());
     }
+  }
+
+  Future pickImage(ImageSource source) async {
+    final pickedFile = await picker.pickImage(source: source);
+    if (pickedFile != null) {
+      setState(() {
+        imageEmpty = false;
+        _img = File(pickedFile.path);
+      });
+    }
+  }
+
+  Future uploadImage() async {
+    ref = firebase_storage.FirebaseStorage.instance
+        .ref()
+        .child('images/${Path.basename(_img.path)}');
+    await ref.putFile(_img).whenComplete(() async {
+      await ref.getDownloadURL().then((value) {
+        StoreMessages.collection('Chats/' +
+                widget.sender +
+                '/Contacts/' +
+                widget.receiver +
+                '/Messages')
+            .doc()
+            .set({
+          "message": '',
+          "sender": widget.sender,
+          "time": DateTime.now(),
+          "image": value,
+        });
+
+        StoreMessages.collection('Chats/' +
+                widget.receiver +
+                '/Contacts/' +
+                widget.sender +
+                '/Messages')
+            .doc()
+            .set({
+          "message": '',
+          "sender": widget.sender,
+          "time": DateTime.now(),
+          "image": value,
+        });
+      });
+    });
   }
 
   @override
@@ -140,38 +197,73 @@ class _MessagesState extends State<Messages> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: cWhite,
-                          border: Border(
-                            top: BorderSide(color: cGreen, width: 0.2),
-                            bottom: BorderSide(color: cGreen, width: 0.2),
-                          )),
-                      child: TextField(
-                        controller: _msg,
-                        decoration: InputDecoration(
-                            hintText: 'Enter Message...',
-                            hintStyle: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 14,
-                              color: Colors.black45,
-                              fontWeight: FontWeight.w500,
-                            )),
+                imageEmpty == false
+                    ? Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: 200,
+                            width: 150,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(12),
+                                  child: Image.file(
+                                    File(_img.path),
+                                    fit: BoxFit.cover,
+                                    width: 90,
+                                    height: 90,
+                                  )),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 40,
+                            child: TextButton(
+                              onPressed: () {
+                                setState(() {
+                                  imageEmpty = true;
+                                });
+                              },
+                              child: Icon(Icons.remove_circle,
+                                  size: 20, color: cGrey),
+                            ),
+                          ),
+                        ],
+                      )
+                    : Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: cWhite,
+                                border: Border(
+                                  top: BorderSide(color: cGreen, width: 0.2),
+                                  bottom: BorderSide(color: cGreen, width: 0.2),
+                                )),
+                            child: TextField(
+                              controller: _msg,
+                              decoration: InputDecoration(
+                                  hintText: 'Enter Message...',
+                                  hintStyle: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontSize: 14,
+                                    color: Colors.black45,
+                                    fontWeight: FontWeight.w500,
+                                  )),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ),
-                TextEmpty == true
+                TextEmpty == true && imageEmpty == true
                     ? SizedBox(
                         child: Row(
                           children: [
                             SizedBox(
                               width: 40,
                               child: TextButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  pickImage(ImageSource.camera);
+                                },
                                 child:
                                     Icon(Icons.camera, size: 20, color: cGrey),
                               ),
@@ -179,7 +271,9 @@ class _MessagesState extends State<Messages> {
                             SizedBox(
                               width: 40,
                               child: TextButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  pickImage(ImageSource.gallery);
+                                },
                                 child: Icon(Icons.picture_in_picture,
                                     size: 20, color: cGrey),
                               ),
@@ -192,6 +286,12 @@ class _MessagesState extends State<Messages> {
                           String contact = widget.receiver;
                           String sender = widget.sender;
                           int messagescount = 0;
+                          if (imageEmpty == false) {
+                            uploadImage();
+                            setState(() {
+                              imageEmpty = true;
+                            });
+                          }
                           if (_msg.text.isNotEmpty) {
                             StoreMessages.collection('Chats/' +
                                     sender +
@@ -203,6 +303,7 @@ class _MessagesState extends State<Messages> {
                               "message": _msg.text.trim(),
                               "sender": widget.sender,
                               "time": DateTime.now(),
+                              "image": '',
                             });
 
                             StoreMessages.collection('Chats/' +
@@ -215,6 +316,7 @@ class _MessagesState extends State<Messages> {
                               "message": _msg.text.trim(),
                               "sender": widget.sender,
                               "time": DateTime.now(),
+                              "image": '',
                             });
                             _msg.clear();
 
@@ -351,24 +453,42 @@ class Showmessages extends StatelessWidget {
                     crossAxisAlignment: sender == x['sender']
                         ? CrossAxisAlignment.end
                         : CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 10),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            color: sender == x['sender']
-                                ? Colors.green[300]!.withOpacity(0.2)
-                                : Colors.blue[300]!.withOpacity(0.2),
-                          ),
-                          child: Text(
-                            x['message'],
-                            style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
-                                color: Colors.black),
-                          )),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: sender == x['sender']
+                              ? Colors.green[300]!.withOpacity(0.2)
+                              : Colors.blue[300]!.withOpacity(0.2),
+                        ),
+                        child: x['image'] == ''
+                            ? Text(
+                                x['message'],
+                                style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.black),
+                              )
+                            : Container(
+                                height: 200,
+                                width: 150,
+                                child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(12),
+                                      child: Image.network(
+                                        x['image'],
+                                        fit: BoxFit.cover,
+                                        width: 90,
+                                        height: 90,
+                                      ),
+                                    )),
+                              ),
+                      ),
                     ],
                   ),
                   trailing: sender == x['sender']
