@@ -26,6 +26,7 @@ class BasketData extends Equatable {
       'buyerId': _auth.currentUser!.uid,
       'products': products!.map((product) => product.name).toList(),
       'productPrice': products!.map((product) => product.price).toList(),
+      'productOwnerId': products!.map((product) => product.ownerId).toList(),
       'total': total!,
     };
   }
