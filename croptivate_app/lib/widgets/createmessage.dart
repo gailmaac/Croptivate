@@ -103,7 +103,6 @@ class _createmessageState extends State<createmessage> {
   }
 
   Widget build(BuildContext context) {
-    print(' omg ' + users.length.toString());
     return Scaffold(
       backgroundColor: cWhite,
       appBar: AppBar(
