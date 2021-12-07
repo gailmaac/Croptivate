@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:croptivate_app/pallete.dart';
 import 'package:flutter/material.dart';
