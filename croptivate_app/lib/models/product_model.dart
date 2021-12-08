@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 class Product extends Equatable {
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  
+  String? ownerId;
   String name;
   String category;
   String imageUrlOne;
@@ -20,6 +20,7 @@ class Product extends Equatable {
   String description;
   
   Product({
+    required this.ownerId,
     required this.name,
     required this.category,
     required this.imageUrlOne,
@@ -36,6 +37,7 @@ class Product extends Equatable {
 
   static Product fromSnapshot(DocumentSnapshot snap){
     Product product = Product(
+      ownerId: snap['ownerId'],
       name: snap['name'],
       category: snap['category'],
       imageUrlOne: snap['imageUrlOne'],
@@ -54,6 +56,7 @@ class Product extends Equatable {
 
   @override
   List<Object?> get props => [
+    ownerId,
     name,
     category,
     imageUrlOne,

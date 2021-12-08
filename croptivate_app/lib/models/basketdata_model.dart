@@ -21,11 +21,11 @@ class BasketData extends Equatable {
 
   Map<String, Object> toDocument() {
 
-
     return {
       'buyerId': _auth.currentUser!.uid,
       'products': products!.map((product) => product.name).toList(),
       'productPrice': products!.map((product) => product.price).toList(),
+      'productOwnerId': products!.map((product) => product.ownerId).toList(),
       'total': total!,
     };
   }

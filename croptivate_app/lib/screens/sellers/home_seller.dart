@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:croptivate_app/pallete.dart';
 import 'package:croptivate_app/screens/buyers/user_profile.dart';
-import 'package:croptivate_app/screens/sellers/add_product.dart';
-import 'package:croptivate_app/widgets/messages.dart';
+import 'package:croptivate_app/screens/sellers/user_profileseller.dart';
 import 'package:croptivate_app/widgets/navigationdrawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
