@@ -131,7 +131,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               "Payment Method": PM,
                               "Delivery Option": DO,
                               "Date ordered": dateOrdered,
-                              "Buyer": _auth.currentUser!.uid,
+                              "Buyer": name,
                               "Seller": '',
                               "To Ship": 'true',
                               "Shipping": 'false',
