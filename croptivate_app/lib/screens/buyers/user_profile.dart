@@ -24,7 +24,7 @@ class UserProfile extends StatefulWidget {
   }
 }
 
-bool loading = false;
+bool loading = true;
 String resultuser = '';
 
 class _UserProfileState extends State<UserProfile> {
@@ -35,7 +35,6 @@ class _UserProfileState extends State<UserProfile> {
   String profilepic = '';
 
   getuser() async {
-    print(_auth.currentUser!.uid);
     try {
       await FirebaseFirestore.instance
           .collection('userBuyer')
@@ -50,6 +49,10 @@ class _UserProfileState extends State<UserProfile> {
               profilepic = doc['Profile Picture'].toString();
             });
           }
+        });
+      }).whenComplete(() {
+        setState(() {
+          loading = false;
         });
       });
     } catch (e) {
@@ -103,7 +106,13 @@ class _UserProfileState extends State<UserProfile> {
             ],
           ),
           SizedBox(height: 200),
-          Image.network(profilepic, height: 40, width: 40),
+          loading == false
+              ? Image.network(profilepic, height: 40, width: 40)
+              : Image.asset(
+                  "assets/addpic.png",
+                  height: 40,
+                  width: 40,
+                ),
           Text(name),
           Text(contactnumber),
           Text(location),
