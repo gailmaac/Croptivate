@@ -347,6 +347,68 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                         horizontal: 2, vertical: 10),
                                     child: TextButton(
                                         onPressed: () {
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return SimpleDialog(
+                                                    title: Padding(
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      horizontal: 20,
+                                                      vertical: 10),
+                                                  child: Column(
+                                                    children: [
+                                                      Text(
+                                                          "Cash On Delivery Payment Method",
+                                                          style: TextStyle(
+                                                              fontSize: 15,
+                                                              fontFamily:
+                                                                  'Poppins',
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700,
+                                                              color: cBrown)),
+                                                      SizedBox(
+                                                        height: 10,
+                                                      ),
+                                                      Text(
+                                                          "By using Cash On Delivery Method, please send me a message and let us discuss about the delivery courier that offers Cash On Delivery service.\n\nDisclaimer: There will be an additional fee for purchase service.",
+                                                          style: TextStyle(
+                                                              fontSize: 13,
+                                                              fontFamily:
+                                                                  'Poppins',
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700,
+                                                              color: cBlack)),
+                                                      SizedBox(
+                                                        height: 10,
+                                                      ),
+                                                      SimpleDialogOption(
+                                                          child: Text("Got It!",
+                                                              style: TextStyle(
+                                                                  fontSize: 15,
+                                                                  fontFamily:
+                                                                      'Poppins',
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700,
+                                                                  color:
+                                                                      cGreen)),
+                                                          onPressed: () {
+                                                            setState(() {
+                                                              selectedPM = 1;
+                                                              PM =
+                                                                  'Cash On Delivery';
+                                                            });
+                                                            Navigator.pop(
+                                                                context);
+                                                          }),
+                                                      SizedBox(height: 10)
+                                                    ],
+                                                  ),
+                                                ));
+                                              });
                                           setState(() {
                                             selectedPM = 1;
                                             PM = 'Cash On Delivery';
@@ -359,7 +421,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                                   MainAxisAlignment.center,
                                               children: [
                                                 Icon(
-                                                  Icons.payment_rounded,
+                                                  Icons.payments_outlined,
                                                   size: 20,
                                                   color: selectedPM == 1
                                                       ? cGreen
@@ -421,6 +483,67 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                         horizontal: 2, vertical: 10),
                                     child: TextButton(
                                         onPressed: () {
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return SimpleDialog(
+                                                    title: Padding(
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      horizontal: 20,
+                                                      vertical: 10),
+                                                  child: Column(
+                                                    children: [
+                                                      Text(
+                                                          "E-Wallet Payment Method",
+                                                          style: TextStyle(
+                                                              fontSize: 15,
+                                                              fontFamily:
+                                                                  'Poppins',
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700,
+                                                              color: cBrown)),
+                                                      SizedBox(
+                                                        height: 10,
+                                                      ),
+                                                      Text(
+                                                          "By using E-Wallet Payment Method, Pay Manually through GCash:\n\nGCash\n091718xxxx\nCamille Abi Enzo",
+                                                          style: TextStyle(
+                                                              fontSize: 13,
+                                                              fontFamily:
+                                                                  'Poppins',
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w700,
+                                                              color: cBlack)),
+                                                      SizedBox(
+                                                        height: 10,
+                                                      ),
+                                                      SimpleDialogOption(
+                                                          child: Text("Got It!",
+                                                              style: TextStyle(
+                                                                  fontSize: 15,
+                                                                  fontFamily:
+                                                                      'Poppins',
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w700,
+                                                                  color:
+                                                                      cGreen)),
+                                                          onPressed: () {
+                                                            setState(() {
+                                                              selectedPM = 2;
+                                                              PM = 'GCash';
+                                                            });
+                                                            Navigator.pop(
+                                                                context);
+                                                          }),
+                                                      SizedBox(height: 10)
+                                                    ],
+                                                  ),
+                                                ));
+                                              });
                                           setState(() {
                                             selectedPM = 2;
                                             PM = 'GCash';
