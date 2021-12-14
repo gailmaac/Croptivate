@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:croptivate_app/pallete.dart';
 import 'package:croptivate_app/screens/buyers/user_profile.dart';
+import 'package:croptivate_app/screens/sellers/orders.dart';
 import 'package:croptivate_app/screens/sellers/user_profileseller.dart';
 import 'package:croptivate_app/widgets/navigationdrawer.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -26,10 +28,38 @@ List<Tab> tabs = [
 ];
 
 class _HomeSellerState extends State<HomeSeller> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   List shipping = [];
   List to_ship = [];
   List refunded = [];
   List completed = [];
+  String name = '';
+
+  @override
+  void initState() {
+    super.initState();
+    getOrders();
+  }
+
+  getuser(String buyer) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('userBuyer')
+          .get()
+          .then((querySnapshot) {
+        querySnapshot.docs.forEach((doc) {
+          if (buyer == doc.id) {
+            setState(() {
+              name = doc['first name'] + ' ' + doc['last name'];
+            });
+          }
+        });
+      });
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
 
   getOrders() async {
     List _to_ship = [];
@@ -42,19 +72,20 @@ class _HomeSellerState extends State<HomeSeller> {
           .get()
           .then((querySnapshot) {
         querySnapshot.docs.forEach((doc) {
-          print(doc['To Ship']);
-          if (doc['To Ship'] == 'true') {
-            _to_ship.add(doc.data());
+          if (doc['Seller'] == _auth.currentUser!.uid) {
+            if (doc['To Ship'] == 'true') {
+              _to_ship.add(doc.data());
+            }
+            if (doc['Shipping'] == 'true') {
+              _shipping.add(doc.data());
+            }
+            if (doc['Refunded'] == 'true') {
+              _refunded.add(doc.data());
+            }
+            if (doc['Completed'] == 'true') {
+              _completed.add(doc.data());
+            }
           }
-          if (doc['Shipping'] == 'true') {
-            _shipping.add(doc.data());
-          }
-          if (doc['Refunded'] == 'true') {
-            _refunded.add(doc.data());
-          }
-          /*if (doc['Completed'] == 'true') {
-            _completed.add(doc.data());
-          }*/
         });
       });
 
@@ -71,8 +102,6 @@ class _HomeSellerState extends State<HomeSeller> {
 
   @override
   Widget build(BuildContext context) {
-    print('hala pano to');
-    getOrders();
     print(to_ship.length);
     return DefaultTabController(
       length: tabs.length,
@@ -111,9 +140,21 @@ class _HomeSellerState extends State<HomeSeller> {
             child: ListView.builder(
                 itemCount: to_ship.length,
                 itemBuilder: (context, int) {
+                  getuser(to_ship[int]['Buyer'].toString());
                   return ListTile(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => OrdersPage(
+                                    fr: 'Seller',
+                                    buyer: to_ship[int]['Buyer'].toString(),
+                                    dateordered:
+                                        to_ship[int]['Date ordered'].toString(),
+                                  )));
+                    },
                     tileColor: cGrey,
-                    title: Text(to_ship[int]['Date ordered'].toString()),
+                    title: Text(name),
                     trailing: Text(to_ship[int]['Delivery Option'].toString()),
                   );
                 }),
@@ -124,9 +165,10 @@ class _HomeSellerState extends State<HomeSeller> {
             child: ListView.builder(
                 itemCount: shipping.length,
                 itemBuilder: (context, int) {
+                  getuser(shipping[int]['Buyer'].toString());
                   return ListTile(
                     tileColor: cGrey,
-                    title: Text(shipping[int]['Date ordered'].toString()),
+                    title: Text(name),
                     trailing: Text(shipping[int]['Delivery Option'].toString()),
                   );
                 }),
@@ -137,9 +179,10 @@ class _HomeSellerState extends State<HomeSeller> {
             child: ListView.builder(
                 itemCount: completed.length,
                 itemBuilder: (context, int) {
+                  getuser(completed[int]['Buyer'].toString());
                   return ListTile(
                     tileColor: cGrey,
-                    title: Text(completed[int]['Date ordered'].toString()),
+                    title: Text(completed[int]['Buyer'].toString()),
                     trailing:
                         Text(completed[int]['Delivery Option'].toString()),
                   );
@@ -151,9 +194,10 @@ class _HomeSellerState extends State<HomeSeller> {
             child: ListView.builder(
                 itemCount: refunded.length,
                 itemBuilder: (context, int) {
+                  getuser(refunded[int]['Buyer'].toString());
                   return ListTile(
                     tileColor: cGrey,
-                    title: Text(refunded[int]['Date ordered'].toString()),
+                    title: Text(refunded[int]['Buyer'].toString()),
                     trailing: Text(refunded[int]['Delivery Option'].toString()),
                   );
                 }),
