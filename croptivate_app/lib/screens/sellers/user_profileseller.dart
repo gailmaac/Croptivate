@@ -28,7 +28,7 @@ class _UserProfileSellerState extends State<UserProfileSeller> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   getuser() async {
-    print(_auth.currentUser!.uid);
+    // print(_auth.currentUser!.uid);
     try {
       await FirebaseFirestore.instance
           .collection('userSeller')
@@ -49,7 +49,7 @@ class _UserProfileSellerState extends State<UserProfileSeller> {
         loading = false;
       });
     } catch (e) {
-      print(e.toString());
+      // print(e.toString());
     }
   }
 
@@ -61,7 +61,7 @@ class _UserProfileSellerState extends State<UserProfileSeller> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: Text(
-          "My Profile Seller",
+          name,
           style: TextStyle(
             fontFamily: 'Poppins',
             color: cGreen,
@@ -79,132 +79,167 @@ class _UserProfileSellerState extends State<UserProfileSeller> {
             size: 15,
           ),
         ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => EditProfile()));
-            },
-            color: cBlack,
-            icon: Icon(Icons.settings_outlined),
-          )
-        ],
       ),
-      body: ListView(
-        // physics: BouncingScrollPhysics(),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Column(
             children: [
               // getusers()
             ],
           ),
-          SizedBox(height: 200),
+          SizedBox(height: 20),
           loading == false
-              ? Image.network(profilepic, height: 40, width: 40)
+              ? Center(
+                child: CircleAvatar(
+                  radius: 80.0,
+                  child: ClipOval(
+                    child: Image.network(
+                      profilepic,
+                      fit: BoxFit.cover,
+                      width: 160.0,
+                      height: 160.0,
+                    )
+                  ),
+                ),
+              )
               : Image.asset(
                   "assets/addpic.png",
-                  height: 40,
-                  width: 40,
+                  height: 160,
+                  width: 160,
                 ),
-          Text(name),
-          Text(contactnumber),
-          Text(location),
-          Text(shopname),
+          SizedBox(height: 20),
+
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.person_outline_rounded,
+                  color: cGreen
+                ),
+                SizedBox(width: 40,),
+                Flexible(
+                  child: Text(
+                    name,
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 22,
+                      fontWeight: FontWeight.w500,
+                      color: cBlack
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          Divider(),
+
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.phone_android_rounded,
+                  color: cGreen
+                ),
+                SizedBox(width: 40,),
+                Text(
+                  contactnumber,
+                  style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 22,
+                    fontWeight: FontWeight.w500,
+                    color: cBlack
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          Divider(),
+
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.location_on_outlined,
+                  color: cGreen
+                ),
+                SizedBox(width: 40,),
+                Flexible(
+                  child: Text(
+                    location,
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 22,
+                      fontWeight: FontWeight.w500,
+                      color: cBlack
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          Divider(),
+
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.store_outlined,
+                  color: cGreen
+                ),
+                SizedBox(width: 40,),
+                Flexible(
+                  child: Text(
+                    shopname,
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 22,
+                      fontWeight: FontWeight.w500,
+                      color: cBlack
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Divider(),
+          SizedBox(height: 20),
+
+          editProfilebutton(),
+          SizedBox(height: 10,),
           signOutButton()
         ],
       ),
     );
   }
 
-  // Widget buildName(User user) => Column(
-  //   children: [
-  //     Text(
-  //       user.fname + ' ' +  user.lname,
-  //       style: TextStyle(
-  //         fontWeight: FontWeight.bold,
-  //         fontFamily: 'Poppins',
-  //         color: cBlack,
-  //         fontSize: 24
-  //       ),
-  //     ),
-  //     const SizedBox(height: 4),
-  //   ],
-  // );
-
-  //Track Order Button
-  Widget trackOrderbutton() {
+  //Edit Profile Button
+  Widget editProfilebutton() {
     return TextButton(
-        onPressed: () {},
-        child: Container(
-          padding: EdgeInsets.all(20),
-          child: Row(
-            children: [
-              Icon(Icons.location_on_outlined, color: cGreen),
-              SizedBox(width: 30),
-              Text("Track my Order",
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: cBlack,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.bold,
-                  )),
-            ],
+        onPressed: () {
+          Navigator.push(context,
+          MaterialPageRoute(builder: (context) => EditProfile()));
+        },
+        child: 
+          Text("Edit My Profile",
+            style: TextStyle(
+              decoration: TextDecoration.underline,
+              fontSize: 20,
+              color: cGreen,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.bold,
+            )
           ),
-          color: Colors.transparent,
-          width: double.infinity,
-          height: 65,
-        ));
+        );
   }
 
-  //Favorites Button
-  Widget myFavsbutton() {
-    return TextButton(
-        onPressed: () {},
-        child: Container(
-          padding: EdgeInsets.all(20),
-          child: Row(
-            children: [
-              Icon(Icons.favorite_border_rounded, color: cGreen),
-              SizedBox(width: 30),
-              Text("My Favorites",
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: cBlack,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.bold,
-                  )),
-            ],
-          ),
-          color: Colors.transparent,
-          width: double.infinity,
-          height: 65,
-        ));
-  }
-
-//Start Selling Button
-  Widget startSellbutton() {
-    return TextButton(
-        onPressed: () {},
-        child: Container(
-          padding: EdgeInsets.all(20),
-          child: Row(
-            children: [
-              Icon(Icons.storefront_outlined, color: cGreen),
-              SizedBox(width: 30),
-              Text("Start Selling",
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: cBlack,
-                    fontFamily: 'Poppins',
-                    fontWeight: FontWeight.bold,
-                  )),
-            ],
-          ),
-          color: Colors.transparent,
-          width: double.infinity,
-          height: 65,
-        ));
-  }
 
   //Sign Out Button
   Widget signOutButton() {
