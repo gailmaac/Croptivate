@@ -18,10 +18,8 @@ class UserProfileSeller extends StatefulWidget {
   }
 }
 
-bool loading = false;
-String resultuser = '';
-
 class _UserProfileSellerState extends State<UserProfileSeller> {
+  bool loading = true;
   String name = '';
   String location = '';
   String contactnumber = '';
@@ -31,9 +29,6 @@ class _UserProfileSellerState extends State<UserProfileSeller> {
 
   getuser() async {
     print(_auth.currentUser!.uid);
-    setState(() {
-      loading = true;
-    });
     try {
       await FirebaseFirestore.instance
           .collection('userSeller')
