@@ -28,6 +28,32 @@ class ProductPage extends StatefulWidget {
 class _ProductPageState extends State<ProductPage> {
   int productcount = 0;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  List products = [];
+
+  @override
+  void initState() {
+    super.initState();
+    super.initState();
+    getproducts();
+  }
+
+  getproducts() async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('sellerPosts')
+          .get()
+          .then((querySnapshot) {
+        querySnapshot.docs.forEach((doc) {
+          if (_auth.currentUser!.uid == doc['ownerId']) {
+            products.add(doc.data());
+          }
+        });
+      });
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -98,47 +124,42 @@ class _ProductPageState extends State<ProductPage> {
                     )),
               ],
             )),
-        body: BlocBuilder<ProductBloc, ProductState>(
-          builder: (context, state) {
-            if (state is ProductLoading) {
-              return Center(
-                child: CircularProgressIndicator(
-                  color: cGreen,
-                ),
-              );
-            }
-            if (state is ProductLoaded) {
-              return GridView.builder(
+        body: Container(
+            child: GridView.builder(
                 padding: const EdgeInsets.symmetric(
                     horizontal: 0.95, vertical: 16.0),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 1, childAspectRatio: 2.4),
-                itemCount: state.products.length,
+                itemCount: products.length,
                 itemBuilder: (BuildContext context, int index) {
-                  if (state.products[index].ownerId == _auth.currentUser!.uid) {
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Center(
-                        child: ProductListCard(
-                          product: state.products[index],
-                          widthFactor: 1.1,
-                          leftPosition: 150,
-                          topPosition: 70,
-                          heightofBox: 70,
-                          widthValue: 205,
-                          isRemoved: true,
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Center(
+                      child: ProductListCard(
+                        product: Product(
+                          category: products[index]['category'],
+                          description: products[index]['description'],
+                          imageUrlOne: products[index]['imageUrlOne'],
+                          imageUrlThree: products[index]['imageUrlThree'],
+                          weightCount: products[index]['weightCount'],
+                          imageUrlTwo: products[index]['imageUrlTwo'],
+                          isDeals: products[index]['isDeals'],
+                          isRecommended: products[index]['isRecommended'],
+                          weight: products[index]['weight'],
+                          name: products[index]['name'],
+                          ownerId: products[index]['ownerId'],
+                          price: products[index]['price'],
+                          stockCount: products[index]['stockCount'],
                         ),
+                        widthFactor: 1.1,
+                        leftPosition: 150,
+                        topPosition: 70,
+                        heightofBox: 70,
+                        widthValue: 205,
+                        isRemoved: true,
                       ),
-                    );
-                  } else {
-                    return Text('blank');
-                  }
-                },
-              );
-            } else {
-              return Text("Something went wrong.");
-            }
-          },
-        ));
+                    ),
+                  );
+                })));
   }
 }
