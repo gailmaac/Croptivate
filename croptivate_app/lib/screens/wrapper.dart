@@ -42,8 +42,10 @@ class Wrapper extends StatelessWidget {
     } else {
       getuserSeller();
       if (seller == 1) {
+        Navigator.pop(context);
         return HomeSeller();
       } else {
+        Navigator.pop(context);
         return HomeBuyer();
       }
     }
