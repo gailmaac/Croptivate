@@ -132,7 +132,7 @@ class ShowContacts extends StatelessWidget {
                 int lhour = x['lastHour'];
                 int lminute = x['lastMinute'];
                 int lday = x['lastDay'];
-                //String profilepic = x['Profile Picture'];
+                String profilepic = x['Profile Picture'];
 
                 return SizedBox(
                   child: Container(
@@ -145,15 +145,14 @@ class ShowContacts extends StatelessWidget {
                     ),
                     child: ListTile(
                       leading: CircleAvatar(
-                        backgroundColor: cGreen
-                        /*child: Image.network(
-                          profilepic,
-                          fit: BoxFit.cover,
-                          width: 80.0,
-                          height: 80.0,
-                        )*/
-                        ,
-                      ),
+                          child: ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: Image.network(
+                                profilepic,
+                                fit: BoxFit.cover,
+                                width: 40,
+                                height: 40,
+                              ))),
                       onTap: () async {
                         await FirebaseFirestore.instance
                             .collection('Chats')
@@ -161,6 +160,7 @@ class ShowContacts extends StatelessWidget {
                             .collection('Contacts')
                             .doc(x.id)
                             .set({
+                          'Profile Picture': profilepic,
                           'contactname': contactname,
                           'lastTime': ltime,
                           'lastHour': lhour,
