@@ -141,8 +141,8 @@ class _HomeSellerState extends State<HomeSeller> {
                 itemCount: to_ship.length,
                 itemBuilder: (context, int) {
                   getuser(to_ship[int]['Buyer'].toString());
-                  return ListTile(
-                    onTap: () {
+                  return InkWell(
+                    onTap: (){
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -153,10 +153,137 @@ class _HomeSellerState extends State<HomeSeller> {
                                         to_ship[int]['Date ordered'].toString(),
                                   )));
                     },
-                    tileColor: cGrey,
-                    title: Text(name),
-                    trailing: Text(to_ship[int]['Delivery Option'].toString()),
-                  );
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                      child: Container(
+                        height: 190,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: cWhite,
+                          boxShadow: [
+                            BoxShadow(
+                              offset: Offset(3, 6),
+                              blurRadius: 10,
+                              color: cGrey.withOpacity(0.6),
+                            )
+                          ]
+                        ),
+                    child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Reference ID",
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontSize: 20,
+                                  color: cBrown,
+                                  fontWeight: FontWeight.w600),
+                            ),
+                            TextButton(
+                              onPressed: (){
+                                Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => OrdersPage(
+                                    fr: 'Seller',
+                                    buyer: to_ship[int]['Buyer'].toString(),
+                                    dateordered:
+                                      to_ship[int]['Date ordered'].toString(),
+                                    )
+                                  )
+                                );
+                              }, 
+                              child: Text(
+                                "View Order Details",
+                                style: TextStyle(
+                                  decoration: TextDecoration.underline,
+                                  fontFamily: 'Poppins',
+                                  fontSize: 13,
+                                  color: cGreen
+                                )
+                              )
+                            )
+                          ],
+                        ),
+                        Text(
+                          "sampleLBzkB6f0wVdPOVgw",
+                          style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 18,
+                              fontWeight: FontWeight.w900,
+                              color: cBlack),
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                              "Ordered By",
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 16,
+                                color: cBrown,
+                                fontWeight: FontWeight.w600),
+                            ),
+                        Text(
+                          name,
+                          style: TextStyle(
+                              fontFamily: 'Poppins',
+                              fontSize: 18,
+                              fontWeight: FontWeight.w900,
+                              color: cBlack),
+                        ),
+                        SizedBox(height: 10,),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Total: #total",
+                              style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w900,
+                                  color: cBlack),
+                            ),
+                            ElevatedButton(
+                                style: ElevatedButton.styleFrom(primary: cGreen),
+                                onPressed: (){}, 
+                                child: Text(
+                                  "Ship Order",
+                                  style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w500
+                                  ),
+                                )
+                            ),
+                          ],
+                        )
+                      ]
+                      ),
+                    ),
+                  )));
+                  // return ListTile(
+                  //   onTap: () {
+                  //     Navigator.push(
+                  //         context,
+                  //         MaterialPageRoute(
+                  //             builder: (context) => OrdersPage(
+                  //                   fr: 'Seller',
+                  //                   buyer: to_ship[int]['Buyer'].toString(),
+                  //                   dateordered:
+                  //                       to_ship[int]['Date ordered'].toString(),
+                  //                 )));
+                  //   },
+                  //   tileColor: cGrey,
+                  //   title: Text(name),
+                  //   trailing: Text(to_ship[int]['Delivery Option'].toString()),
+                  // );
                 }),
           ),
           Container(
@@ -239,10 +366,7 @@ class _HomeSellerState extends State<HomeSeller> {
                 ),
                 IconButton(
                     onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => UserProfile()));
+                      Navigator.pushNamed(context, '/userprofileseller');
                     },
                     icon: Icon(
                       Icons.person_outline_rounded,
