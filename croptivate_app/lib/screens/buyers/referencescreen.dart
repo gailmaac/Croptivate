@@ -8,7 +8,9 @@ import 'package:flutter/material.dart';
 
 class ReferenceScreen extends StatefulWidget {
   final dateordered;
-  const ReferenceScreen({Key? key, this.dateordered}) : super(key: key);
+  final uid;
+  const ReferenceScreen({Key? key, this.dateordered, this.uid})
+      : super(key: key);
 
   @override
   _ReferenceScreenState createState() => _ReferenceScreenState();
@@ -23,17 +25,18 @@ class ReferenceScreen extends StatefulWidget {
 class _ReferenceScreenState extends State<ReferenceScreen> {
   final _auth = FirebaseAuth.instance;
   String referenceID = '';
-  String buyer = '';
   String seller = '';
   String loc = '';
-  String PM = '';
-  String DO = '';
+  String pM = '';
+  String dO = '';
   String date = '';
+  String name = '';
 
   @override
   void initState() {
     super.initState();
     findReference();
+    getUser();
   }
 
   findReference() async {
@@ -45,15 +48,30 @@ class _ReferenceScreenState extends State<ReferenceScreen> {
         print(doc['Date ordered'].toString());
         print(widget.dateordered);
         if (doc['Date ordered'].toString() == widget.dateordered &&
-            _auth.currentUser!.uid == doc['Buyer']) {
+            widget.uid == doc['Buyer']) {
           print('meron');
           setState(() {
-            buyer = doc['Buyer'];
             date = doc['Date ordered'];
             loc = doc['location'];
-            PM = doc['Payment Method'];
-            DO = doc['Delivery Option'];
+            pM = doc['Payment Method'];
+            dO = doc['Delivery Option'];
             referenceID = doc.id;
+            seller = doc['Seller'];
+          });
+        }
+      });
+    });
+  }
+
+  getUser() async {
+    await FirebaseFirestore.instance
+        .collection('userBuyer')
+        .get()
+        .then((querySnapshot) {
+      querySnapshot.docs.forEach((doc) {
+        if (_auth.currentUser?.uid == doc.id) {
+          setState(() {
+            name = doc['first name'] + ' ' + doc['last name'];
           });
         }
       });
@@ -63,7 +81,6 @@ class _ReferenceScreenState extends State<ReferenceScreen> {
   @override
   Widget build(BuildContext context) {
     print(referenceID);
-    print('loc');
     return Scaffold(
       backgroundColor: cWhite,
       appBar: AppBar(
@@ -80,25 +97,21 @@ class _ReferenceScreenState extends State<ReferenceScreen> {
         centerTitle: true,
         automaticallyImplyLeading: false,
       ),
-      body: Stack(
-        children: [
-          BackgroundImageRef(image: "assets/ref-bg.png"),
-          Container(
-          child: Column(
-            children: [
+      body: Stack(children: [
+        BackgroundImageRef(image: "assets/ref-bg.png"),
+        Container(
+          child: Column(children: [
             Padding(
               padding: EdgeInsets.fromLTRB(0, 120, 0, 10),
               child: Container(
-                child: Text(
-                  "Reference Number",
-                  style: TextStyle(
+                  child: Text(
+                "Reference Number",
+                style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 20,
                     color: cBrown,
-                    fontWeight: FontWeight.bold
-                  ),
-                )
-              ),
+                    fontWeight: FontWeight.bold),
+              )),
             ),
             Center(
               child: Text(
@@ -121,21 +134,18 @@ class _ReferenceScreenState extends State<ReferenceScreen> {
               ),
             ),
             SizedBox(height: 20),
-      
             Container(
-              child: Text(
-                "Ordered By:",
-                style: TextStyle(
+                child: Text(
+              "Ordered By:",
+              style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 20,
                   color: cBrown,
-                  fontWeight: FontWeight.bold
-                ),
-              )
-            ),
+                  fontWeight: FontWeight.bold),
+            )),
             Center(
               child: Text(
-                buyer,
+                name,
                 style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 16,
@@ -145,19 +155,17 @@ class _ReferenceScreenState extends State<ReferenceScreen> {
             ),
             SizedBox(height: 20),
             Container(
-              child: Text(
-                "Payment Method",
-                style: TextStyle(
+                child: Text(
+              "Payment Method",
+              style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 20,
                   color: cBrown,
-                  fontWeight: FontWeight.bold
-                ),
-              )
-            ),
+                  fontWeight: FontWeight.bold),
+            )),
             Center(
               child: Text(
-                PM,
+                pM,
                 style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 16,
@@ -165,22 +173,19 @@ class _ReferenceScreenState extends State<ReferenceScreen> {
                     color: Colors.black),
               ),
             ),
-
             SizedBox(height: 20),
             Container(
-              child: Text(
-                "Delivery Options",
-                style: TextStyle(
+                child: Text(
+              "Delivery Options",
+              style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 20,
                   color: cBrown,
-                  fontWeight: FontWeight.bold
-                ),
-              )
-            ),
+                  fontWeight: FontWeight.bold),
+            )),
             Center(
               child: Text(
-                DO,
+                dO,
                 style: TextStyle(
                     fontFamily: 'Poppins',
                     fontSize: 16,
@@ -188,10 +193,15 @@ class _ReferenceScreenState extends State<ReferenceScreen> {
                     color: Colors.black),
               ),
             ),
-            SizedBox(height: 60,),
+            SizedBox(
+              height: 60,
+            ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 50),
-              child: Divider(thickness: 1, height: 20,),
+              child: Divider(
+                thickness: 1,
+                height: 20,
+              ),
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
@@ -199,20 +209,18 @@ class _ReferenceScreenState extends State<ReferenceScreen> {
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 50),
-              child: Divider(thickness: 1,),
+              child: Divider(
+                thickness: 1,
+              ),
             )
           ]),
         ),
-        ]
-      ),
+      ]),
       bottomNavigationBar: TextButton(
         onPressed: () {
           Navigator.pop(context);
         },
-        child: Text('Close', 
-        style: TextStyle(
-          color: cGreen, 
-          fontSize: 18)),
+        child: Text('Close', style: TextStyle(color: cGreen, fontSize: 18)),
       ),
     );
   }
