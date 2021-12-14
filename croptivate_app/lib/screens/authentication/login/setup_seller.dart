@@ -35,7 +35,6 @@ class SetUpSeller extends StatefulWidget {
 
 class _SetUpSellerState extends State<SetUpSeller> {
 
-  
   TextEditingController fname = new TextEditingController();
   TextEditingController lname = new TextEditingController();
   TextEditingController loc = new TextEditingController();
@@ -68,6 +67,7 @@ class _SetUpSellerState extends State<SetUpSeller> {
   }
 
   createSellerProfile({
+    String? sellerType,
     String? accImageUrl,
     String? fname,
     String? lname,
@@ -78,6 +78,7 @@ class _SetUpSellerState extends State<SetUpSeller> {
     sellerInfo
     .doc(_auth.currentUser!.uid)
     .set({
+      "sellerType": sellerType,
       "Profile Picture": accImageUrl,
       "first name": fname,
       "last name": lname,
@@ -93,6 +94,7 @@ class _SetUpSellerState extends State<SetUpSeller> {
     });
     String accImageUrl = await uploadaccImage(accImage);
     createSellerProfile(
+      sellerType: sellerType,
       accImageUrl: accImageUrl,
       fname: fname.text,
       lname: lname.text,
@@ -247,10 +249,10 @@ class _SetUpSellerState extends State<SetUpSeller> {
       ),
     );
 
-  var myInitialItem;
+  var sellerType;
 
   //textfieldform state
-  List<String> myItems = [
+  List<String> sellerTypeCat = [
     "Farmer",
     "Reseller",
   ];
@@ -313,11 +315,11 @@ class _SetUpSellerState extends State<SetUpSeller> {
                                 style: inputBodyText,
                                 onChanged: (value) {
                                   setState(() {
-                                    myInitialItem = value;
+                                    sellerType = value;
                                   });
                                 },
-                                value: myInitialItem,
-                                items: myItems.map((items) {
+                                value: sellerType,
+                                items: sellerTypeCat.map((items) {
                                   return DropdownMenuItem(value: items, child: Text(items));
                                 }).toList()),
                             ),
