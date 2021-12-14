@@ -37,6 +37,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   String DO = '';
   String PM = '';
   String dateOrdered = '';
+  String ownerid = '';
 
   @override
   void initState() {
@@ -131,19 +132,22 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               "Payment Method": PM,
                               "Delivery Option": DO,
                               "Date ordered": dateOrdered,
-                              "Buyer": name,
-                              "Seller": '',
+                              "Buyer": _auth.currentUser!.uid,
+                              "Seller": ownerid,
                               "To Ship": 'true',
                               "Shipping": 'false',
                               "Refunded": 'false',
                               "Completed": 'false',
+                            }).whenComplete(() {
+                              Navigator.pop(context);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ReferenceScreen(
+                                            dateordered: dateOrdered,
+                                            uid: _auth.currentUser!.uid,
+                                          )));
                             });
-                            Navigator.pop(context);
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ReferenceScreen(
-                                        dateordered: dateOrdered)));
                           } else {
                             showDialog(
                                 context: context,
@@ -343,68 +347,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                         horizontal: 2, vertical: 10),
                                     child: TextButton(
                                         onPressed: () {
-                                          showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return SimpleDialog(
-                                                    title: Padding(
-                                                  padding: const EdgeInsets
-                                                          .symmetric(
-                                                      horizontal: 20,
-                                                      vertical: 10),
-                                                  child: Column(
-                                                    children: [
-                                                      Text(
-                                                          "Cash On Delivery Payment Method",
-                                                          style: TextStyle(
-                                                              fontSize: 15,
-                                                              fontFamily:
-                                                                  'Poppins',
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w700,
-                                                              color: cBrown)),
-                                                      SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      Text(
-                                                          "By using Cash On Delivery Method, please send me a message and let us discuss about the delivery courier that offers Cash On Delivery service.\n\nDisclaimer: There will be an additional fee for purchase service.",
-                                                          style: TextStyle(
-                                                              fontSize: 13,
-                                                              fontFamily:
-                                                                  'Poppins',
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w700,
-                                                              color: cBlack)),
-                                                      SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      SimpleDialogOption(
-                                                          child: Text("Got It!",
-                                                              style: TextStyle(
-                                                                  fontSize: 15,
-                                                                  fontFamily:
-                                                                      'Poppins',
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w700,
-                                                                  color:
-                                                                      cGreen)),
-                                                          onPressed: () {
-                                                            setState(() {
-                                                              selectedPM = 1;
-                                                              PM =
-                                                                  'Cash On Delivery';
-                                                            });
-                                                            Navigator.pop(
-                                                                context);
-                                                          }),
-                                                      SizedBox(height: 10)
-                                                    ],
-                                                  ),
-                                                ));
-                                              });
+                                          setState(() {
+                                            selectedPM = 1;
+                                            PM = 'Cash On Delivery';
+                                          });
                                         },
                                         child: Column(
                                           children: [
@@ -475,67 +421,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                         horizontal: 2, vertical: 10),
                                     child: TextButton(
                                         onPressed: () {
-                                          showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return SimpleDialog(
-                                                    title: Padding(
-                                                  padding: const EdgeInsets
-                                                          .symmetric(
-                                                      horizontal: 20,
-                                                      vertical: 10),
-                                                  child: Column(
-                                                    children: [
-                                                      Text(
-                                                          "E-Wallet Payment Method",
-                                                          style: TextStyle(
-                                                              fontSize: 15,
-                                                              fontFamily:
-                                                                  'Poppins',
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w700,
-                                                              color: cBrown)),
-                                                      SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      Text(
-                                                          "By using E-Wallet Payment Method, Pay Manually through GCash:\n\nGCash\n091718xxxx\nCamille Abi Enzo",
-                                                          style: TextStyle(
-                                                              fontSize: 13,
-                                                              fontFamily:
-                                                                  'Poppins',
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w700,
-                                                              color: cBlack)),
-                                                      SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      SimpleDialogOption(
-                                                          child: Text("Got It!",
-                                                              style: TextStyle(
-                                                                  fontSize: 15,
-                                                                  fontFamily:
-                                                                      'Poppins',
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w700,
-                                                                  color:
-                                                                      cGreen)),
-                                                          onPressed: () {
-                                                            setState(() {
-                                                              selectedPM = 2;
-                                                              PM = 'GCash';
-                                                            });
-                                                            Navigator.pop(
-                                                                context);
-                                                          }),
-                                                      SizedBox(height: 10)
-                                                    ],
-                                                  ),
-                                                ));
-                                              });
+                                          setState(() {
+                                            selectedPM = 2;
+                                            PM = 'GCash';
+                                          });
                                         },
                                         child: Column(
                                           children: [
@@ -607,67 +496,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                         horizontal: 2, vertical: 10),
                                     child: TextButton(
                                         onPressed: () {
-                                          showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return SimpleDialog(
-                                                    title: Padding(
-                                                  padding: const EdgeInsets
-                                                          .symmetric(
-                                                      horizontal: 20,
-                                                      vertical: 10),
-                                                  child: Column(
-                                                    children: [
-                                                      Text("Bank Transfer",
-                                                          style: TextStyle(
-                                                              fontSize: 15,
-                                                              fontFamily:
-                                                                  'Poppins',
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w700,
-                                                              color: cBrown)),
-                                                      SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      Text(
-                                                          "By using Bank Transfer Payment Method, Pay Manually through UnionBank:\n\nUnionBank\n1096xxxx\nCamille Abi Enzo",
-                                                          style: TextStyle(
-                                                              fontSize: 13,
-                                                              fontFamily:
-                                                                  'Poppins',
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w700,
-                                                              color: cBlack)),
-                                                      SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      SimpleDialogOption(
-                                                          child: Text("Got It!",
-                                                              style: TextStyle(
-                                                                  fontSize: 15,
-                                                                  fontFamily:
-                                                                      'Poppins',
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w700,
-                                                                  color:
-                                                                      cGreen)),
-                                                          onPressed: () {
-                                                            setState(() {
-                                                              selectedPM = 3;
-                                                              PM =
-                                                                  'Bank Transfer';
-                                                            });
-                                                            Navigator.pop(
-                                                                context);
-                                                          }),
-                                                      SizedBox(height: 10)
-                                                    ],
-                                                  ),
-                                                ));
-                                              });
+                                          setState(() {
+                                            selectedPM = 3;
+                                            PM = 'Bank Transfer';
+                                          });
                                         },
                                         child: Column(
                                           children: [
@@ -786,67 +618,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                         horizontal: 2, vertical: 10),
                                     child: TextButton(
                                         onPressed: () {
-                                          showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return SimpleDialog(
-                                                    title: Padding(
-                                                  padding: const EdgeInsets
-                                                          .symmetric(
-                                                      horizontal: 20,
-                                                      vertical: 10),
-                                                  child: Column(
-                                                    children: [
-                                                      Text("GRAB EXPRESS",
-                                                          style: TextStyle(
-                                                              fontSize: 15,
-                                                              fontFamily:
-                                                                  'Poppins',
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w700,
-                                                              color: cBrown)),
-                                                      SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      Text(
-                                                          "Kindly pin the address below if you wish to arrange your own shipment. After doing so, please message me. \n\nName: Camille Abi Enzo\nLocation: 7124 General Ricarte St. South Cembo, Makati City\nContact Number: 09171234525",
-                                                          style: TextStyle(
-                                                              fontSize: 13,
-                                                              fontFamily:
-                                                                  'Poppins',
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w700,
-                                                              color: cBlack)),
-                                                      SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      SimpleDialogOption(
-                                                          child: Text("Got It!",
-                                                              style: TextStyle(
-                                                                  fontSize: 15,
-                                                                  fontFamily:
-                                                                      'Poppins',
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w700,
-                                                                  color:
-                                                                      cGreen)),
-                                                          onPressed: () {
-                                                            setState(() {
-                                                              selectedDO = 1;
-                                                              DO =
-                                                                  'Grab Express';
-                                                            });
-                                                            Navigator.pop(
-                                                                context);
-                                                          }),
-                                                      SizedBox(height: 10)
-                                                    ],
-                                                  ),
-                                                ));
-                                              });
+                                          setState(() {
+                                            selectedDO = 1;
+                                            DO = 'Grab Express';
+                                          });
                                         },
                                         child: Column(
                                           children: [
@@ -917,66 +692,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                         horizontal: 2, vertical: 10),
                                     child: TextButton(
                                         onPressed: () {
-                                          showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return SimpleDialog(
-                                                    title: Padding(
-                                                  padding: const EdgeInsets
-                                                          .symmetric(
-                                                      horizontal: 20,
-                                                      vertical: 10),
-                                                  child: Column(
-                                                    children: [
-                                                      Text("LALAMOVE",
-                                                          style: TextStyle(
-                                                              fontSize: 15,
-                                                              fontFamily:
-                                                                  'Poppins',
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w700,
-                                                              color: cBrown)),
-                                                      SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      Text(
-                                                          "Kindly pin the address below if you wish to arrange your own shipment. After doing so, please message me. \n\nName: Camille Abi Enzo\nLocation: 601 JP Rizal St. Malanday, Marikina City\nContact Number: 09171234525",
-                                                          style: TextStyle(
-                                                              fontSize: 13,
-                                                              fontFamily:
-                                                                  'Poppins',
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w700,
-                                                              color: cBlack)),
-                                                      SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      SimpleDialogOption(
-                                                          child: Text("Got It!",
-                                                              style: TextStyle(
-                                                                  fontSize: 15,
-                                                                  fontFamily:
-                                                                      'Poppins',
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w700,
-                                                                  color:
-                                                                      cGreen)),
-                                                          onPressed: () {
-                                                            setState(() {
-                                                              selectedDO = 2;
-                                                              DO = 'Lalamove';
-                                                            });
-                                                            Navigator.pop(
-                                                                context);
-                                                          }),
-                                                      SizedBox(height: 10)
-                                                    ],
-                                                  ),
-                                                ));
-                                              });
+                                          setState(() {
+                                            selectedDO = 2;
+                                            DO = 'Lalamove';
+                                          });
                                         },
                                         child: Column(
                                           children: [
@@ -1047,66 +766,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                         horizontal: 2, vertical: 10),
                                     child: TextButton(
                                         onPressed: () {
-                                          showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return SimpleDialog(
-                                                    title: Padding(
-                                                  padding: const EdgeInsets
-                                                          .symmetric(
-                                                      horizontal: 20,
-                                                      vertical: 10),
-                                                  child: Column(
-                                                    children: [
-                                                      Text("MR. SPEEDY",
-                                                          style: TextStyle(
-                                                              fontSize: 15,
-                                                              fontFamily:
-                                                                  'Poppins',
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w700,
-                                                              color: cBrown)),
-                                                      SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      Text(
-                                                          "Kindly pin the address below if you wish to arrange your own shipment. After doing so, please message me. \n\nName: Camille Abi Enzo\nLocation: Blk 2 Lot 13 Intramuros St. Metropolis 1 Vill, Sta. Lucia, Pasig City\nContact Number: 09171234525",
-                                                          style: TextStyle(
-                                                              fontSize: 13,
-                                                              fontFamily:
-                                                                  'Poppins',
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w700,
-                                                              color: cBlack)),
-                                                      SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      SimpleDialogOption(
-                                                          child: Text("Got It!",
-                                                              style: TextStyle(
-                                                                  fontSize: 15,
-                                                                  fontFamily:
-                                                                      'Poppins',
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w700,
-                                                                  color:
-                                                                      cGreen)),
-                                                          onPressed: () {
-                                                            setState(() {
-                                                              selectedDO = 3;
-                                                              DO = 'Mr. Speedy';
-                                                            });
-                                                            Navigator.pop(
-                                                                context);
-                                                          }),
-                                                      SizedBox(height: 10)
-                                                    ],
-                                                  ),
-                                                ));
-                                              });
+                                          setState(() {
+                                            selectedDO = 3;
+                                            DO = 'Mr. Speedy';
+                                          });
                                         },
                                         child: Column(
                                           children: [
@@ -1177,66 +840,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                         horizontal: 2, vertical: 10),
                                     child: TextButton(
                                         onPressed: () {
-                                          showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return SimpleDialog(
-                                                    title: Padding(
-                                                  padding: const EdgeInsets
-                                                          .symmetric(
-                                                      horizontal: 20,
-                                                      vertical: 10),
-                                                  child: Column(
-                                                    children: [
-                                                      Text("TOKTOK DELIVERY",
-                                                          style: TextStyle(
-                                                              fontSize: 15,
-                                                              fontFamily:
-                                                                  'Poppins',
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w700,
-                                                              color: cBrown)),
-                                                      SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      Text(
-                                                          "Kindly pin the address below if you wish to arrange your own shipment. After doing so, please message me.\n\nName: Camille Abi Enzo\nLocation: 2022 General Malvar St. South Cemboo, Makati City\nContact Number: 09171234525",
-                                                          style: TextStyle(
-                                                              fontSize: 13,
-                                                              fontFamily:
-                                                                  'Poppins',
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w700,
-                                                              color: cBlack)),
-                                                      SizedBox(
-                                                        height: 10,
-                                                      ),
-                                                      SimpleDialogOption(
-                                                          child: Text("Got It!",
-                                                              style: TextStyle(
-                                                                  fontSize: 15,
-                                                                  fontFamily:
-                                                                      'Poppins',
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w700,
-                                                                  color:
-                                                                      cGreen)),
-                                                          onPressed: () {
-                                                            setState(() {
-                                                              selectedDO = 4;
-                                                              DO = 'Toktok';
-                                                            });
-                                                            Navigator.pop(
-                                                                context);
-                                                          }),
-                                                      SizedBox(height: 10)
-                                                    ],
-                                                  ),
-                                                ));
-                                              });
+                                          setState(() {
+                                            selectedDO = 4;
+                                            DO = 'Toktok';
+                                          });
                                         },
                                         child: Column(
                                           children: [
@@ -1362,6 +969,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                             .keys
                                             .length,
                                         itemBuilder: (context, index) {
+                                          ownerid = state.basket
+                                              .productQuantity(
+                                                  state.basket.products)
+                                              .keys
+                                              .elementAt(index)
+                                              .ownerId;
+
+                                          print(ownerid);
+
                                           return Container(
                                             color: cWhite,
                                             child: Padding(
