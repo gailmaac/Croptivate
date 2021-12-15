@@ -3,7 +3,6 @@ import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Product extends Equatable {
-
   final FirebaseAuth _auth = FirebaseAuth.instance;
   String? ownerId;
   String name;
@@ -18,7 +17,8 @@ class Product extends Equatable {
   int weightCount;
   String weight;
   String description;
-  
+  Timestamp timestamp;
+
   Product({
     required this.ownerId,
     required this.name,
@@ -33,9 +33,10 @@ class Product extends Equatable {
     required this.weightCount,
     required this.weight,
     required this.description,
+    required this.timestamp,
   });
 
-  static Product fromSnapshot(DocumentSnapshot snap){
+  static Product fromSnapshot(DocumentSnapshot snap) {
     Product product = Product(
       ownerId: snap['ownerId'],
       name: snap['name'],
@@ -50,26 +51,28 @@ class Product extends Equatable {
       weightCount: snap['weightCount'],
       weight: snap['weight'],
       description: snap['description'],
-      );
-      return product;
+      timestamp: snap['timestamp'],
+    );
+    return product;
   }
 
   @override
   List<Object?> get props => [
-    ownerId,
-    name,
-    category,
-    imageUrlOne,
-    imageUrlTwo,
-    imageUrlThree,
-    price,
-    isDeals,
-    isRecommended,
-    stockCount,
-    weightCount,
-    weight
-  ];
-  
+        ownerId,
+        name,
+        category,
+        imageUrlOne,
+        imageUrlTwo,
+        imageUrlThree,
+        price,
+        isDeals,
+        isRecommended,
+        stockCount,
+        weightCount,
+        weight,
+        timestamp
+      ];
+
   // static List<Product> products = [
   //   //isDeals
   //   Product(
@@ -124,7 +127,7 @@ class Product extends Equatable {
   //     isDeals: true,
   //     isRecommended: false,
   //     stockCount: 18,
-  //     description: "Product and Payment Information:\nPay manually online using the following options and send us the proof of payment afterwards.\nIf online payment is not available for you, Cash On Delivery (COD) is also available:\n\nGCash\n09171232568\nCamille Abi E\n\nPaymaya\n09171232568\nCamille Abi E\n\nUnionBank\n109421041204\nCamille Abi Enzo",  
+  //     description: "Product and Payment Information:\nPay manually online using the following options and send us the proof of payment afterwards.\nIf online payment is not available for you, Cash On Delivery (COD) is also available:\n\nGCash\n09171232568\nCamille Abi E\n\nPaymaya\n09171232568\nCamille Abi E\n\nUnionBank\n109421041204\nCamille Abi Enzo",
   //     weightCount: 500,
   //     weight: "grams"
   //   ),
@@ -138,7 +141,7 @@ class Product extends Equatable {
   //     isDeals: true,
   //     isRecommended: false,
   //     stockCount: 6,
-  //     description: "Product and Payment Information:\nPay manually online using the following options and send us the proof of payment afterwards.\nIf online payment is not available for you, Cash On Delivery (COD) is also available:\n\nGCash\n09171232568\nCamille Abi E\n\nPaymaya\n09171232568\nCamille Abi E\n\nUnionBank\n109421041204\nCamille Abi Enzo", 
+  //     description: "Product and Payment Information:\nPay manually online using the following options and send us the proof of payment afterwards.\nIf online payment is not available for you, Cash On Delivery (COD) is also available:\n\nGCash\n09171232568\nCamille Abi E\n\nPaymaya\n09171232568\nCamille Abi E\n\nUnionBank\n109421041204\nCamille Abi Enzo",
   //     weightCount: 500,
   //     weight: "grams"
   //   ),
@@ -196,7 +199,7 @@ class Product extends Equatable {
   //     isDeals: false,
   //     isRecommended: true,
   //     stockCount: 13,
-  //     description: "Product and Payment Information:\nPay manually online using the following options and send us the proof of payment afterwards.\nIf online payment is not available for you, Cash On Delivery (COD) is also available:\n\nGCash\n09171232568\nCamille Abi E\n\nPaymaya\n09171232568\nCamille Abi E\n\nUnionBank\n109421041204\nCamille Abi Enzo", 
+  //     description: "Product and Payment Information:\nPay manually online using the following options and send us the proof of payment afterwards.\nIf online payment is not available for you, Cash On Delivery (COD) is also available:\n\nGCash\n09171232568\nCamille Abi E\n\nPaymaya\n09171232568\nCamille Abi E\n\nUnionBank\n109421041204\nCamille Abi Enzo",
   //     weightCount: 500,
   //     weight: "grams"
   //   ),
