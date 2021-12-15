@@ -46,7 +46,9 @@ class _ProductPageState extends State<ProductPage> {
         querySnapshot.docs.forEach((doc) {
           if (_auth.currentUser!.uid == doc['ownerId']) {
             products.add(doc.data());
+            print('meron');
           }
+          print('wala');
         });
       });
     } catch (e) {
@@ -150,7 +152,7 @@ class _ProductPageState extends State<ProductPage> {
                           ownerId: products[index]['ownerId'],
                           price: products[index]['price'],
                           stockCount: products[index]['stockCount'],
-                          timestamp: products[index]['timestamp'],
+                          timestamp: products[index]['timestamp'].toString(),
                         ),
                         widthFactor: 1.1,
                         leftPosition: 150,
