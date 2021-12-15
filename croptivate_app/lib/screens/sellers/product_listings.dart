@@ -150,6 +150,7 @@ class _ProductPageState extends State<ProductPage> {
                           ownerId: products[index]['ownerId'],
                           price: products[index]['price'],
                           stockCount: products[index]['stockCount'],
+                          timestamp: products[index]['timestamp'],
                         ),
                         widthFactor: 1.1,
                         leftPosition: 150,
