@@ -61,7 +61,7 @@ class _AddProductState extends State<AddProduct> {
   String postIdTwo = Uuid().v4();
   String postIdThree = Uuid().v4();
   String postId = Uuid().v4();
-  late DateTime timestamp;
+  late String timestamp;
 
   bool isUploading = false;
 
@@ -109,7 +109,7 @@ class _AddProductState extends State<AddProduct> {
     int? weightCount,
     int? stockCount,
     double? price,
-    DateTime? timestamp,
+    String? timestamp,
   }) {
     //String? wholesale, //String? count String? location
     postRef.doc(postId).set({
@@ -136,7 +136,7 @@ class _AddProductState extends State<AddProduct> {
 
   handleSubmit() async {
     setState(() {
-      timestamp = DateTime.now();
+      timestamp = DateTime.now().toString();
       isUploading = true;
     });
     String imageUrlOne = await uploadImageOne(imageOne);
