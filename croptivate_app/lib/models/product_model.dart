@@ -18,6 +18,7 @@ class Product extends Equatable {
   int weightCount;
   String weight;
   String description;
+  String timestamp;
   
   Product({
     required this.ownerId,
@@ -33,6 +34,7 @@ class Product extends Equatable {
     required this.weightCount,
     required this.weight,
     required this.description,
+    required this.timestamp,
   });
 
   static Product fromSnapshot(DocumentSnapshot snap){
@@ -50,6 +52,7 @@ class Product extends Equatable {
       weightCount: snap['weightCount'],
       weight: snap['weight'],
       description: snap['description'],
+      timestamp: snap['timestamp']
       );
       return product;
   }
