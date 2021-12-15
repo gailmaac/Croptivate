@@ -65,6 +65,8 @@ set _imageThreeFile(XFile? value) {
   String postIdThree = Uuid().v4();
   String postId = Uuid().v4();
 
+  final DateTime timestamp = DateTime.now();
+
   bool isUploading = false;
 
   String? get uid => null;
@@ -103,7 +105,8 @@ set _imageThreeFile(XFile? value) {
                     String? weight,
                     int? weightCount,
                     int? stockCount, 
-                    double? price, }) {
+                    double? price, 
+                    }) {
                      //String? wholesale, //String? count String? location
     postRef
     .doc(postId)
@@ -122,6 +125,7 @@ set _imageThreeFile(XFile? value) {
       "weight": weight,
       "stockCount": stockCount,
       "price": price,
+      "timestamp": timestamp
       // "count": count,
       // "wholesale": wholesale,
       // "location": location,
