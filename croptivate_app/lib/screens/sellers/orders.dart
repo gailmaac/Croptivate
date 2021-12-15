@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class OrdersPage extends StatefulWidget {
-  
   final fr;
   final buyer;
   final dateordered;
@@ -24,6 +23,9 @@ class _OrdersPageState extends State<OrdersPage> {
   String to_ship = '';
   String shipping = '';
   String completed = '';
+  String contactnumber = '';
+  String profilepic = '';
+  bool loading = true;
 
   @override
   void initState() {
@@ -40,9 +42,15 @@ class _OrdersPageState extends State<OrdersPage> {
         querySnapshot.docs.forEach((doc) {
           if (widget.buyer == doc.id) {
             setState(() {
+              profilepic = doc['Profile Picture'];
               name = doc['first name'] + ' ' + doc['last name'];
+              contactnumber = doc['contact number'].toString();
             });
           }
+        });
+      }).whenComplete(() {
+        setState(() {
+          loading = false;
         });
       });
       await FirebaseFirestore.instance
@@ -73,136 +81,136 @@ class _OrdersPageState extends State<OrdersPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.grey[100],
-      appBar: AppBar(
-        backgroundColor: cWhite,
-        elevation: 1,
-        title: Text(
-          "Order Details",
-          style: TextStyle(
-              color: cGreen,
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.bold,
-              letterSpacing: 1),
-        ),
-        centerTitle: true,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: cBlack,
-            size: 15,
+        appBar: AppBar(
+          backgroundColor: cWhite,
+          elevation: 1,
+          title: Text(
+            "Order Details",
+            style: TextStyle(
+                color: cGreen,
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.bold,
+                letterSpacing: 1),
+          ),
+          centerTitle: true,
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: cBlack,
+              size: 15,
+            ),
           ),
         ),
-      ),
         body: widget.fr == 'Seller'
             ? SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
                       color: cWhite,
                       child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-            
                             Row(
                               children: [
-                                
-                                Icon(Icons.location_on_outlined,
-                                color: cGreen,
-                                size: 20,),
+                                Icon(
+                                  Icons.location_on_outlined,
+                                  color: cGreen,
+                                  size: 20,
+                                ),
                                 SizedBox(width: 20),
                                 Text(
                                   "Delivery Address",
                                   style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 18,
-                                    color: cGreen,
-                                    fontWeight: FontWeight.w800
-                                  ),
+                                      fontFamily: 'Poppins',
+                                      fontSize: 18,
+                                      color: cGreen,
+                                      fontWeight: FontWeight.w800),
                                 )
                               ],
                             ),
                             //delivery info -- BUYER'S NUMBER
                             Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 40, vertical: 10),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     name,
                                     style: TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 16,
-                                      color: cBlack
-                                    ),
+                                        fontFamily: 'Poppins',
+                                        fontSize: 16,
+                                        color: cBlack),
                                   ),
                                   Text(
-                                    "+63 number",
+                                    "+63 -" + contactnumber,
                                     style: TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 16,
-                                      color: cBlack
-                                    ),
+                                        fontFamily: 'Poppins',
+                                        fontSize: 16,
+                                        color: cBlack),
                                   ),
                                   Text(
                                     location,
                                     style: TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 16,
-                                      color: cBlack
-                                    ),
+                                        fontFamily: 'Poppins',
+                                        fontSize: 16,
+                                        color: cBlack),
                                   ),
                                 ],
                               ),
                             ),
-            
+
                             Divider(height: 16),
-            
+
                             Row(
                               children: [
-                                Icon(Icons.motorcycle,
-                                color: cGreen,
-                                size: 20,),
+                                Icon(
+                                  Icons.motorcycle,
+                                  color: cGreen,
+                                  size: 20,
+                                ),
                                 SizedBox(width: 20),
                                 Text(
                                   "Delivery Method",
                                   style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 18,
-                                    color: cGreen,
-                                    fontWeight: FontWeight.w800
-                                  ),
+                                      fontFamily: 'Poppins',
+                                      fontSize: 18,
+                                      color: cGreen,
+                                      fontWeight: FontWeight.w800),
                                 )
                               ],
                             ),
-            
+
                             Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 40, vertical: 10),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     "Chosen Third-Party Courier",
                                     style: TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 14,
-                                      color: cBlack
-                                    ),
+                                        fontFamily: 'Poppins',
+                                        fontSize: 14,
+                                        color: cBlack),
                                   ),
-                                  SizedBox(height: 5,),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
                                   Text(
                                     dO,
                                     style: TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 16,
-                                      color: cBlack,
-                                      fontWeight: FontWeight.w800
-                                    ),
+                                        fontFamily: 'Poppins',
+                                        fontSize: 16,
+                                        color: cBlack,
+                                        fontWeight: FontWeight.w800),
                                   ),
                                 ],
                               ),
@@ -212,180 +220,184 @@ class _OrdersPageState extends State<OrdersPage> {
                       ),
                     ),
                     SizedBox(height: 20),
-            
+
                     //payment info -- TOTAL AMOUNT
                     Container(
-                      color: cWhite,
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                
-                                Icon(Icons.payments_outlined,
-                                color: cGreen,
-                                size: 20,),
-                                SizedBox(width: 20),
-                                Text(
-                                  "Payment Information",
-                                  style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 18,
-                                    color: cGreen,
-                                    fontWeight: FontWeight.w800
-                                  ),
-                                )
-                              ],
-                            ),
-            
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-                              child: Column(
+                        color: cWhite,
+                        child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 10),
+                            child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    "Payment Method",
-                                    style: TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 14,
-                                      color: cBlack
-                                    ),
-                                  ),
-                                  SizedBox(height: 5,),
-                                  Text(
-                                    pM,
-                                    style: TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 16,
-                                      color: cBlack,
-                                      fontWeight: FontWeight.w800
-                                    ),
-                                  ),
-                                  SizedBox(height: 10,),
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(
-                                        "Order Total",
-                                        style: TextStyle(
-                                          fontFamily: 'Poppins',
-                                          fontSize: 16,
-                                          color: cBlack
-                                        ),
+                                      Icon(
+                                        Icons.payments_outlined,
+                                        color: cGreen,
+                                        size: 20,
                                       ),
-            
+                                      SizedBox(width: 20),
                                       Text(
-                                        "P AMOUNT",
+                                        "Payment Information",
                                         style: TextStyle(
-                                          fontFamily: 'Poppins',
-                                          fontSize: 18,
-                                          color: cGreen,
-                                          fontWeight: FontWeight.w800
-                                        ),
-                                      ),
+                                            fontFamily: 'Poppins',
+                                            fontSize: 18,
+                                            color: cGreen,
+                                            fontWeight: FontWeight.w800),
+                                      )
                                     ],
                                   ),
-                                  
-                                ],
-                              ),
-                            ),
-                          ]
-                        )
-                      )
-                    ),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 40, vertical: 10),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Payment Method",
+                                          style: TextStyle(
+                                              fontFamily: 'Poppins',
+                                              fontSize: 14,
+                                              color: cBlack),
+                                        ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        Text(
+                                          pM,
+                                          style: TextStyle(
+                                              fontFamily: 'Poppins',
+                                              fontSize: 16,
+                                              color: cBlack,
+                                              fontWeight: FontWeight.w800),
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              "Order Total",
+                                              style: TextStyle(
+                                                  fontFamily: 'Poppins',
+                                                  fontSize: 16,
+                                                  color: cBlack),
+                                            ),
+                                            Text(
+                                              "P AMOUNT",
+                                              style: TextStyle(
+                                                  fontFamily: 'Poppins',
+                                                  fontSize: 18,
+                                                  color: cGreen,
+                                                  fontWeight: FontWeight.w800),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ]))),
                     SizedBox(height: 20),
-            
+
                     Container(
                       color: cWhite,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 10),
                             child: Row(
                               children: [
                                 CircleAvatar(
                                   backgroundColor: cGreen,
                                   radius: 15,
+                                  child: loading == true
+                                      ? Image.network(profilepic)
+                                      : Image.asset(
+                                          "assets/addpic.png",
+                                        ),
                                 ),
-                                SizedBox(width: 20,),
+                                SizedBox(
+                                  width: 20,
+                                ),
                                 Text(
                                   name,
                                   style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 16,
-                                    color: cBlack
-                                  ),
+                                      fontFamily: 'Poppins',
+                                      fontSize: 16,
+                                      color: cBlack),
                                 )
                               ],
                             ),
                           ),
-            
+
                           Divider(),
                           //List of Items Ordered
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 10),
                                 child: Text(
                                   "Items Ordered",
                                   style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontSize: 18,
-                                    color: cGreen,
-                                    fontWeight: FontWeight.w800
-                                  ),
+                                      fontFamily: 'Poppins',
+                                      fontSize: 18,
+                                      color: cGreen,
+                                      fontWeight: FontWeight.w800),
                                 ),
                               ),
-                            
                             ],
                           ),
-            
+
                           Divider(),
-            
+
                           Column(
                             children: [
                               Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 10),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       "Order ID",
                                       style: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 18,
-                                        color: cBlack
-                                      ),
+                                          fontFamily: 'Poppins',
+                                          fontSize: 18,
+                                          color: cBlack),
                                     ),
                                     Text(
                                       referenceID,
                                       style: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 18,
-                                        color: cBlack,
-                                        fontWeight: FontWeight.w800
-                                      ),
+                                          fontFamily: 'Poppins',
+                                          fontSize: 18,
+                                          color: cBlack,
+                                          fontWeight: FontWeight.w800),
                                     )
                                   ],
                                 ),
                               ),
-            
                               Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 5),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       "Order Time",
                                       style: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 16,
-                                        color: cBlack
-                                      ),
+                                          fontFamily: 'Poppins',
+                                          fontSize: 16,
+                                          color: cBlack),
                                     ),
                                     Text(
                                       widget.dateordered,
@@ -406,34 +418,32 @@ class _OrdersPageState extends State<OrdersPage> {
                     SizedBox(
                         child: to_ship == 'true'
                             ? Container(
-                              color: cWhite,
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "Order Status",
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins',
-                                          fontSize: 18,
-                                          color: cBlack,
-                                          fontWeight: FontWeight.w800
+                                color: cWhite,
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 5),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "Order Status",
+                                        style: TextStyle(
+                                            fontFamily: 'Poppins',
+                                            fontSize: 18,
+                                            color: cBlack,
+                                            fontWeight: FontWeight.w800),
                                       ),
-                                    ),
-                                    Text(
-                                      'To Ship',
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins',
-                                          fontSize: 20,
-                                          color: cGreen,
-                                          fontWeight: FontWeight.w800
-                                      )
-                                    ),
-                                  ],
+                                      Text('To Ship',
+                                          style: TextStyle(
+                                              fontFamily: 'Poppins',
+                                              fontSize: 20,
+                                              color: cGreen,
+                                              fontWeight: FontWeight.w800)),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            )
+                              )
                             : Text(
                                 'Shipping')) /*shipping == 'true'
                                 ? Text('Shipping')
@@ -442,7 +452,7 @@ class _OrdersPageState extends State<OrdersPage> {
                                     : Text('Cancelled'))*/
                   ],
                 ),
-            )
+              )
             : Column(
                 children: [
                   Text(name),
