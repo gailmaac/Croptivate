@@ -4,16 +4,19 @@ import 'package:croptivate_app/repository/basket/base_basketdata_repo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class BasketDataRepository extends BaseBasketDataRepository {
-
   final FirebaseFirestore _firebaseFirestore;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  BasketDataRepository({FirebaseFirestore? firebaseFirestore,}) : _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
+  BasketDataRepository({
+    FirebaseFirestore? firebaseFirestore,
+  }) : _firebaseFirestore = firebaseFirestore ?? FirebaseFirestore.instance;
 
   @override
   Future<void> addBasket(BasketData basketData) {
     var uid = _auth.currentUser!.uid;
-    return _firebaseFirestore.collection('basket').doc(uid).set(basketData.toDocument());
+    return _firebaseFirestore
+        .collection('basket')
+        .doc()
+        .set(basketData.toDocument());
   }
-
 }
