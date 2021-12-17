@@ -12,22 +12,16 @@ class BasketData extends Equatable {
     required this.total,
   });
 
-
   @override
-  List<Object?> get props => [
-    products, 
-    total
-  ];
-
+  List<Object?> get props => [products, total];
   Map<String, Object> toDocument() {
-
     return {
       'buyerId': _auth.currentUser!.uid,
+      'sellerPostId': products!.map((product) => product.sellerPostId).toList(),
       'products': products!.map((product) => product.name).toList(),
       'productPrice': products!.map((product) => product.price).toList(),
       'productOwnerId': products!.map((product) => product.ownerId).toList(),
       'total': total!,
     };
   }
-
 }
