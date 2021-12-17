@@ -19,7 +19,7 @@ class BasketScreen extends StatefulWidget {
 
   @override
   _BasketScreenState createState() => _BasketScreenState();
-  
+
   static const String routeName = '/basket';
   static Route route() {
     return MaterialPageRoute(
@@ -33,6 +33,7 @@ List<Tab> tabs = [
   Tab(child: Text("Order History".toUpperCase())),
 ];
 final FirebaseAuth _auth = FirebaseAuth.instance;
+
 class _BasketScreenState extends State<BasketScreen> {
   @override
   Widget build(BuildContext context) {
@@ -100,7 +101,7 @@ class _BasketScreenState extends State<BasketScreen> {
                           // .collection('userBuyer')
                           // .get()
                           // .then((querySnapshot){
-                          //   querySnapshot.docs.forEach((doc) { 
+                          //   querySnapshot.docs.forEach((doc) {
                           //     if (_auth.currentUser?.uid == doc.id) {
                           //       name = doc['fname'] + ' ' + doc['lname'];
                           //       loc = doc['loc'];
@@ -108,7 +109,7 @@ class _BasketScreenState extends State<BasketScreen> {
                           //       print(name);
                           //       print(loc);
                           //       print(num);
-                          //     } 
+                          //     }
 
                           //   });
                           // });
@@ -132,58 +133,62 @@ class _BasketScreenState extends State<BasketScreen> {
                 // child: SingleChildScrollView(
                 child: BlocBuilder<BasketBloc, BasketState>(
                   builder: (context, state) {
-                    if(state is BasketLoading) {
-                      return Center(child: CircularProgressIndicator(color: cGreen));
+                    if (state is BasketLoading) {
+                      return Center(
+                          child: CircularProgressIndicator(color: cGreen));
                     }
-                    if(state is BasketLoaded) {
+                    if (state is BasketLoaded) {
                       return Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 15, vertical: 16),
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                      height: 530,
-                                      child: ListView.builder(
-                                          itemCount: state.basket
-                                          .productQuantity(state.basket.products)
-                                          .keys
-                                          .length,
-                                          itemBuilder: (context, index) {
-                                            return BasketProdCard(
-                                                product: state.basket
-                                                .productQuantity(state.basket.products)
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 15, vertical: 16),
+                                child: Column(
+                                  children: [
+                                    SizedBox(
+                                        height: 530,
+                                        child: ListView.builder(
+                                            itemCount: state.basket
+                                                .productQuantity(
+                                                    state.basket.products)
                                                 .keys
-                                                .elementAt(index),
+                                                .length,
+                                            itemBuilder: (context, index) {
+                                              return BasketProdCard(
+                                                product: state.basket
+                                                    .productQuantity(
+                                                        state.basket.products)
+                                                    .keys
+                                                    .elementAt(index),
                                                 quantity: state.basket
-                                                .productQuantity(state.basket.products)
-                                                .values
-                                                .elementAt(index),
-                                                    );
-                                          })),
-                                ],
+                                                    .productQuantity(
+                                                        state.basket.products)
+                                                    .values
+                                                    .elementAt(index),
+                                              );
+                                            })),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 20),
-                              child: Divider(
-                                thickness: 1,
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 20),
+                                child: Divider(
+                                  thickness: 1,
+                                ),
                               ),
-                            ),
-                            OrderSummary(),
-                          ],
-                        ),
-                      ],
-                    );
+                              OrderSummary(),
+                            ],
+                          ),
+                        ],
+                      );
                     } else {
                       return Text("sarreh");
                     }
