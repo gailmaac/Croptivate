@@ -109,7 +109,6 @@ class _AddProductState extends State<AddProduct> {
     int? weightCount,
     int? stockCount,
     double? price,
-    String? timestamp,
   }) {
     //String? wholesale, //String? count String? location
     postRef.doc(postId).set({
@@ -127,7 +126,6 @@ class _AddProductState extends State<AddProduct> {
       "weight": weight,
       "stockCount": stockCount,
       "price": price,
-      "timestamp": timestamp,
       // "count": count,
       // "wholesale": wholesale,
       // "location": location,
@@ -156,7 +154,6 @@ class _AddProductState extends State<AddProduct> {
       weightCount: int.parse(weightCountController.text),
       stockCount: int.parse(stockCountController.text),
       price: double.parse(priceController.text),
-      timestamp: timestamp,
       // count: countController.text,
       // wholesale: wholesaleController.text,
       // location: locationController.text
