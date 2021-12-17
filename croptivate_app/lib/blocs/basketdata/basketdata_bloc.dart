@@ -25,16 +25,16 @@ class BasketdataBloc extends Bloc<BasketdataEvent, BasketdataState> {
         _basketDataRepository = basketDataRepository,
         super(basketBloc.state is BasketLoaded
             ? BasketdataLoaded(
-              products: (basketBloc.state as BasketLoaded).basket.products,
-              total: (basketBloc.state as BasketLoaded).basket.subtotalString,
-            )
+                products: (basketBloc.state as BasketLoaded).basket.products,
+                total: (basketBloc.state as BasketLoaded).basket.subtotalString,
+              )
             : BasketdataLoading()) {
-              _basketSubscription = basketBloc.stream.listen((state) {
-                if (state is BasketLoaded) {
-                  add(UpdateBasketdata(basket: state.basket));
-                }
-              });
-            }
+    _basketSubscription = basketBloc.stream.listen((state) {
+      if (state is BasketLoaded) {
+        add(UpdateBasketdata(basket: state.basket));
+      }
+    });
+  }
 
   @override
   Stream<BasketdataState> mapEventToState(
@@ -49,21 +49,16 @@ class BasketdataBloc extends Bloc<BasketdataEvent, BasketdataState> {
   }
 
   Stream<BasketdataState> _mapUpdateBasketdataToState(
-    UpdateBasketdata event, 
-    BasketdataState state
-  ) async* {
+      UpdateBasketdata event, BasketdataState state) async* {
     if (state is BasketdataLoaded) {
       yield BasketdataLoaded(
-        products: event.basket?.products ?? state.products,
-        total: event.basket?.subtotalString ?? state.total
-      );
+          products: event.basket?.products ?? state.products,
+          total: event.basket?.subtotalString ?? state.total);
     }
   }
 
   Stream<BasketdataState> _mapConfirmBasketdataToState(
-    ConfirmBasketdata event, 
-    BasketdataState state
-  ) async* {
+      ConfirmBasketdata event, BasketdataState state) async* {
     _basketdataSubscription?.cancel();
     if (state is BasketdataLoaded) {
       try {
