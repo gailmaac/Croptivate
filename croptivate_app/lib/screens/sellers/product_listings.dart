@@ -26,16 +26,8 @@ class ProductPage extends StatefulWidget {
 }
 
 class _ProductPageState extends State<ProductPage> {
-  int productcount = 0;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   List products = [];
-
-  @override
-  void initState() {
-    super.initState();
-    super.initState();
-    getproducts();
-  }
 
   getproducts() async {
     try {
@@ -126,7 +118,9 @@ class _ProductPageState extends State<ProductPage> {
                     )),
               ],
             )),
-        body: Container(
+        body: ShowProductLists(
+          owner: _auth.currentUser!.uid,
+        ) /*Container(
             child: GridView.builder(
                 padding: const EdgeInsets.symmetric(
                     horizontal: 0.95, vertical: 16.0),
@@ -152,7 +146,7 @@ class _ProductPageState extends State<ProductPage> {
                           ownerId: products[index]['ownerId'],
                           price: products[index]['price'],
                           stockCount: products[index]['stockCount'],
-                          timestamp: products[index]['timestamp'].toString(),
+                          sellerPostId: ids[index],
                         ),
                         widthFactor: 1.1,
                         leftPosition: 150,
@@ -163,6 +157,68 @@ class _ProductPageState extends State<ProductPage> {
                       ),
                     ),
                   );
-                })));
+                }))*/
+        );
+  }
+}
+
+class ShowProductLists extends StatelessWidget {
+  final owner;
+  const ShowProductLists({Key? key, this.owner}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('sellerPosts')
+            .where("ownerId", isEqualTo: owner)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: Text('No Products yet'),
+            );
+          }
+          return GridView.builder(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 0.95, vertical: 16.0),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 1, childAspectRatio: 2.4),
+            itemCount: snapshot.data!.docs.length,
+            itemBuilder: (BuildContext context, int i) {
+              QueryDocumentSnapshot x = snapshot.data!.docs[i];
+
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Center(
+                  child: ProductListCard(
+                    product: Product(
+                      category: x['category'],
+                      description: x['description'],
+                      imageUrlOne: x['imageUrlOne'],
+                      imageUrlThree: x['imageUrlThree'],
+                      weightCount: x['weightCount'],
+                      imageUrlTwo: x['imageUrlTwo'],
+                      isDeals: x['isDeals'],
+                      isRecommended: x['isRecommended'],
+                      weight: x['weight'],
+                      name: x['name'],
+                      ownerId: x['ownerId'],
+                      price: x['price'],
+                      stockCount: x['stockCount'],
+                      sellerPostId: x.id,
+                    ),
+                    widthFactor: 1.1,
+                    leftPosition: 150,
+                    topPosition: 70,
+                    heightofBox: 70,
+                    widthValue: 205,
+                    isRemoved: true,
+                  ),
+                ),
+              );
+            },
+          );
+        });
   }
 }
