@@ -17,7 +17,7 @@ class Product extends Equatable {
   int weightCount;
   String weight;
   String description;
-  String timestamp;
+  String sellerPostId;
 
   Product({
     required this.ownerId,
@@ -33,11 +33,12 @@ class Product extends Equatable {
     required this.weightCount,
     required this.weight,
     required this.description,
-    required this.timestamp,
+    required this.sellerPostId,
   });
 
   static Product fromSnapshot(DocumentSnapshot snap) {
     Product product = Product(
+      sellerPostId: snap.id,
       ownerId: snap['ownerId'],
       name: snap['name'],
       category: snap['category'],
@@ -51,7 +52,6 @@ class Product extends Equatable {
       weightCount: snap['weightCount'],
       weight: snap['weight'],
       description: snap['description'],
-      timestamp: snap['timestamp'],
     );
     return product;
   }
@@ -70,7 +70,7 @@ class Product extends Equatable {
         stockCount,
         weightCount,
         weight,
-        timestamp
+        sellerPostId,
       ];
 
   // static List<Product> products = [
