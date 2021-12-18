@@ -32,7 +32,6 @@ class _EditProfileBuyerState extends State<EditProfileBuyer> {
   TextEditingController nameController = new TextEditingController();
   TextEditingController numberController = new TextEditingController();
   TextEditingController locationController = new TextEditingController();
-  TextEditingController shopnameController = new TextEditingController();
 
   getuser() async {
     try {
@@ -62,9 +61,9 @@ class _EditProfileBuyerState extends State<EditProfileBuyer> {
 
   void initState() {
     super.initState();
-    nameController.text = name;
-    numberController.text = contactnumber;
-    locationController.text = location;
+    nameController.text = name.toString();
+    numberController.text = contactnumber.toString();
+    locationController.text = location.toString();
   }
 
   File ? image;
@@ -298,8 +297,8 @@ class _EditProfileBuyerState extends State<EditProfileBuyer> {
                     ),
                     SizedBox(width: 40,),
                     Flexible(
-                      child: Text(
-                        location,
+                      child: TextFormField(
+                        controller: locationController,
                         style: TextStyle(
                           fontFamily: 'Poppins',
                           fontSize: 22,
