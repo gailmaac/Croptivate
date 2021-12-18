@@ -80,48 +80,74 @@ class _UserProfileSellerState extends State<UserProfileSeller> {
           ),
         ),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Column(
-            children: [
-              // getusers()
-            ],
-          ),
-          SizedBox(height: 20),
-          loading == false
-              ? Center(
-                child: CircleAvatar(
-                  radius: 80.0,
-                  child: ClipOval(
-                    child: Image.network(
-                      profilepic,
-                      fit: BoxFit.cover,
-                      width: 160.0,
-                      height: 160.0,
-                    )
-                  ),
-                ),
-              )
-              : Image.asset(
-                  "assets/addpic.png",
-                  height: 160,
-                  width: 160,
-                ),
-          SizedBox(height: 20),
-
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Row(
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Column(
               children: [
-                Icon(
-                  Icons.person_outline_rounded,
-                  color: cGreen
-                ),
-                SizedBox(width: 40,),
-                Flexible(
-                  child: Text(
-                    name,
+                // getusers()
+              ],
+            ),
+            SizedBox(height: 20),
+            loading == false
+                ? Center(
+                  child: CircleAvatar(
+                    radius: 80.0,
+                    child: ClipOval(
+                      child: Image.network(
+                        profilepic,
+                        fit: BoxFit.cover,
+                        width: 160.0,
+                        height: 160.0,
+                      )
+                    ),
+                  ),
+                )
+                : Image.asset(
+                    "assets/addpic.png",
+                    height: 160,
+                    width: 160,
+                  ),
+            SizedBox(height: 20),
+      
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.person_outline_rounded,
+                    color: cGreen
+                  ),
+                  SizedBox(width: 40,),
+                  Flexible(
+                    child: Text(
+                      name,
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 22,
+                        fontWeight: FontWeight.w500,
+                        color: cBlack
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+      
+            Divider(),
+      
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.phone_android_rounded,
+                    color: cGreen
+                  ),
+                  SizedBox(width: 40,),
+                  Text(
+                    "+63" + contactnumber,
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 22,
@@ -129,93 +155,69 @@ class _UserProfileSellerState extends State<UserProfileSeller> {
                       color: cBlack
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-
-          Divider(),
-
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.phone_android_rounded,
-                  color: cGreen
-                ),
-                SizedBox(width: 40,),
-                Text(
-                  contactnumber,
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 22,
-                    fontWeight: FontWeight.w500,
-                    color: cBlack
+      
+            Divider(),
+      
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.location_on_outlined,
+                    color: cGreen
                   ),
-                ),
-              ],
-            ),
-          ),
-
-          Divider(),
-
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.location_on_outlined,
-                  color: cGreen
-                ),
-                SizedBox(width: 40,),
-                Flexible(
-                  child: Text(
-                    location,
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 22,
-                      fontWeight: FontWeight.w500,
-                      color: cBlack
+                  SizedBox(width: 40,),
+                  Flexible(
+                    child: Text(
+                      location,
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 22,
+                        fontWeight: FontWeight.w500,
+                        color: cBlack
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-
-          Divider(),
-
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-            child: Row(
-              children: [
-                Icon(
-                  Icons.store_outlined,
-                  color: cGreen
-                ),
-                SizedBox(width: 40,),
-                Flexible(
-                  child: Text(
-                    shopname,
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 22,
-                      fontWeight: FontWeight.w500,
-                      color: cBlack
+      
+            Divider(),
+      
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.store_outlined,
+                    color: cGreen
+                  ),
+                  SizedBox(width: 40,),
+                  Flexible(
+                    child: Text(
+                      shopname,
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontSize: 22,
+                        fontWeight: FontWeight.w500,
+                        color: cBlack
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          Divider(),
-          SizedBox(height: 20),
-
-          editProfilebutton(),
-          SizedBox(height: 10,),
-          signOutButton()
-        ],
+            Divider(),
+            SizedBox(height: 20),
+      
+            editProfilebutton(),
+            SizedBox(height: 10,),
+            signOutButton()
+          ],
+        ),
       ),
     );
   }
