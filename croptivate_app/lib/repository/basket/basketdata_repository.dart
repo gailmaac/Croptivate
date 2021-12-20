@@ -19,4 +19,12 @@ class BasketDataRepository extends BaseBasketDataRepository {
         .doc()
         .set(basketData.toDocument());
   }
+
+  Future<void> removeBasket(BasketData basketData) {
+    var uid = _auth.currentUser!.uid;
+    return _firebaseFirestore
+        .collection('basket')
+        .doc()
+        .set(basketData.toDocument());
+  }
 }
