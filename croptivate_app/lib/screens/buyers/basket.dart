@@ -3,6 +3,7 @@ import 'package:croptivate_app/blocs/basket/basket_bloc.dart';
 import 'package:croptivate_app/models/product_model.dart';
 import 'package:croptivate_app/models/basket_model.dart';
 import 'package:croptivate_app/pallete.dart';
+import 'package:croptivate_app/screens/buyers/checkoutscreen.dart';
 import 'package:croptivate_app/screens/buyers/user_profile.dart';
 import 'package:croptivate_app/screens/buyers/home_buyer.dart';
 import 'package:croptivate_app/widgets/basketprodcard_wid.dart';
@@ -15,190 +16,383 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BasketScreen extends StatefulWidget {
-  const BasketScreen({Key? key}) : super(key: key);
+  final allUserSellers;
+  final allUserSellersid;
+  const BasketScreen(
+      {Key? key, required this.allUserSellers, required this.allUserSellersid})
+      : super(key: key);
 
   @override
   _BasketScreenState createState() => _BasketScreenState();
-
-  static const String routeName = '/basket';
-  static Route route() {
-    return MaterialPageRoute(
-        settings: RouteSettings(name: routeName),
-        builder: (_) => BasketScreen());
-  }
 }
 
-List<Tab> tabs = [
-  Tab(child: Text("Current Orders".toUpperCase())),
-  Tab(child: Text("Order History".toUpperCase())),
-];
 final FirebaseAuth _auth = FirebaseAuth.instance;
+
+List shoplist = [];
+List<Product> allproducts = [];
+List<int> allproductvalues = [];
+List<Product> selectedproducts = [];
+List<int> selectedproductvalues = [];
+List shopname = [];
+List userSellers = [];
+List userSellersid = [];
+int selectedtile = 0;
+List<Product> passproducts = [];
+List<int> passvalues = [];
+String passshopname = '';
 
 class _BasketScreenState extends State<BasketScreen> {
   @override
-  Widget build(BuildContext context) {
-    return DefaultTabController(
-        length: tabs.length,
-        child: Scaffold(
-            backgroundColor: cWhite,
-            appBar: AppBar(
-                backgroundColor: cWhite,
-                elevation: 0,
-                title: Text(
-                  "My Basket",
-                  style: TextStyle(
-                      color: cGreen,
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1),
-                ),
-                centerTitle: true,
-                leading: IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: Icon(
-                    Icons.arrow_back_ios,
-                    color: cBlack,
-                    size: 15,
-                  ),
-                ),
-                bottom: PreferredSize(
-                  preferredSize: Size.fromHeight(50),
-                  child: TabBar(
-                    labelColor: cGreen,
-                    labelStyle: TextStyle(fontFamily: 'Poppins', fontSize: 14),
-                    indicatorColor: cGreen,
-                    isScrollable: true,
-                    tabs: tabs,
-                  ),
-                )),
-            bottomNavigationBar: Container(
-                padding: EdgeInsets.only(
-                  left: 0,
-                  right: 0,
-                  bottom: 10,
-                  top: 10,
-                ),
-                height: 65,
-                decoration: BoxDecoration(color: cWhite, boxShadow: [
-                  BoxShadow(
-                    offset: Offset(1, 10),
-                    blurRadius: 35,
-                    color: cGrey.withOpacity(0.40),
-                  )
-                ]),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    ElevatedButton(
-                        style: ElevatedButton.styleFrom(primary: cGreen),
-                        onPressed: () async {
-                          // var name = '';
-                          // String loc = '';
-                          // String num = '';
-                          // await FirebaseFirestore.instance
-                          // .collection('userBuyer')
-                          // .get()
-                          // .then((querySnapshot){
-                          //   querySnapshot.docs.forEach((doc) {
-                          //     if (_auth.currentUser?.uid == doc.id) {
-                          //       name = doc['fname'] + ' ' + doc['lname'];
-                          //       loc = doc['loc'];
-                          //       num = doc['cnum'];
-                          //       print(name);
-                          //       print(loc);
-                          //       print(num);
-                          //     }
+  void initState() {
+    super.initState();
+    userSellers = widget.allUserSellers;
+    userSellersid = widget.allUserSellersid;
+  }
 
-                          //   });
-                          // });
-                          Navigator.pushNamed(context, '/checkout');
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                          ),
-                          child: Text("PROCEED TO CHECKOUT",
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.bold)),
-                        ))
-                  ],
-                )),
-            body: TabBarView(children: [
-              Container(
-                height: double.infinity,
-                // child: SingleChildScrollView(
-                child: BlocBuilder<BasketBloc, BasketState>(
-                  builder: (context, state) {
-                    if (state is BasketLoading) {
-                      return Center(
-                          child: CircularProgressIndicator(color: cGreen));
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: cWhite,
+      appBar: AppBar(
+        backgroundColor: cWhite,
+        elevation: 0,
+        title: Text(
+          "My Basket",
+          style: TextStyle(
+              color: cGreen,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1),
+        ),
+        centerTitle: true,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: cBlack,
+            size: 15,
+          ),
+        ),
+      ),
+      bottomNavigationBar: Container(
+          padding: EdgeInsets.only(
+            left: 0,
+            right: 0,
+            bottom: 10,
+            top: 10,
+          ),
+          height: 65,
+          decoration: BoxDecoration(color: cWhite, boxShadow: [
+            BoxShadow(
+              offset: Offset(1, 10),
+              blurRadius: 35,
+              color: cGrey.withOpacity(0.40),
+            )
+          ]),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(primary: cGreen),
+                  onPressed: () async {
+                    for (int x = 0; x < userSellersid.length; x++) {
+                      if (userSellersid[x] == shoplist[selectedtile]) {
+                        passshopname = userSellers[x]['shop name'];
+                      }
                     }
-                    if (state is BasketLoaded) {
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
+                    passproducts = [];
+                    passvalues = [];
+                    for (int x = 0; x < allproducts.length; x++) {
+                      if (allproducts[x].ownerId == shoplist[selectedtile]) {
+                        passproducts.add(allproducts[x]);
+                        passvalues.add(allproductvalues[x]);
+                      }
+                    }
+
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CheckoutScreen(
+                                  selectedproducts: passproducts,
+                                  selectedvalues: passvalues,
+                                  shopname: passshopname,
+                                )));
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                    ),
+                    child: Text("PROCEED TO CHECKOUT",
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.bold)),
+                  ))
+            ],
+          )),
+      body: Container(
+        height: double.infinity,
+        // child: SingleChildScrollView(
+        child: BlocBuilder<BasketBloc, BasketState>(
+          builder: (context, state) {
+            shopname = [];
+            shoplist = [];
+            allproducts = [];
+            allproductvalues = [];
+            selectedproducts = [];
+            selectedproductvalues = [];
+            if (state is BasketLoading) {
+              return Center(child: CircularProgressIndicator(color: cGreen));
+            }
+            if (state is BasketLoaded) {
+              for (int x = 0;
+                  x <
+                      state.basket
+                          .productQuantity(state.basket.products)
+                          .keys
+                          .length;
+                  x++) {
+                Product Products;
+                Products = state.basket
+                    .productQuantity(state.basket.products)
+                    .keys
+                    .elementAt(x);
+                allproducts.add(Products);
+                int Productvalue;
+                Productvalue = state.basket
+                    .productQuantity(state.basket.products)
+                    .values
+                    .elementAt(x);
+                allproductvalues.add(Productvalue);
+
+                if (shoplist.contains(Products.ownerId)) {
+                } else {
+                  shoplist.add(Products.ownerId);
+                }
+              }
+
+              //TRY ULIT
+              return Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 15, vertical: 16),
+                          child: Column(
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 15, vertical: 16),
-                                child: Column(
-                                  children: [
-                                    SizedBox(
-                                        height: 530,
-                                        child: ListView.builder(
-                                            itemCount: state.basket
+                              SizedBox(
+                                  height: 551,
+                                  child: ListView.builder(
+                                      shrinkWrap: true,
+                                      physics: ScrollPhysics(),
+                                      itemCount: shoplist.length,
+                                      itemBuilder: (context, index) {
+                                        selectedproducts = [];
+                                        selectedproductvalues = [];
+
+                                        for (int x = 0;
+                                            x < userSellersid.length;
+                                            x++) {
+                                          if (userSellersid[x] ==
+                                              shoplist[index]) {
+                                            shopname.add(
+                                                userSellers[x]['shop name']);
+                                          }
+                                        }
+
+                                        for (int x = 0;
+                                            x < allproducts.length;
+                                            x++) {
+                                          if (allproducts[x].ownerId ==
+                                              shoplist[index]) {
+                                            selectedproducts
+                                                .add(allproducts[x]);
+                                            selectedproductvalues
+                                                .add(allproductvalues[x]);
+                                          }
+                                        }
+
+                                        return Container(
+                                          //color: cGreen,
+                                          child: Column(
+                                            children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: ListTile(
+                                                  onTap: () {
+                                                    setState(() {
+                                                      selectedtile = index;
+                                                    });
+                                                  },
+                                                  tileColor:
+                                                      selectedtile == index
+                                                          ? Colors.blue
+                                                          : Colors.green[200],
+                                                  title: Text(
+                                                    'Shop: ' + shopname[index],
+                                                  ),
+                                                  trailing: Icon(
+                                                    selectedtile != index
+                                                        ? Icons
+                                                            .check_box_outline_blank_sharp
+                                                        : Icons
+                                                            .check_box_outlined,
+                                                  ),
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Container(
+                                                    //color: cGreen,
+                                                    child: ListView.builder(
+                                                        shrinkWrap: true,
+                                                        physics:
+                                                            ScrollPhysics(),
+                                                        itemCount:
+                                                            selectedproducts
+                                                                .length,
+                                                        itemBuilder:
+                                                            (context, index) {
+                                                          return BasketProdCard(
+                                                              product:
+                                                                  selectedproducts[
+                                                                      index],
+                                                              quantity:
+                                                                  selectedproductvalues[
+                                                                      index]);
+                                                        })),
+                                              ),
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 20),
+                                                child: Divider(
+                                                  thickness: 1,
+                                                ),
+                                              ),
+                                              Container(
+                                                child: OrderSummary(
+                                                  selectedproducts:
+                                                      selectedproducts,
+                                                  selectedproductvalues:
+                                                      selectedproductvalues,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      })),
+                              /*Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20),
+                                    child: Divider(
+                                      thickness: 1,
+                                    ),
+                                  ),
+                                  OrderSummary(),
+                                ],
+                              ),*/
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              );
+
+              // Eto TRY pero okay naman
+              /*for (int x = 0; x < shoplist.length; x++)
+              {
+                return Container(
+                    child: SizedBox(
+                        height: 530,
+                        child: ListView.builder(
+                            itemCount: state.basket
+                                .productQuantity(state.basket.products)
+                                .keys
+                                .length,
+                            itemBuilder: (context, index) {
+                              return BasketProdCard(
+                                product: state.basket
+                                    .productQuantity(state.basket.products)
+                                    .keys
+                                    .elementAt(index),
+                                quantity: state.basket
+                                    .productQuantity(state.basket.products)
+                                    .values
+                                    .elementAt(index),
+                              );
+                            })));
+              }*/
+
+              //Eto yung unang code
+              /*return Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 15, vertical: 16),
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                    height: 530,
+                                    child: ListView.builder(
+                                        itemCount: state.basket
+                                            .productQuantity(
+                                                state.basket.products)
+                                            .keys
+                                            .length,
+                                        itemBuilder: (context, index) {
+                                          return BasketProdCard(
+                                            product: state.basket
                                                 .productQuantity(
                                                     state.basket.products)
                                                 .keys
-                                                .length,
-                                            itemBuilder: (context, index) {
-                                              return BasketProdCard(
-                                                product: state.basket
-                                                    .productQuantity(
-                                                        state.basket.products)
-                                                    .keys
-                                                    .elementAt(index),
-                                                quantity: state.basket
-                                                    .productQuantity(
-                                                        state.basket.products)
-                                                    .values
-                                                    .elementAt(index),
-                                              );
-                                            })),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 20),
-                                child: Divider(
-                                  thickness: 1,
-                                ),
-                              ),
-                              OrderSummary(),
-                            ],
+                                                .elementAt(index),
+                                            quantity: state.basket
+                                                .productQuantity(
+                                                    state.basket.products)
+                                                .values
+                                                .elementAt(index),
+                                          );
+                                        })),
+                              ],
+                            ),
                           ),
                         ],
-                      );
-                    } else {
-                      return Text("sarreh");
-                    }
-                  },
-                ),
-              ),
-              Container(
-                height: double.infinity,
-                color: cWhite,
-              )
-            ])));
+                      ),
+                      Column(
+                        children: [
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 20),
+                            child: Divider(
+                              thickness: 1,
+                            ),
+                          ),
+                          OrderSummary(),
+                        ],
+                      ),
+                    ],
+                  );*/
+            } else {
+              return Text("sarreh");
+            }
+          },
+        ),
+      ),
+    );
   }
 }
