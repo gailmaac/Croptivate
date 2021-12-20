@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:croptivate_app/blocs/basket/basket_bloc.dart';
 import 'package:croptivate_app/blocs/basketdata/basketdata_bloc.dart';
 import 'package:croptivate_app/blocs/favorites/favorites_bloc.dart';
+import 'package:croptivate_app/models/product_model.dart';
 import 'package:croptivate_app/pallete.dart';
 import 'package:croptivate_app/screens/buyers/referencescreen.dart';
 import 'package:croptivate_app/widgets/bottomnavbar.dart';
@@ -11,14 +12,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CheckoutScreen extends StatefulWidget {
-  const CheckoutScreen({Key? key}) : super(key: key);
-
-  static const String routeName = '/checkout';
-  static Route route() {
-    return MaterialPageRoute(
-        settings: RouteSettings(name: routeName),
-        builder: (_) => CheckoutScreen());
-  }
+  final selectedproducts;
+  final selectedvalues;
+  final shopname;
+  const CheckoutScreen(
+      {Key? key,
+      required this.selectedproducts,
+      required this.selectedvalues,
+      required this.shopname})
+      : super(key: key);
 
   @override
   _CheckoutScreenState createState() => _CheckoutScreenState();
@@ -28,6 +30,7 @@ final FirebaseAuth _auth = FirebaseAuth.instance;
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
   final StoreOrder = FirebaseFirestore.instance;
+
   var name = '';
   String loc = '';
   String num = '';
@@ -43,6 +46,21 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   void initState() {
     super.initState();
     getUser();
+  }
+
+  double subtotal = 0;
+  double total = 0;
+
+  computetotal() {
+    List<Product> selectedproducts = widget.selectedproducts;
+    List<int> selectedvalues = widget.selectedvalues;
+    double _subtotal = 0;
+    for (int x = 0; x < selectedproducts.length; x++) {
+      _subtotal += selectedproducts[x].price * selectedvalues[x];
+    }
+    setState(() {
+      subtotal = _subtotal;
+    });
   }
 
   getUser() async {
@@ -67,6 +85,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   @override
   Widget build(BuildContext context) {
+    computetotal();
+    List<Product> selectedproducts = widget.selectedproducts;
+    List<int> selectedvalues = widget.selectedvalues;
+
     return Scaffold(
       backgroundColor: cWhite,
       appBar: AppBar(
@@ -110,7 +132,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              BlocBuilder<BasketdataBloc, BasketdataState>(
+              BlocBuilder<BasketBloc, BasketState>(
                 builder: (context, state) {
                   if (state is BasketdataLoading) {
                     return Center(
@@ -120,8 +142,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     return ElevatedButton(
                         style: ElevatedButton.styleFrom(primary: cGreen),
                         onPressed: () {
-                          context.read<BasketdataBloc>().add(
-                              ConfirmBasketdata(basketData: state.basketData));
                           setState(() {
                             dateOrdered = DateTime.now().toString();
                           });
@@ -138,12 +158,22 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               "Shipping": 'false',
                               "Refunded": 'false',
                               "Completed": 'false',
+                              "Items Ordered": selectedproducts
+                                  .map((product) => product.name)
+                                  .toList(),
+                              "Item values": selectedvalues.toList(),
+                              "Item price": selectedproducts
+                                  .map((product) => product.price)
+                                  .toList(),
+                              "total": subtotal.toStringAsFixed(2)
                             }).whenComplete(() {
                               Navigator.pop(context);
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => ReferenceScreen(
+                                            selectedproducts: selectedproducts,
+                                            selectedvalues: selectedvalues,
                                             dateordered: dateOrdered,
                                             uid: _auth.currentUser!.uid,
                                           )));
@@ -1149,7 +1179,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 },
                               ),
                               SizedBox(height: 10),
-                              OrderSummary(),
+                              OrderSummary(
+                                selectedproducts: selectedproducts,
+                                selectedproductvalues: selectedvalues,
+                              ),
                             ],
                           ),
                         ],
