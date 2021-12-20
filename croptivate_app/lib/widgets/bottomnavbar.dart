@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:croptivate_app/pallete.dart';
+import 'package:croptivate_app/screens/buyers/basket.dart';
 import 'package:croptivate_app/screens/buyers/user_profile.dart';
 import 'package:croptivate_app/services/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -24,14 +25,16 @@ class BottomNavBar extends StatefulWidget {
 
 class _BottomNavBarState extends State<BottomNavBar> {
   bool loading = false;
-  final FirebaseAuth auth = FirebaseAuth.instance;
-  String uid = '';
+  FirebaseAuth _auth = FirebaseAuth.instance;
   List allcontacts = [];
   int Notifs = 0;
+  List allUserSellers = [];
+  List allUserSellersid = [];
 
   @override
   void initState() {
     super.initState();
+    getuserSeller();
     getContacts();
     countnotifs();
   }
@@ -47,15 +50,35 @@ class _BottomNavBarState extends State<BottomNavBar> {
   }
 
   getContacts() async {
-    await FirebaseFirestore.instance
-        .collection('Chats')
-        .doc(uid)
-        .collection('Contacts')
-        .doc()
-        .get()
-        .then((doc) {
-      allcontacts.add(doc.data());
-    });
+    try {
+      await FirebaseFirestore.instance
+          .collection('Chats')
+          .doc(_auth.currentUser!.uid)
+          .collection('Contacts')
+          .doc()
+          .get()
+          .then((doc) {
+        allcontacts.add(doc.data());
+      });
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  getuserSeller() async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('userSeller')
+          .get()
+          .then((querySnapshot) {
+        querySnapshot.docs.forEach((doc) {
+          allUserSellers.add(doc.data());
+          allUserSellersid.add(doc.id);
+        });
+      });
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   @override
@@ -99,7 +122,13 @@ class _BottomNavBarState extends State<BottomNavBar> {
             ),
             IconButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/basket');
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => BasketScreen(
+                              allUserSellers: allUserSellers,
+                              allUserSellersid: allUserSellersid,
+                            )));
               },
               icon: Icon(
                 Icons.shopping_basket_outlined,
