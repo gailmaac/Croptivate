@@ -64,7 +64,6 @@ class BasketdataBloc extends Bloc<BasketdataEvent, BasketdataState> {
       try {
         await _basketDataRepository.addBasket(event.basketData);
         print("Done");
-        yield BasketdataLoading();
       } catch (_) {}
     }
   }
