@@ -90,7 +90,7 @@ class _MessagesState extends State<Messages> {
 
   Future getcontactname() async {
     try {
-      Buyers.snapshots().forEach((element) {
+      await Buyers.snapshots().forEach((element) {
         element.docs.forEach((doc) {
           print(doc.data());
         });
