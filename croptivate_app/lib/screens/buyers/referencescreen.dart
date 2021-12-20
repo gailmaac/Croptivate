@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:croptivate_app/models/product_model.dart';
 import 'package:croptivate_app/pallete.dart';
+import 'package:croptivate_app/screens/buyers/basket.dart';
 import 'package:croptivate_app/widgets/backgroundimage.dart';
 import 'package:croptivate_app/widgets/backgroundimageref.dart';
 import 'package:croptivate_app/widgets/ordersummary.dart';
@@ -7,19 +9,20 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ReferenceScreen extends StatefulWidget {
+  final List<Product> selectedproducts;
+  final List<int> selectedvalues;
   final dateordered;
   final uid;
-  const ReferenceScreen({Key? key, this.dateordered, this.uid})
+  const ReferenceScreen(
+      {Key? key,
+      this.dateordered,
+      this.uid,
+      required this.selectedproducts,
+      required this.selectedvalues})
       : super(key: key);
 
   @override
   _ReferenceScreenState createState() => _ReferenceScreenState();
-  static const String routeName = '/reference';
-  static Route route() {
-    return MaterialPageRoute(
-        settings: RouteSettings(name: routeName),
-        builder: (_) => ReferenceScreen());
-  }
 }
 
 class _ReferenceScreenState extends State<ReferenceScreen> {
@@ -31,6 +34,9 @@ class _ReferenceScreenState extends State<ReferenceScreen> {
   String dO = '';
   String date = '';
   String name = '';
+  List products = [];
+  List values = [];
+  List price = [];
 
   @override
   void initState() {
@@ -57,6 +63,9 @@ class _ReferenceScreenState extends State<ReferenceScreen> {
             dO = doc['Delivery Option'];
             referenceID = doc.id;
             seller = doc['Seller'];
+            products = doc['Items Ordered'];
+            values = doc['Item values'];
+            price = doc['Item price'];
           });
         }
       });
@@ -80,7 +89,6 @@ class _ReferenceScreenState extends State<ReferenceScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(referenceID);
     return Scaffold(
       backgroundColor: cWhite,
       appBar: AppBar(
@@ -193,6 +201,16 @@ class _ReferenceScreenState extends State<ReferenceScreen> {
                     color: Colors.black),
               ),
             ),
+            // Eto yung pang output ng items
+            /*Container(
+              child: ListView.builder(itemBuilder: (context, index) {
+                return ListTile(
+                  leading: Text(products[index].toString()),
+                  title: Text(values[index].toString()),
+                  trailing: Text(price[index].toString()),
+                );
+              }),
+            ),*/
             SizedBox(
               height: 60,
             ),
@@ -205,7 +223,10 @@ class _ReferenceScreenState extends State<ReferenceScreen> {
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-              child: OrderSummary(),
+              child: OrderSummary(
+                selectedproducts: widget.selectedproducts,
+                selectedproductvalues: widget.selectedvalues,
+              ),
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 50),
