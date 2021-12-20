@@ -63,12 +63,9 @@ class AppRouter {
 
       case UserProfile.routeName:
         return UserProfile.route();
-      
+
       case UserProfileSeller.routeName:
         return UserProfileSeller.route();
-
-      case BasketScreen.routeName:
-        return BasketScreen.route();
 
       case AccountCategories.routeName:
         return AccountCategories.route();
@@ -91,15 +88,8 @@ class AppRouter {
       case Messagescreen.routeName:
         return Messagescreen.route();
 
-      case CheckoutScreen.routeName:
-        return CheckoutScreen.route();
-
-      case ReferenceScreen.routeName:
-        return ReferenceScreen.route();
-
       // case SellerShop.routeName:
       //   return SellerShop.route(category: settings.arguments as Category);
-
 
       case CatalogScreen.routeName:
         return CatalogScreen.route(category: settings.arguments as Category);
