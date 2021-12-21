@@ -95,35 +95,36 @@ class ProductCard extends StatelessWidget {
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold),
                           ),
-                          
                         ],
                       ),
                     ),
                     BlocBuilder<BasketBloc, BasketState>(
                       builder: (context, state) {
-                        if(state is BasketLoading) {
+                        if (state is BasketLoading) {
                           return Center(child: Text("sshh"));
                         }
-                        if(state is BasketLoaded) {
+                        if (state is BasketLoaded) {
                           return Expanded(
-                          child: IconButton(
-                              onPressed: () {
-                                context
-                                    .read<BasketBloc>()
-                                    .add(BasketProductAdded(product));
+                            child: IconButton(
+                                onPressed: () {
+                                  context
+                                      .read<BasketBloc>()
+                                      .add(BasketProductAdded(product));
 
-                                    final snackBar = SnackBar(
-                                          content: Text(
-                                              "Item was added to your Basket!"),
-                                          duration: Duration(
-                                            seconds: 1, milliseconds: 100));
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(snackBar);
-                              },
-                              icon: Icon(Icons.add_circle_outline_rounded,
-                                  color: cGreen)),
-                        );
-                        } else{return Text("soreh");}
+                                  final snackBar = SnackBar(
+                                      content: Text(
+                                          "Item was added to your Basket!"),
+                                      duration: Duration(
+                                          seconds: 1, milliseconds: 100));
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
+                                },
+                                icon: Icon(Icons.add_circle_outline_rounded,
+                                    color: cGreen)),
+                          );
+                        } else {
+                          return Text("soreh");
+                        }
                       },
                     ),
                     isFavorite
@@ -140,7 +141,7 @@ class ProductCard extends StatelessWidget {
                                           content: Text(
                                               "Item was removed to your Favorites!"),
                                           duration: Duration(
-                                            seconds: 1, milliseconds: 100));
+                                              seconds: 1, milliseconds: 100));
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(snackBar);
                                     },
