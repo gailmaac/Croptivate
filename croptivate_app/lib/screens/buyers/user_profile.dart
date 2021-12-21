@@ -3,6 +3,7 @@ import 'package:croptivate_app/models/user_model_buyer.dart';
 import 'package:croptivate_app/pallete.dart';
 import 'package:croptivate_app/screens/authentication/sign_in.dart';
 import 'package:croptivate_app/screens/buyers/edit_profile_buyer.dart';
+import 'package:croptivate_app/screens/buyers/my_orders.dart';
 import 'package:croptivate_app/screens/sellers/edit_profile.dart';
 import 'package:croptivate_app/services/auth.dart';
 import 'package:croptivate_app/widgets/profile_widget.dart';
@@ -196,7 +197,8 @@ class _UserProfileState extends State<UserProfile> {
             Divider(),
       
             SizedBox(height: 20),
-      
+            myOrdersbutton(),
+            SizedBox(height: 5),
             editProfilebutton(),
             SizedBox(height: 10,),
             signOutButton()
@@ -205,6 +207,41 @@ class _UserProfileState extends State<UserProfile> {
       ),
     );
   }
+
+  Widget myOrdersbutton() {
+    return TextButton(
+      onPressed: () {
+        Navigator.push(context, MaterialPageRoute(
+          builder: (context) => MyOrders()
+        ));
+      },
+      child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.storefront_outlined,
+                      color: cGreen
+                    ),
+                    SizedBox(width: 40,),
+                    Flexible(
+                      child: Text(
+                        "My Orders",
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 22,
+                          fontWeight: FontWeight.w800,
+                          color: cBlack,
+                          
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+    );
+  }
+
 
   //Edit Profile Button
   Widget editProfilebutton() {
