@@ -11,6 +11,7 @@ import 'package:croptivate_app/widgets/herocarouselcard.dart';
 import 'package:croptivate_app/widgets/navigationdrawer.dart';
 import 'package:croptivate_app/widgets/productcard.dart';
 import 'package:croptivate_app/widgets/productcarousel.dart';
+import 'package:croptivate_app/widgets/productlistcard.dart';
 import 'package:croptivate_app/widgets/sectiontitle.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -153,6 +154,7 @@ class _HomeBuyerState extends State<HomeBuyer> {
 
   searchpostlist() {
     var showpostresults = [];
+    //var showpostid = [];
     if (_searchto.text != '') {
       posts.forEach((doc) async {
         var owner = doc['ownerId'].toString();
@@ -285,14 +287,45 @@ class _HomeBuyerState extends State<HomeBuyer> {
                   body: TabBarView(children: [
                     Container(
                       height: double.infinity,
-                      child: ListView.builder(
-                          itemCount: resultposts.length,
-                          itemBuilder: (context, int) {
-                            return ListTile(
-                              tileColor: cGrey,
-                              title: Text(resultposts[int]['name'].toString()),
-                            );
-                          }),
+                      child: GridView.builder(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 0.95, vertical: 16.0),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 1, childAspectRatio: 2.4),
+                        itemCount: resultposts.length,
+                        itemBuilder: (BuildContext context, int x) {
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Center(
+                                /*child: ProductListCard(
+                    product: Product(
+                      category: resultposts[x]['category'],
+                      description: resultposts[x]['description'],
+                      imageUrlOne: resultposts[x]['imageUrlOne'],
+                      imageUrlThree: resultposts[x]['imageUrlThree'],
+                      weightCount: resultposts[x]['weightCount'],
+                      imageUrlTwo: resultposts[x]['imageUrlTwo'],
+                      isDeals: resultposts[x]['isDeals'],
+                      isRecommended: resultposts[x]['isRecommended'],
+                      weight: resultposts[x]['weight'],
+                      name: resultposts[x]['name'],
+                      ownerId: resultposts[x]['ownerId'],
+                      price: resultposts[x]['price'],
+                      stockCount: resultposts[x]['stockCount'],
+                      sellerPostId: x.id,
+                    ),
+                    widthFactor: 1.1,
+                    leftPosition: 150,
+                    topPosition: 70,
+                    heightofBox: 70,
+                    widthValue: 205,
+                    isRemoved: true,
+                  ),*/
+                                ),
+                          );
+                        },
+                      ),
                     ),
                     Container(
                       height: double.infinity,
