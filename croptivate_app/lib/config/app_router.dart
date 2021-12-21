@@ -88,8 +88,8 @@ class AppRouter {
       case Messagescreen.routeName:
         return Messagescreen.route();
 
-      // case SellerShop.routeName:
-      //   return SellerShop.route(category: settings.arguments as Category);
+      //case SellerShop.routeName:
+      //return SellerShop.route(category: settings.arguments as Category);
 
       case CatalogScreen.routeName:
         return CatalogScreen.route(category: settings.arguments as Category);
