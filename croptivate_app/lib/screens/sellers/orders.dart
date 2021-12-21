@@ -26,6 +26,7 @@ class _OrdersPageState extends State<OrdersPage> {
   String contactnumber = '';
   String profilepic = '';
   bool loading = true;
+  String total = '';
 
   @override
   void initState() {
@@ -150,7 +151,7 @@ class _OrdersPageState extends State<OrdersPage> {
                                         color: cBlack),
                                   ),
                                   Text(
-                                    "+63 -" + contactnumber,
+                                    "+63" + contactnumber,
                                     style: TextStyle(
                                         fontFamily: 'Poppins',
                                         fontSize: 16,
