@@ -1,14 +1,18 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:croptivate_app/blocs/basket/basket_bloc.dart';
 import 'package:croptivate_app/blocs/favorites/favorites_bloc.dart';
 import 'package:croptivate_app/blocs/product/product_bloc.dart';
+import 'package:croptivate_app/models/basket_model.dart';
 import 'package:croptivate_app/models/product_model.dart';
 import 'package:croptivate_app/pallete.dart';
+import 'package:croptivate_app/screens/buyers/basket.dart';
 import 'package:croptivate_app/widgets/herocarouselcard.dart';
+import 'package:croptivate_app/widgets/viewprofile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ProductScreen extends StatelessWidget {
+class ProductScreen extends StatefulWidget {
   static const String routeName = '/product';
 
   static Route route({required Product product}) {
@@ -21,6 +25,54 @@ class ProductScreen extends StatelessWidget {
   const ProductScreen({required this.product});
 
   @override
+  State<ProductScreen> createState() => _ProductScreenState();
+}
+
+List allUserSellers = [];
+List allUserSellersid = [];
+String firstname = '';
+String lastname = '';
+String location = '';
+String contactnumber = '';
+String profilepic = '';
+String shopname = '';
+String sellerType = '';
+
+class _ProductScreenState extends State<ProductScreen> {
+  getuserSeller() async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('userSeller')
+          .get()
+          .then((querySnapshot) {
+        querySnapshot.docs.forEach((doc) {
+          allUserSellers.add(doc.data());
+          allUserSellersid.add(doc.id);
+          if (widget.product.ownerId == doc.id) {
+            setState(() {
+              firstname = doc['first name'];
+              lastname = doc['last name'];
+              contactnumber = doc['contact number'].toString();
+              location = doc['location'];
+              profilepic = doc['Profile Picture'].toString();
+              shopname = doc['shop name'];
+              sellerType = doc['sellerType'];
+            });
+          }
+        });
+      });
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getuserSeller();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: cWhite,
@@ -28,7 +80,7 @@ class ProductScreen extends StatelessWidget {
             backgroundColor: cWhite,
             elevation: 0,
             title: Text(
-              product.name,
+              widget.product.name,
               style: TextStyle(
                   color: cGreen,
                   fontFamily: 'Poppins',
@@ -86,7 +138,7 @@ class ProductScreen extends StatelessWidget {
                       onPressed: () {
                         context
                             .read<FavoritesBloc>()
-                            .add(AddFavoritesProduct(product));
+                            .add(AddFavoritesProduct(widget.product));
 
                         final snackBar = SnackBar(
                             content: Text("Added to your Favorites!"),
@@ -107,9 +159,21 @@ class ProductScreen extends StatelessWidget {
                         onPressed: () {
                           context
                               .read<BasketBloc>()
-                              .add(BasketProductAdded(product));
+                              .add(BasketProductAdded(widget.product));
 
-                          Navigator.pushNamed(context, '/basket');
+                          final snackBar = SnackBar(
+                              content: Text("Item was added to your Basket!"),
+                              duration:
+                                  Duration(seconds: 1, milliseconds: 100));
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                          /*Navigator.pop(context);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => BasketScreen(
+                                        allUserSellers: allUserSellers,
+                                        allUserSellersid: allUserSellersid,
+                                      )));*/
                         },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
@@ -130,117 +194,128 @@ class ProductScreen extends StatelessWidget {
             builder: (context, state) {
               if (state is ProductLoading) {
                 return Center(
-                  child: CircularProgressIndicator(
-                    color: cGreen,
-                  )
-                );
+                    child: CircularProgressIndicator(
+                  color: cGreen,
+                ));
               }
 
               if (state is ProductLoaded) {
                 return CarouselSlider(
-                  options: CarouselOptions(
-                    aspectRatio: 1.5,
-                    viewportFraction: 0.9,
-                    enlargeCenterPage: true,
-                    enableInfiniteScroll: false,
-                    enlargeStrategy: CenterPageEnlargeStrategy.height,
-                  ),
-                  items: [
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 5.0, vertical: 20),
+                    options: CarouselOptions(
+                      aspectRatio: 1.5,
+                      viewportFraction: 0.9,
+                      enlargeCenterPage: true,
+                      enableInfiniteScroll: false,
+                      enlargeStrategy: CenterPageEnlargeStrategy.height,
+                    ),
+                    items: [
+                      Container(
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 5.0, vertical: 20),
                         child: ClipRRect(
                           borderRadius: BorderRadius.all(Radius.circular(5.0)),
                           child: Stack(
                             children: <Widget>[
-                              Image.network(product.imageUrlOne, fit: BoxFit.cover, width: 1000,),
+                              Image.network(
+                                widget.product.imageUrlOne,
+                                fit: BoxFit.cover,
+                                width: 1000,
+                              ),
                               Positioned(
                                 bottom: 0.0,
                                 left: 0.0,
                                 right: 0.0,
                                 child: Container(
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    colors: [
-                                      Color.fromARGB(200, 0, 0, 0),
-                                      Color.fromARGB(0, 0, 0, 0)
-                                    ],
-                                    begin: Alignment.bottomCenter,
-                                    end: Alignment.topCenter,
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        Color.fromARGB(200, 0, 0, 0),
+                                        Color.fromARGB(0, 0, 0, 0)
+                                      ],
+                                      begin: Alignment.bottomCenter,
+                                      end: Alignment.topCenter,
+                                    ),
                                   ),
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 10.0, horizontal: 20.0),
                                 ),
-                              padding: EdgeInsets.symmetric(
-                              vertical: 10.0, horizontal: 20.0),
-                              ),
-                            )
-                          ],
+                              )
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 5.0, vertical: 20),
+                      Container(
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 5.0, vertical: 20),
                         child: ClipRRect(
                           borderRadius: BorderRadius.all(Radius.circular(5.0)),
                           child: Stack(
                             children: <Widget>[
-                              Image.network(product.imageUrlTwo, fit: BoxFit.cover, width: 1000,),
+                              Image.network(
+                                widget.product.imageUrlTwo,
+                                fit: BoxFit.cover,
+                                width: 1000,
+                              ),
                               Positioned(
                                 bottom: 0.0,
                                 left: 0.0,
                                 right: 0.0,
                                 child: Container(
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    colors: [
-                                      Color.fromARGB(200, 0, 0, 0),
-                                      Color.fromARGB(0, 0, 0, 0)
-                                    ],
-                                    begin: Alignment.bottomCenter,
-                                    end: Alignment.topCenter,
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        Color.fromARGB(200, 0, 0, 0),
+                                        Color.fromARGB(0, 0, 0, 0)
+                                      ],
+                                      begin: Alignment.bottomCenter,
+                                      end: Alignment.topCenter,
+                                    ),
                                   ),
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 10.0, horizontal: 20.0),
                                 ),
-                              padding: EdgeInsets.symmetric(
-                              vertical: 10.0, horizontal: 20.0),
-                              ),
-                            )
-                          ],
+                              )
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 5.0, vertical: 20),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                        child: Stack(
-                          children: <Widget>[
-                            Image.network(product.imageUrlThree, fit: BoxFit.cover, width: 1000,),
-                            Positioned(
-                              bottom: 0.0,
-                              left: 0.0,
-                              right: 0.0,
-                              child: Container(
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [
-                                    Color.fromARGB(200, 0, 0, 0),
-                                    Color.fromARGB(0, 0, 0, 0)
-                                  ],
-                                  begin: Alignment.bottomCenter,
-                                  end: Alignment.topCenter,
-                                ),
+                      Container(
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 5.0, vertical: 20),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                          child: Stack(
+                            children: <Widget>[
+                              Image.network(
+                                widget.product.imageUrlThree,
+                                fit: BoxFit.cover,
+                                width: 1000,
                               ),
-                            padding: EdgeInsets.symmetric(
-                            vertical: 10.0, horizontal: 20.0),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    )
-                  ]
-                );
-              }
-
-              else  {
+                              Positioned(
+                                bottom: 0.0,
+                                left: 0.0,
+                                right: 0.0,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        Color.fromARGB(200, 0, 0, 0),
+                                        Color.fromARGB(0, 0, 0, 0)
+                                      ],
+                                      begin: Alignment.bottomCenter,
+                                      end: Alignment.topCenter,
+                                    ),
+                                  ),
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 10.0, horizontal: 20.0),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      )
+                    ]);
+              } else {
                 return Text("Sorry");
               }
             },
@@ -264,7 +339,7 @@ class ProductScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              product.name,
+                              widget.product.name,
                               style: TextStyle(
                                   fontFamily: 'Poppins',
                                   fontSize: 25,
@@ -272,15 +347,15 @@ class ProductScreen extends StatelessWidget {
                                   fontWeight: FontWeight.bold),
                             ),
                             Text(
-                            '${product.weightCount} ${product.weight}',
-                            style: TextStyle(
-                                fontFamily: 'Poppins',
-                                color: Colors.black26,
-                                fontSize: 13,
-                                fontWeight: FontWeight.w700),
+                              '${widget.product.weightCount} ${widget.product.weight}',
+                              style: TextStyle(
+                                  fontFamily: 'Poppins',
+                                  color: Colors.black26,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w700),
                             ),
                             Text(
-                              'Stock: ${product.stockCount}',
+                              'Stock: ${widget.product.stockCount}',
                               style: TextStyle(
                                   fontFamily: 'Poppins',
                                   fontSize: 14,
@@ -288,7 +363,7 @@ class ProductScreen extends StatelessWidget {
                                   fontWeight: FontWeight.bold),
                             ),
                             Text(
-                              "Loc:Makati City, Philippines",
+                              location,
                               style: TextStyle(
                                   fontFamily: 'Poppins',
                                   fontSize: 14,
@@ -299,7 +374,7 @@ class ProductScreen extends StatelessWidget {
                         ),
                         SizedBox(width: 95),
                         Text(
-                          '\₱${product.price}',
+                          '\₱${widget.product.price}',
                           style: TextStyle(fontSize: 25, color: cBlack),
                         ),
                       ],
@@ -320,18 +395,52 @@ class ProductScreen extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
-                child: CircleAvatar(
-                  backgroundColor: cGreen,
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ViewProfile(
+                                  type: 'Seller',
+                                  contactnumber: contactnumber,
+                                  location: location,
+                                  firstname: firstname,
+                                  lastname: lastname,
+                                  profilepic: profilepic,
+                                  sellerType: sellerType,
+                                )));
+                  },
+                  child: CircleAvatar(
+                      radius: 20.0,
+                      child: ClipOval(
+                          child: Image.network(
+                        profilepic,
+                        fit: BoxFit.cover,
+                        width: 40.0,
+                        height: 40.0,
+                      ))),
                 ),
               ),
               Container(
-                child: Text(
-                  "Profile Name",
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 16,
-                    color: cBlack
-                  )
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ViewProfile(
+                                  type: 'Seller',
+                                  contactnumber: contactnumber,
+                                  location: location,
+                                  firstname: firstname,
+                                  lastname: lastname,
+                                  profilepic: profilepic,
+                                  sellerType: sellerType,
+                                  shopname: shopname,
+                                )));
+                  },
+                  child: Text(firstname.toString() + ' ' + lastname.toString(),
+                      style: TextStyle(
+                          fontFamily: 'Poppins', fontSize: 16, color: cBlack)),
                 ),
               ),
               Padding(
@@ -339,24 +448,20 @@ class ProductScreen extends StatelessWidget {
                 child: Container(
                   height: 33,
                   decoration: BoxDecoration(
-                    border: Border.all(
-                      color: cGrey,
-                      width: 1,
-                    ),
-                    borderRadius: BorderRadius.circular(6)
-                  ),
+                      border: Border.all(
+                        color: cGrey,
+                        width: 1,
+                      ),
+                      borderRadius: BorderRadius.circular(6)),
                   child: TextButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/shopprofile');
+                      // Navigator.pushNamed(context, '/shopprofile');
                     },
-                    child: Text(
-                      "View Shop",
-                      style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 12,
-                      color: cGreen
-                      )
-                    ),
+                    child: Text("View Shop",
+                        style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 12,
+                            color: cGreen)),
                   ),
                 ),
               )
@@ -388,7 +493,7 @@ class ProductScreen extends StatelessWidget {
               children: [
                 ListTile(
                   title: Text(
-                    product.description,
+                    widget.product.description,
                     style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 14,
