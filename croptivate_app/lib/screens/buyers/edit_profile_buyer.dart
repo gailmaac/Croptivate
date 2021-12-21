@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:croptivate_app/models/user.dart';
 import 'package:croptivate_app/pallete.dart';
 import 'package:croptivate_app/screens/authentication/sign_in.dart';
+import 'package:croptivate_app/screens/buyers/my_orders.dart';
 import 'package:croptivate_app/shared/loading.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -314,7 +315,7 @@ class _EditProfileBuyerState extends State<EditProfileBuyer> {
               Divider(),
 
               SizedBox(height: 20),
-              
+
               updateButton()
             ],
           ),
@@ -323,6 +324,7 @@ class _EditProfileBuyerState extends State<EditProfileBuyer> {
     );
   }
 
+  
   //Edit Profile Button
   Widget editProfilebutton() {
     return TextButton(
