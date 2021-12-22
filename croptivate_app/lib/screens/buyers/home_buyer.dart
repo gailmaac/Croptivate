@@ -13,6 +13,7 @@ import 'package:croptivate_app/widgets/productcard.dart';
 import 'package:croptivate_app/widgets/productcarousel.dart';
 import 'package:croptivate_app/widgets/productlistcard.dart';
 import 'package:croptivate_app/widgets/sectiontitle.dart';
+import 'package:croptivate_app/widgets/viewprofile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -41,10 +42,14 @@ class _HomeBuyerState extends State<HomeBuyer> {
   bool TextEmpty = true;
   List users = [];
   List posts = [];
+  List usersids = [];
+  List postsids = [];
   late Future postsloaded;
   late Future usersloaded;
   List resultusers = [];
+  List resultusersid = [];
   List resultposts = [];
+  List resultpostsid = [];
   String seller = '';
   final FirebaseAuth auth = FirebaseAuth.instance;
 
@@ -70,20 +75,23 @@ class _HomeBuyerState extends State<HomeBuyer> {
 
   searchuserlist() {
     var showresults = [];
+    var showresultsid = [];
     if (_searchto.text != '') {
-      users.forEach((doc) {
-        var name = doc['first name'].toString().toLowerCase() +
+      for (int x = 0; x < users.length; x++) {
+        var name = users[x]['first name'].toString().toLowerCase() +
             ' ' +
-            doc['last name'].toString().toLowerCase() +
+            users[x]['last name'].toString().toLowerCase() +
             ' ' +
-            doc['contact number'].toString();
+            users[x]['contact number'].toString();
         if (name.contains(_searchto.text)) {
-          showresults.add(doc);
+          showresults.add(users[x]);
+          showresultsid.add(usersids[x]);
         }
-      });
+      }
     }
     setState(() {
       resultusers = showresults;
+      resultusersid = showresultsid;
     });
   }
 
@@ -103,26 +111,21 @@ class _HomeBuyerState extends State<HomeBuyer> {
 
   getusers() async {
     List user = [];
+    List usersid = [];
     try {
-      await FirebaseFirestore.instance
-          .collection('userBuyer')
-          .get()
-          .then((querySnapshot) {
-        querySnapshot.docs.forEach((doc) {
-          user.add(doc.data());
-        });
-      });
       await FirebaseFirestore.instance
           .collection('userSeller')
           .get()
           .then((querySnapshot) {
         querySnapshot.docs.forEach((doc) {
           user.add(doc.data());
+          usersid.add(doc.id);
         });
       });
 
       setState(() {
         users = user;
+        usersids = usersid;
       });
       searchuserlist();
     } catch (e) {
@@ -133,6 +136,7 @@ class _HomeBuyerState extends State<HomeBuyer> {
 
   getPosts() async {
     List post = [];
+    List postid = [];
     try {
       await FirebaseFirestore.instance
           .collection('sellerPosts')
@@ -140,10 +144,12 @@ class _HomeBuyerState extends State<HomeBuyer> {
           .then((querySnapshot) {
         querySnapshot.docs.forEach((doc) {
           post.add(doc.data());
+          postid.add(doc.id);
         });
       });
       setState(() {
         posts = post;
+        postsids = postid;
       });
       searchpostlist();
     } catch (e) {
@@ -152,12 +158,12 @@ class _HomeBuyerState extends State<HomeBuyer> {
     }
   }
 
-  searchpostlist() {
+  searchpostlist() async {
     var showpostresults = [];
-    //var showpostid = [];
+    var showpostid = [];
     if (_searchto.text != '') {
-      posts.forEach((doc) async {
-        var owner = doc['ownerId'].toString();
+      for (int x = 0; x < posts.length; x++) {
+        var owner = posts[x]['ownerId'].toString();
         await FirebaseFirestore.instance
             .collection('userSeller')
             .get()
@@ -172,27 +178,31 @@ class _HomeBuyerState extends State<HomeBuyer> {
             }
           });
         });
-        var sellerpost = doc['category'].toString().toLowerCase() +
+
+        var sellerpost = posts[x]['category'].toString().toLowerCase() +
             ' ' +
-            doc['description'].toString().toLowerCase() +
+            posts[x]['description'].toString().toLowerCase() +
             ' ' +
-            doc['name'].toString().toLowerCase() +
+            posts[x]['name'].toString().toLowerCase() +
             ' ' +
-            doc['price'].toString().toLowerCase() +
+            posts[x]['price'].toString().toLowerCase() +
             ' ' +
-            doc['weightCount'].toString().toLowerCase() +
+            posts[x]['weightCount'].toString().toLowerCase() +
             ' ' +
-            doc['stockCount'].toString().toLowerCase() +
+            posts[x]['stockCount'].toString().toLowerCase() +
             ' ' +
             seller;
+
         if (sellerpost.contains(_searchto.text)) {
-          showpostresults.add(doc);
+          showpostresults.add(posts[x]);
+          showpostid.add(postsids[x]);
         }
+      }
+      setState(() {
+        resultposts = showpostresults;
+        resultpostsid = showpostid;
       });
     }
-    setState(() {
-      resultposts = showpostresults;
-    });
   }
 
   @override
@@ -298,48 +308,92 @@ class _HomeBuyerState extends State<HomeBuyer> {
                           return Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Center(
-                                /*child: ProductListCard(
-                    product: Product(
-                      category: resultposts[x]['category'],
-                      description: resultposts[x]['description'],
-                      imageUrlOne: resultposts[x]['imageUrlOne'],
-                      imageUrlThree: resultposts[x]['imageUrlThree'],
-                      weightCount: resultposts[x]['weightCount'],
-                      imageUrlTwo: resultposts[x]['imageUrlTwo'],
-                      isDeals: resultposts[x]['isDeals'],
-                      isRecommended: resultposts[x]['isRecommended'],
-                      weight: resultposts[x]['weight'],
-                      name: resultposts[x]['name'],
-                      ownerId: resultposts[x]['ownerId'],
-                      price: resultposts[x]['price'],
-                      stockCount: resultposts[x]['stockCount'],
-                      sellerPostId: x.id,
-                    ),
-                    widthFactor: 1.1,
-                    leftPosition: 150,
-                    topPosition: 70,
-                    heightofBox: 70,
-                    widthValue: 205,
-                    isRemoved: true,
-                  ),*/
+                              child: ProductCard(
+                                product: Product(
+                                  category: resultposts[x]['category'],
+                                  description: resultposts[x]['description'],
+                                  imageUrlOne: resultposts[x]['imageUrlOne'],
+                                  imageUrlThree: resultposts[x]
+                                      ['imageUrlThree'],
+                                  weightCount: resultposts[x]['weightCount'],
+                                  imageUrlTwo: resultposts[x]['imageUrlTwo'],
+                                  isDeals: resultposts[x]['isDeals'],
+                                  isRecommended: resultposts[x]
+                                      ['isRecommended'],
+                                  weight: resultposts[x]['weight'],
+                                  name: resultposts[x]['name'],
+                                  ownerId: resultposts[x]['ownerId'],
+                                  price: resultposts[x]['price'],
+                                  stockCount: resultposts[x]['stockCount'],
+                                  sellerPostId: resultpostsid[x],
                                 ),
+                                widthFactor: 1.1,
+                                leftPosition: 150,
+                                topPosition: 70,
+                                heightofBox: 70,
+                                widthValue: 205,
+                              ),
+                            ),
                           );
                         },
                       ),
                     ),
-                    Container(
-                      height: double.infinity,
-                      color: cWhite,
-                      child: ListView.builder(
-                          itemCount: resultusers.length,
-                          itemBuilder: (context, int) {
-                            return ListTile(
-                              tileColor: cGrey,
-                              title: Text(
-                                  resultusers[int]['first name'].toString()),
-                            );
-                          }),
-                    ),
+                    Expanded(
+                        child: ListView.builder(
+                            itemCount: resultusers.length,
+                            itemBuilder: (context, i) {
+                              return ListTile(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => ViewProfile(
+                                                type: 'Seller',
+                                                firstname: resultusers[i]
+                                                    ['first name'],
+                                                lastname: resultusers[i]
+                                                    ['last name'],
+                                                location: resultusers[i]
+                                                    ['location'],
+                                                contactnumber: resultusers[i]
+                                                        ['contact number']
+                                                    .toString(),
+                                                profilepic: resultusers[i]
+                                                    ['Profile Picture'],
+                                                shopname: resultusers[i]
+                                                    ['shop name'],
+                                              )));
+                                },
+                                leading: CircleAvatar(
+                                  radius: 20.0,
+                                  child: ClipOval(
+                                      child: Image.network(
+                                    resultusers[i]['Profile Picture']
+                                        .toString(),
+                                    fit: BoxFit.cover,
+                                    width: 40.0,
+                                    height: 60.0,
+                                  )),
+                                ),
+                                title: Text(
+                                    resultusers[i]['first name'].toString() +
+                                        ' ' +
+                                        resultusers[i]['last name'].toString(),
+                                    style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 16,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w500)),
+                                tileColor: cWhite,
+                                subtitle: Text(
+                                    resultusers[i]['contact number']
+                                            .toString() +
+                                        ' ' +
+                                        resultusers[i]['location'].toString(),
+                                    style: smallBodyText.copyWith(
+                                        color: Colors.black45)),
+                              );
+                            })),
                   ])))
           : SingleChildScrollView(
               child: Column(
