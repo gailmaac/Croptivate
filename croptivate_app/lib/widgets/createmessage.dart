@@ -164,7 +164,16 @@ class _createmessageState extends State<createmessage> {
                     itemCount: resultusers.length,
                     itemBuilder: (context, i) {
                       return ListTile(
-                        leading: CircleAvatar(backgroundColor: cGreen),
+                        leading: CircleAvatar(
+                          radius: 20.0,
+                          child: ClipOval(
+                              child: Image.network(
+                            resultusers[i]['Profile Picture'].toString(),
+                            fit: BoxFit.cover,
+                            width: 40.0,
+                            height: 60.0,
+                          )),
+                        ),
                         title: Text(
                             resultusers[i]['first name'].toString() +
                                 ' ' +
