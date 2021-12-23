@@ -21,9 +21,11 @@ class BasketScreen extends StatefulWidget {
   const BasketScreen(
       {Key? key, required this.allUserSellers, required this.allUserSellersid})
       : super(key: key);
+      
 
   @override
   _BasketScreenState createState() => _BasketScreenState();
+  
 }
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -175,6 +177,7 @@ class _BasketScreenState extends State<BasketScreen> {
 
               //TRY ULIT
               return Container(
+
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -186,7 +189,7 @@ class _BasketScreenState extends State<BasketScreen> {
                           child: Column(
                             children: [
                               SizedBox(
-                                  height: 551,
+                                  height: 665.9,
                                   child: ListView.builder(
                                       shrinkWrap: true,
                                       physics: ScrollPhysics(),
@@ -218,7 +221,6 @@ class _BasketScreenState extends State<BasketScreen> {
                                         }
 
                                         return Container(
-                                          //color: cGreen,
                                           child: Column(
                                             children: [
                                               Padding(
@@ -230,12 +232,18 @@ class _BasketScreenState extends State<BasketScreen> {
                                                       selectedtile = index;
                                                     });
                                                   },
+                                                  
                                                   tileColor:
                                                       selectedtile == index
-                                                          ? Colors.blue
-                                                          : Colors.green[200],
+                                                          ? cGreen.withOpacity(0.50)
+                                                          : cGreen.withOpacity(0.10),
                                                   title: Text(
-                                                    'Shop: ' + shopname[index],
+                                                    shopname[index],
+                                                    style: TextStyle(
+                                                      fontSize: 18,
+                                                      fontFamily: 'Poppins',
+                                                      color: cBlack
+                                                    ),
                                                   ),
                                                   trailing: Icon(
                                                     selectedtile != index
