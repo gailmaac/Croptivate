@@ -50,23 +50,31 @@ class SellerShop extends StatelessWidget {
                         bottomRight: Radius.circular(36),
                       )
                     ) ,
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 15),
-                          child: CircleAvatar(
-                            backgroundColor: cWhite
-                          ),
-                        ),
-                        Text("Hi, I'm \$Seller's Name!",
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 26,
-                            color: cWhite,
-                            fontWeight: FontWeight.w800
-                          ),
-                        )
-                      ],
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          // Padding(
+                          //   padding: EdgeInsets.symmetric(horizontal: 15),
+                          //   child: CircleAvatar(
+                          //     backgroundColor: cWhite
+                          //   ),
+                          // ),
+                          Flexible(
+                            child: Text("Welcome to \$Juan Dela Cruz Farm Shop Eme!",
+                            textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 24,
+                                color: cWhite,
+                                fontWeight: FontWeight.w800
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
                     )       
                   ),
                   Positioned(
@@ -110,20 +118,20 @@ class SellerShop extends StatelessWidget {
               ),
             ),
 
-            Padding(
-              padding: EdgeInsets.only(top: 20),
-              child: Container(
-                child: Text(
-                  "Welcome to \$ShopName!",
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 22,
-                    color: cDGreen,
-                    fontWeight: FontWeight.w800
-                  ),
-                )
-              ),
-            ),
+            // Padding(
+            //   padding: EdgeInsets.only(top: 20),
+            //   child: Container(
+            //     child: Text(
+            //       "Welcome to \$ShopName!",
+            //       style: TextStyle(
+            //         fontFamily: 'Poppins',
+            //         fontSize: 22,
+            //         color: cDGreen,
+            //         fontWeight: FontWeight.w800
+            //       ),
+            //     )
+            //   ),
+            // ),
 
             Padding(
               padding: const EdgeInsets.only(top: 15, left: 15),
