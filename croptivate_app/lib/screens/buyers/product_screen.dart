@@ -7,6 +7,7 @@ import 'package:croptivate_app/models/basket_model.dart';
 import 'package:croptivate_app/models/product_model.dart';
 import 'package:croptivate_app/pallete.dart';
 import 'package:croptivate_app/screens/buyers/basket.dart';
+import 'package:croptivate_app/screens/sellers/shopprofile.dart';
 import 'package:croptivate_app/widgets/herocarouselcard.dart';
 import 'package:croptivate_app/widgets/messagesscreen.dart';
 import 'package:croptivate_app/widgets/viewprofile.dart';
@@ -127,8 +128,10 @@ class _ProductScreenState extends State<ProductScreen> {
               children: <Widget>[
                 IconButton(
                   onPressed: () {
-                    Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Messagescreen()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Messagescreen()));
                   },
                   icon: Icon(
                     Icons.chat_bubble_outline_rounded,
@@ -405,14 +408,14 @@ class _ProductScreenState extends State<ProductScreen> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => ViewProfile(
-                                  type: 'Seller',
-                                  contactnumber: contactnumber,
-                                  location: location,
-                                  firstname: firstname,
-                                  lastname: lastname,
-                                  profilepic: profilepic,
-                                  sellerType: sellerType,
-                                )));
+                                type: 'Seller',
+                                contactnumber: contactnumber,
+                                location: location,
+                                firstname: firstname,
+                                lastname: lastname,
+                                profilepic: profilepic,
+                                sellerType: sellerType,
+                                uid: widget.product.ownerId)));
                   },
                   child: CircleAvatar(
                       radius: 20.0,
@@ -440,6 +443,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                   profilepic: profilepic,
                                   sellerType: sellerType,
                                   shopname: shopname,
+                                  uid: widget.product.ownerId,
                                 )));
                   },
                   child: Text(firstname.toString() + ' ' + lastname.toString(),
@@ -459,7 +463,20 @@ class _ProductScreenState extends State<ProductScreen> {
                       borderRadius: BorderRadius.circular(6)),
                   child: TextButton(
                     onPressed: () {
-                      // Navigator.pushNamed(context, '/shopprofile');
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SellerShop(
+                                    type: 'Seller',
+                                    contactnumber: contactnumber,
+                                    location: location,
+                                    firstname: firstname,
+                                    lastname: lastname,
+                                    profilepic: profilepic,
+                                    sellerType: sellerType,
+                                    shopname: shopname,
+                                    uid: widget.product.ownerId,
+                                  )));
                     },
                     child: Text("View Shop",
                         style: TextStyle(
