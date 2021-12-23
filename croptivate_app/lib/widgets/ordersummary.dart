@@ -46,14 +46,14 @@ class _OrderSummaryState extends State<OrderSummary> {
               Text("Total".toUpperCase(),
                   style: TextStyle(
                       color: cBlack,
-                      fontSize: 24,
+                      fontSize: 18,
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.w900)),
-              SizedBox(width: 90),
+              SizedBox(width: 50),
               Text('\₱ ' + subtotal.toStringAsFixed(2),
                   style: TextStyle(
                       color: cBlack,
-                      fontSize: 24,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold)),
             ],
           ),
