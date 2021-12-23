@@ -8,6 +8,7 @@ import 'package:croptivate_app/models/product_model.dart';
 import 'package:croptivate_app/pallete.dart';
 import 'package:croptivate_app/screens/buyers/basket.dart';
 import 'package:croptivate_app/widgets/herocarouselcard.dart';
+import 'package:croptivate_app/widgets/messagesscreen.dart';
 import 'package:croptivate_app/widgets/viewprofile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -126,7 +127,8 @@ class _ProductScreenState extends State<ProductScreen> {
               children: <Widget>[
                 IconButton(
                   onPressed: () {
-                    print("Messaging is pressed");
+                    Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => Messagescreen()));
                   },
                   icon: Icon(
                     Icons.chat_bubble_outline_rounded,
@@ -333,6 +335,7 @@ class _ProductScreenState extends State<ProductScreen> {
                       horizontal: 20.0,
                     ),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -362,17 +365,18 @@ class _ProductScreenState extends State<ProductScreen> {
                                   color: cBlack,
                                   fontWeight: FontWeight.bold),
                             ),
-                            Text(
-                              location,
-                              style: TextStyle(
-                                  fontFamily: 'Poppins',
-                                  fontSize: 14,
-                                  color: cBlack,
-                                  fontWeight: FontWeight.bold),
+                            Flexible(
+                              child: Text(
+                                location,
+                                style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontSize: 14,
+                                    color: cBlack,
+                                    fontWeight: FontWeight.bold),
+                              ),
                             ),
                           ],
                         ),
-                        SizedBox(width: 95),
                         Text(
                           '\₱${widget.product.price}',
                           style: TextStyle(fontSize: 25, color: cBlack),
