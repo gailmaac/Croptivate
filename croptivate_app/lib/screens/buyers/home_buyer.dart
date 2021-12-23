@@ -362,6 +362,7 @@ class _HomeBuyerState extends State<HomeBuyer> {
                                                     ['Profile Picture'],
                                                 shopname: resultusers[i]
                                                     ['shop name'],
+                                                uid: resultusersid[i],
                                               )));
                                 },
                                 leading: CircleAvatar(
