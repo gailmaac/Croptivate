@@ -201,16 +201,6 @@ class _ReferenceScreenState extends State<ReferenceScreen> {
                     color: Colors.black),
               ),
             ),
-            // Eto yung pang output ng items
-            /*Container(
-              child: ListView.builder(itemBuilder: (context, index) {
-                return ListTile(
-                  leading: Text(products[index].toString()),
-                  title: Text(values[index].toString()),
-                  trailing: Text(price[index].toString()),
-                );
-              }),
-            ),*/
             SizedBox(
               height: 60,
             ),
