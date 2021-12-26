@@ -1,4 +1,5 @@
 import 'package:croptivate_app/blocs/product/product_bloc.dart';
+import 'package:croptivate_app/models/product_model.dart';
 import 'package:croptivate_app/pallete.dart';
 import 'package:croptivate_app/widgets/bottomnavbar.dart';
 import 'package:croptivate_app/widgets/productcarousel.dart';
@@ -6,7 +7,7 @@ import 'package:croptivate_app/widgets/sectiontitle.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SellerShop extends StatelessWidget {
+class SellerShop extends StatefulWidget {
   final type;
   final firstname;
   final lastname;
@@ -29,6 +30,41 @@ class SellerShop extends StatelessWidget {
     this.shopname,
     this.sellerType,
   }) : super(key: key);
+
+  @override
+  State<SellerShop> createState() => _SellerShopState();
+}
+
+class _SellerShopState extends State<SellerShop> {
+  @override
+  void initState() {
+    super.initState();
+    _search.addListener(_onsearchChanged);
+  }
+
+  @override
+  void dispose() {
+    _search.removeListener(_onsearchChanged);
+    _search.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+  }
+
+  _onsearchChanged() {
+    setState(() {
+      search = _search.text.toLowerCase();
+    });
+  }
+
+  TextEditingController _search = TextEditingController();
+  List<Product> product = [];
+  String search = '';
+  List<Product> searchedproduct = [];
+  String name = '';
 
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -75,7 +111,7 @@ class SellerShop extends StatelessWidget {
                           // ),
                           Flexible(
                             child: Text(
-                              "Welcome to " + shopname + '!',
+                              "Welcome to " + widget.shopname + '!',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontFamily: 'Poppins',
@@ -110,6 +146,7 @@ class SellerShop extends StatelessWidget {
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 35),
                           child: TextField(
+                              controller: _search,
                               decoration: InputDecoration(
                                   hintText: "What are you looking for?",
                                   hintStyle:
@@ -324,7 +361,7 @@ class SellerShop extends StatelessWidget {
                 if (state is ProductLoaded) {
                   return ProductCarousel(
                       products: state.products
-                          .where((product) => product.ownerId == uid)
+                          .where((product) => product.ownerId == widget.uid)
                           .toList());
                 } else {
                   return Text("Sorry");
@@ -343,12 +380,21 @@ class SellerShop extends StatelessWidget {
                 }
 
                 if (state is ProductLoaded) {
-                  return ProductCarousel(
-                      products: state.products
-                          .where((product) =>
-                              product.category == "Plant Vegetables")
-                          .where((product) => product.ownerId == uid)
-                          .toList());
+                  product = state.products
+                      .where(
+                          (product) => product.category == "Plant Vegetables")
+                      .where((product) => product.ownerId == widget.uid)
+                      .toList();
+                  searchedproduct = [];
+                  for (int x = 0; x < product.length; x++) {
+                    name = product[x].name.toLowerCase();
+
+                    if (name.contains(search)) {
+                      searchedproduct.add(product[x]);
+                    }
+                  }
+
+                  return ProductCarousel(products: searchedproduct);
                 } else {
                   return Text("Sorry");
                 }
@@ -366,12 +412,20 @@ class SellerShop extends StatelessWidget {
                 }
 
                 if (state is ProductLoaded) {
-                  return ProductCarousel(
-                      products: state.products
-                          .where((product) =>
-                              product.category == "Climbers and Creepers")
-                          .where((product) => product.ownerId == uid)
-                          .toList());
+                  product = state.products
+                      .where((product) =>
+                          product.category == "Climbers and Creepers")
+                      .where((product) => product.ownerId == widget.uid)
+                      .toList();
+                  searchedproduct = [];
+                  for (int x = 0; x < product.length; x++) {
+                    name = product[x].name.toLowerCase();
+
+                    if (name.contains(search)) {
+                      searchedproduct.add(product[x]);
+                    }
+                  }
+                  return ProductCarousel(products: searchedproduct);
                 } else {
                   return Text("Sorry");
                 }
@@ -389,12 +443,20 @@ class SellerShop extends StatelessWidget {
                 }
 
                 if (state is ProductLoaded) {
-                  return ProductCarousel(
-                      products: state.products
-                          .where((product) =>
-                              product.category == "Leafy Vegetables")
-                          .where((product) => product.ownerId == uid)
-                          .toList());
+                  product = state.products
+                      .where(
+                          (product) => product.category == "Leafy Vegetables")
+                      .where((product) => product.ownerId == widget.uid)
+                      .toList();
+                  searchedproduct = [];
+                  for (int x = 0; x < product.length; x++) {
+                    name = product[x].name.toLowerCase();
+
+                    if (name.contains(search)) {
+                      searchedproduct.add(product[x]);
+                    }
+                  }
+                  return ProductCarousel(products: searchedproduct);
                 } else {
                   return Text("Sorry");
                 }
@@ -412,12 +474,19 @@ class SellerShop extends StatelessWidget {
                 }
 
                 if (state is ProductLoaded) {
-                  return ProductCarousel(
-                      products: state.products
-                          .where((product) =>
-                              product.category == "Root Vegetables")
-                          .where((product) => product.ownerId == uid)
-                          .toList());
+                  product = state.products
+                      .where((product) => product.category == "Root Vegetables")
+                      .where((product) => product.ownerId == widget.uid)
+                      .toList();
+                  searchedproduct = [];
+                  for (int x = 0; x < product.length; x++) {
+                    name = product[x].name.toLowerCase();
+
+                    if (name.contains(search)) {
+                      searchedproduct.add(product[x]);
+                    }
+                  }
+                  return ProductCarousel(products: searchedproduct);
                 } else {
                   return Text("Sorry");
                 }
