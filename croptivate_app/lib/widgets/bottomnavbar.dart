@@ -145,7 +145,6 @@ class _BottomNavBarState extends State<BottomNavBar> {
                     querySnapshot.docs.forEach((doc) {
                       if (_auth.currentUser?.uid == doc.id) {
                         name = doc['first name'] + ' ' + doc['last name'];
-                        print(name);
                       } else {
                         print("something went wrong");
                       }
