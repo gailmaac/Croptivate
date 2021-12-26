@@ -36,26 +36,6 @@ class _HomeSellerState extends State<HomeSeller> {
     super.initState();
   }
 
-  getuser(String buyer) async {
-    try {
-      await FirebaseFirestore.instance
-          .collection('userBuyer')
-          .get()
-          .then((querySnapshot) {
-        querySnapshot.docs.forEach((doc) {
-          if (buyer == doc.id) {
-            setState(() {
-              name = doc['first name'] + ' ' + doc['last name'];
-            });
-          }
-        });
-      });
-    } catch (e) {
-      print(e.toString());
-      return null;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -162,16 +142,42 @@ class _HomeSellerState extends State<HomeSeller> {
   }
 }
 
-class Showtoship extends StatelessWidget {
+class Showtoship extends StatefulWidget {
   final owner;
   const Showtoship({Key? key, this.owner}) : super(key: key);
+
+  @override
+  State<Showtoship> createState() => _ShowtoshipState();
+}
+
+class _ShowtoshipState extends State<Showtoship> {
+  String name = '';
+  getuser(String buyer) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('userBuyer')
+          .get()
+          .then((querySnapshot) {
+        querySnapshot.docs.forEach((doc) {
+          if (buyer == doc.id) {
+            setState(() {
+              name = doc['first name'] + ' ' + doc['last name'];
+            });
+          }
+        });
+      });
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('Orders')
-            .where("Seller", isEqualTo: owner)
+            .where("Seller", isEqualTo: widget.owner)
             .where("To Ship", isEqualTo: "true")
             .snapshots(),
         builder: (context, snapshot) {
@@ -180,11 +186,12 @@ class Showtoship extends StatelessWidget {
               child: Text('No Orders to Ship'),
             );
           }
+
           return ListView.builder(
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (context, i) {
                 QueryDocumentSnapshot x = snapshot.data!.docs[i];
-
+                getuser(x['Buyer']);
                 return InkWell(
                     onTap: () {
                       Navigator.push(
@@ -194,6 +201,7 @@ class Showtoship extends StatelessWidget {
                                     fr: 'Seller',
                                     buyer: x['Buyer'].toString(),
                                     dateordered: x['Date ordered'].toString(),
+                                    orderid: x.id,
                                   )));
                     },
                     child: Padding(
@@ -243,6 +251,7 @@ class Showtoship extends StatelessWidget {
                                                           dateordered:
                                                               x['Date ordered']
                                                                   .toString(),
+                                                          orderid: x.id,
                                                         )));
                                           },
                                           child: Text("View Order Details",
@@ -255,7 +264,7 @@ class Showtoship extends StatelessWidget {
                                     ],
                                   ),
                                   Text(
-                                    "sampleLBzkB6f0wVdPOVgw",
+                                    x.id,
                                     style: TextStyle(
                                         fontFamily: 'Poppins',
                                         fontSize: 18,
@@ -273,7 +282,7 @@ class Showtoship extends StatelessWidget {
                                         fontWeight: FontWeight.w600),
                                   ),
                                   Text(
-                                    'name',
+                                    name,
                                     style: TextStyle(
                                         fontFamily: 'Poppins',
                                         fontSize: 18,
@@ -288,7 +297,7 @@ class Showtoship extends StatelessWidget {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        "Total: #total",
+                                        "Total: " + x['total'].toString(),
                                         style: TextStyle(
                                             fontFamily: 'Poppins',
                                             fontSize: 18,
@@ -298,7 +307,15 @@ class Showtoship extends StatelessWidget {
                                       ElevatedButton(
                                           style: ElevatedButton.styleFrom(
                                               primary: cGreen),
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            FirebaseFirestore.instance
+                                                .collection('Orders')
+                                                .doc(x.id)
+                                                .update({
+                                              'To Ship': 'false',
+                                              'Shipping': 'true'
+                                            });
+                                          },
                                           child: Text(
                                             "Ship Order",
                                             style: TextStyle(
@@ -316,16 +333,42 @@ class Showtoship extends StatelessWidget {
   }
 }
 
-class Shipping extends StatelessWidget {
+class Shipping extends StatefulWidget {
   final owner;
   const Shipping({Key? key, this.owner}) : super(key: key);
+
+  @override
+  State<Shipping> createState() => _ShippingState();
+}
+
+class _ShippingState extends State<Shipping> {
+  String name = '';
+  getuser(String buyer) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('userBuyer')
+          .get()
+          .then((querySnapshot) {
+        querySnapshot.docs.forEach((doc) {
+          if (buyer == doc.id) {
+            setState(() {
+              name = doc['first name'] + ' ' + doc['last name'];
+            });
+          }
+        });
+      });
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('Orders')
-            .where("Seller", isEqualTo: owner)
+            .where("Seller", isEqualTo: widget.owner)
             .where("Shipping", isEqualTo: "true")
             .snapshots(),
         builder: (context, snapshot) {
@@ -339,33 +382,171 @@ class Shipping extends StatelessWidget {
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (context, i) {
                 QueryDocumentSnapshot x = snapshot.data!.docs[i];
-
-                return ListTile(
-                  tileColor: cGrey,
-                  title: Text(x['Buyer']),
-                  trailing: Text(x['Delivery Option'].toString()),
-                );
+                getuser(x['Buyer']);
+                return InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => OrdersPage(
+                                    fr: 'Seller',
+                                    buyer: x['Buyer'].toString(),
+                                    dateordered: x['Date ordered'].toString(),
+                                    orderid: x.id,
+                                  )));
+                    },
+                    child: Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                        child: Container(
+                          height: 190,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: cWhite,
+                              boxShadow: [
+                                BoxShadow(
+                                  offset: Offset(3, 6),
+                                  blurRadius: 10,
+                                  color: cGrey.withOpacity(0.6),
+                                )
+                              ]),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "Reference ID",
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(
+                                            fontFamily: 'Poppins',
+                                            fontSize: 20,
+                                            color: cBrown,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      TextButton(
+                                          onPressed: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        OrdersPage(
+                                                          fr: 'Seller',
+                                                          buyer: x['Buyer']
+                                                              .toString(),
+                                                          dateordered:
+                                                              x['Date ordered']
+                                                                  .toString(),
+                                                          orderid: x.id,
+                                                        )));
+                                          },
+                                          child: Text("View Order Details",
+                                              style: TextStyle(
+                                                  decoration:
+                                                      TextDecoration.underline,
+                                                  fontFamily: 'Poppins',
+                                                  fontSize: 13,
+                                                  color: cGreen)))
+                                    ],
+                                  ),
+                                  Text(
+                                    x.id,
+                                    style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w900,
+                                        color: cBlack),
+                                  ),
+                                  SizedBox(height: 10),
+                                  Text(
+                                    "Ordered By",
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 16,
+                                        color: cBrown,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  Text(
+                                    name,
+                                    style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w900,
+                                        color: cBlack),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "Total: " + x['total'].toString(),
+                                        style: TextStyle(
+                                            fontFamily: 'Poppins',
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w900,
+                                            color: cBlack),
+                                      ),
+                                    ],
+                                  )
+                                ]),
+                          ),
+                        )));
               });
         });
   }
 }
 
-class Completed extends StatelessWidget {
+class Completed extends StatefulWidget {
   final owner;
   const Completed({Key? key, this.owner}) : super(key: key);
+
+  @override
+  State<Completed> createState() => _CompletedState();
+}
+
+class _CompletedState extends State<Completed> {
+  String name = '';
+  getuser(String buyer) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('userBuyer')
+          .get()
+          .then((querySnapshot) {
+        querySnapshot.docs.forEach((doc) {
+          if (buyer == doc.id) {
+            setState(() {
+              name = doc['first name'] + ' ' + doc['last name'];
+            });
+          }
+        });
+      });
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('Orders')
-            .where("Seller", isEqualTo: owner)
+            .where("Seller", isEqualTo: widget.owner)
             .where("Completed", isEqualTo: "true")
             .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return Center(
-              child: Text('No Completed orders'),
+              child: Text('No Completed Orders'),
             );
           }
 
@@ -373,33 +554,171 @@ class Completed extends StatelessWidget {
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (context, i) {
                 QueryDocumentSnapshot x = snapshot.data!.docs[i];
-
-                return ListTile(
-                  tileColor: cGrey,
-                  title: Text(x['Buyer']),
-                  trailing: Text(x['Delivery Option'].toString()),
-                );
+                getuser(x['Buyer']);
+                return InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => OrdersPage(
+                                    fr: 'Seller',
+                                    buyer: x['Buyer'].toString(),
+                                    dateordered: x['Date ordered'].toString(),
+                                    orderid: x.id,
+                                  )));
+                    },
+                    child: Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                        child: Container(
+                          height: 190,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: cWhite,
+                              boxShadow: [
+                                BoxShadow(
+                                  offset: Offset(3, 6),
+                                  blurRadius: 10,
+                                  color: cGrey.withOpacity(0.6),
+                                )
+                              ]),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "Reference ID",
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(
+                                            fontFamily: 'Poppins',
+                                            fontSize: 20,
+                                            color: cBrown,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      TextButton(
+                                          onPressed: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        OrdersPage(
+                                                          fr: 'Seller',
+                                                          buyer: x['Buyer']
+                                                              .toString(),
+                                                          dateordered:
+                                                              x['Date ordered']
+                                                                  .toString(),
+                                                          orderid: x.id,
+                                                        )));
+                                          },
+                                          child: Text("View Order Details",
+                                              style: TextStyle(
+                                                  decoration:
+                                                      TextDecoration.underline,
+                                                  fontFamily: 'Poppins',
+                                                  fontSize: 13,
+                                                  color: cGreen)))
+                                    ],
+                                  ),
+                                  Text(
+                                    x.id,
+                                    style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w900,
+                                        color: cBlack),
+                                  ),
+                                  SizedBox(height: 10),
+                                  Text(
+                                    "Ordered By",
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 16,
+                                        color: cBrown,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  Text(
+                                    name,
+                                    style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w900,
+                                        color: cBlack),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "Total: " + x['total'].toString(),
+                                        style: TextStyle(
+                                            fontFamily: 'Poppins',
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w900,
+                                            color: cBlack),
+                                      ),
+                                    ],
+                                  )
+                                ]),
+                          ),
+                        )));
               });
         });
   }
 }
 
-class Cancelled extends StatelessWidget {
+class Cancelled extends StatefulWidget {
   final owner;
   const Cancelled({Key? key, this.owner}) : super(key: key);
+
+  @override
+  State<Cancelled> createState() => _CancelledState();
+}
+
+class _CancelledState extends State<Cancelled> {
+  String name = '';
+  getuser(String buyer) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('userBuyer')
+          .get()
+          .then((querySnapshot) {
+        querySnapshot.docs.forEach((doc) {
+          if (buyer == doc.id) {
+            setState(() {
+              name = doc['first name'] + ' ' + doc['last name'];
+            });
+          }
+        });
+      });
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('Orders')
-            .where("Seller", isEqualTo: owner)
+            .where("Seller", isEqualTo: widget.owner)
             .where("Refunded", isEqualTo: "true")
             .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return Center(
-              child: Text('No Cancelled orders'),
+              child: Text('No Cancelled Orders'),
             );
           }
 
@@ -407,12 +726,124 @@ class Cancelled extends StatelessWidget {
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (context, i) {
                 QueryDocumentSnapshot x = snapshot.data!.docs[i];
-
-                return ListTile(
-                  tileColor: cGrey,
-                  title: Text(x['Buyer']),
-                  trailing: Text(x['Delivery Option'].toString()),
-                );
+                getuser(x['Buyer']);
+                return InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => OrdersPage(
+                                    fr: 'Seller',
+                                    buyer: x['Buyer'].toString(),
+                                    dateordered: x['Date ordered'].toString(),
+                                    orderid: x.id,
+                                  )));
+                    },
+                    child: Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                        child: Container(
+                          height: 190,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: cWhite,
+                              boxShadow: [
+                                BoxShadow(
+                                  offset: Offset(3, 6),
+                                  blurRadius: 10,
+                                  color: cGrey.withOpacity(0.6),
+                                )
+                              ]),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "Reference ID",
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(
+                                            fontFamily: 'Poppins',
+                                            fontSize: 20,
+                                            color: cBrown,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      TextButton(
+                                          onPressed: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        OrdersPage(
+                                                          fr: 'Seller',
+                                                          buyer: x['Buyer']
+                                                              .toString(),
+                                                          dateordered:
+                                                              x['Date ordered']
+                                                                  .toString(),
+                                                          orderid: x.id,
+                                                        )));
+                                          },
+                                          child: Text("View Order Details",
+                                              style: TextStyle(
+                                                  decoration:
+                                                      TextDecoration.underline,
+                                                  fontFamily: 'Poppins',
+                                                  fontSize: 13,
+                                                  color: cGreen)))
+                                    ],
+                                  ),
+                                  Text(
+                                    x.id,
+                                    style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w900,
+                                        color: cBlack),
+                                  ),
+                                  SizedBox(height: 10),
+                                  Text(
+                                    "Ordered By",
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 16,
+                                        color: cBrown,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  Text(
+                                    name,
+                                    style: TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w900,
+                                        color: cBlack),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "Total: " + x['total'].toString(),
+                                        style: TextStyle(
+                                            fontFamily: 'Poppins',
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.w900,
+                                            color: cBlack),
+                                      ),
+                                    ],
+                                  )
+                                ]),
+                          ),
+                        )));
               });
         });
   }
