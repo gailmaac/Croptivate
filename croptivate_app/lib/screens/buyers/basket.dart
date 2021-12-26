@@ -21,11 +21,9 @@ class BasketScreen extends StatefulWidget {
   const BasketScreen(
       {Key? key, required this.allUserSellers, required this.allUserSellersid})
       : super(key: key);
-      
 
   @override
   _BasketScreenState createState() => _BasketScreenState();
-  
 }
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -42,6 +40,9 @@ int selectedtile = 0;
 List<Product> passproducts = [];
 List<int> passvalues = [];
 String passshopname = '';
+List passids = [];
+List allpostids = [];
+String sellerid = '';
 
 class _BasketScreenState extends State<BasketScreen> {
   @override
@@ -106,13 +107,15 @@ class _BasketScreenState extends State<BasketScreen> {
                     }
                     passproducts = [];
                     passvalues = [];
+                    passids = [];
                     for (int x = 0; x < allproducts.length; x++) {
                       if (allproducts[x].ownerId == shoplist[selectedtile]) {
                         passproducts.add(allproducts[x]);
                         passvalues.add(allproductvalues[x]);
+                        passids.add(allpostids[x]);
                       }
                     }
-
+                    sellerid = shoplist[selectedtile];
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -120,6 +123,8 @@ class _BasketScreenState extends State<BasketScreen> {
                                   selectedproducts: passproducts,
                                   selectedvalues: passvalues,
                                   shopname: passshopname,
+                                  selectedids: passids,
+                                  sellerid: sellerid,
                                 )));
                   },
                   child: Padding(
@@ -145,6 +150,7 @@ class _BasketScreenState extends State<BasketScreen> {
             allproductvalues = [];
             selectedproducts = [];
             selectedproductvalues = [];
+            allpostids = [];
             if (state is BasketLoading) {
               return Center(child: CircularProgressIndicator(color: cGreen));
             }
@@ -162,6 +168,7 @@ class _BasketScreenState extends State<BasketScreen> {
                     .keys
                     .elementAt(x);
                 allproducts.add(Products);
+                allpostids.add(Products.sellerPostId);
                 int Productvalue;
                 Productvalue = state.basket
                     .productQuantity(state.basket.products)
@@ -177,7 +184,6 @@ class _BasketScreenState extends State<BasketScreen> {
 
               //TRY ULIT
               return Container(
-
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -232,18 +238,17 @@ class _BasketScreenState extends State<BasketScreen> {
                                                       selectedtile = index;
                                                     });
                                                   },
-                                                  
-                                                  tileColor:
-                                                      selectedtile == index
-                                                          ? cGreen.withOpacity(0.50)
-                                                          : cGreen.withOpacity(0.10),
+                                                  tileColor: selectedtile ==
+                                                          index
+                                                      ? cGreen.withOpacity(0.50)
+                                                      : cGreen
+                                                          .withOpacity(0.10),
                                                   title: Text(
                                                     shopname[index],
                                                     style: TextStyle(
-                                                      fontSize: 18,
-                                                      fontFamily: 'Poppins',
-                                                      color: cBlack
-                                                    ),
+                                                        fontSize: 18,
+                                                        fontFamily: 'Poppins',
+                                                        color: cBlack),
                                                   ),
                                                   trailing: Icon(
                                                     selectedtile != index
