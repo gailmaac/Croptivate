@@ -14,12 +14,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class CheckoutScreen extends StatefulWidget {
   final selectedproducts;
   final selectedvalues;
+  final selectedids;
+  final sellerid;
   final shopname;
   const CheckoutScreen(
       {Key? key,
       required this.selectedproducts,
       required this.selectedvalues,
-      required this.shopname})
+      required this.selectedids,
+      required this.shopname,
+      required this.sellerid})
       : super(key: key);
 
   @override
@@ -41,6 +45,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   String PM = '';
   String dateOrdered = '';
   String ownerid = '';
+  late int stockcount;
 
   @override
   void initState() {
@@ -85,9 +90,32 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   @override
   Widget build(BuildContext context) {
+    List passids = widget.selectedids;
     computetotal();
     List<Product> selectedproducts = widget.selectedproducts;
     List<int> selectedvalues = widget.selectedvalues;
+
+    updateStockCount() async {
+      for (int x = 0; x < selectedproducts.length; x++) {
+        try {
+          await FirebaseFirestore.instance
+              .collection('sellerPosts')
+              .doc(passids[x])
+              .get()
+              .then((doc) {
+            stockcount = doc['stockCount'];
+          });
+          int newstockcount = stockcount - selectedvalues[x];
+          await FirebaseFirestore.instance
+              .collection('sellerPosts')
+              .doc(passids[x])
+              .update({'stockCount': newstockcount});
+        } catch (e) {
+          print(e.toString());
+          return null;
+        }
+      }
+    }
 
     return Scaffold(
       backgroundColor: cWhite,
@@ -141,7 +169,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
                   return ElevatedButton(
                       style: ElevatedButton.styleFrom(primary: cGreen),
-                      onPressed: () {
+                      onPressed: () async {
                         setState(() {
                           dateOrdered = DateTime.now().toString();
                         });
@@ -153,6 +181,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 .add(BasketProductRemoved(selectedproducts[y]));
                           }
                         }
+                        updateStockCount();
 
                         if (PM != '' && DO != '') {
                           StoreOrder.collection('Orders').doc().set({
@@ -161,7 +190,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             "Delivery Option": DO,
                             "Date ordered": dateOrdered,
                             "Buyer": _auth.currentUser!.uid,
-                            "Seller": ownerid,
+                            "Seller": widget.sellerid,
                             "To Ship": 'true',
                             "Shipping": 'false',
                             "Refunded": 'false',
