@@ -43,7 +43,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   int selectedPM = 0;
   String DO = '';
   String PM = '';
-  String dateOrdered = '';
+  late DateTime dateOrdered;
   String ownerid = '';
   late int stockcount;
 
@@ -171,7 +171,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       style: ElevatedButton.styleFrom(primary: cGreen),
                       onPressed: () async {
                         setState(() {
-                          dateOrdered = DateTime.now().toString();
+                          dateOrdered = DateTime.now();
                         });
 
                         for (int y = 0; y < selectedvalues.length; y++) {
@@ -184,11 +184,19 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         updateStockCount();
 
                         if (PM != '' && DO != '') {
+                          StoreOrder.collection('Notifications').doc().set({
+                            "Buyer": _auth.currentUser!.uid,
+                            "Seller": widget.sellerid,
+                            "Date": dateOrdered,
+                            "Date ordered": dateOrdered.toString(),
+                            "Status": 'OrderPlaced'
+                          });
+
                           StoreOrder.collection('Orders').doc().set({
                             "location": loc,
                             "Payment Method": PM,
                             "Delivery Option": DO,
-                            "Date ordered": dateOrdered,
+                            "Date ordered": dateOrdered.toString(),
                             "Buyer": _auth.currentUser!.uid,
                             "Seller": widget.sellerid,
                             "To Ship": 'true',
@@ -211,7 +219,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                     builder: (context) => ReferenceScreen(
                                           selectedproducts: selectedproducts,
                                           selectedvalues: selectedvalues,
-                                          dateordered: dateOrdered,
+                                          dateordered: dateOrdered.toString(),
                                           uid: _auth.currentUser!.uid,
                                         )));
                           });
