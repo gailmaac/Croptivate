@@ -22,14 +22,12 @@ Future<void> main() async {
   runApp(MyApp());
 }
 
-class SimpleBlocObserver extends BlocObserver{
+class SimpleBlocObserver extends BlocObserver {
   void onChange(BlocBase BasketBloc, Change BasketChange) {
     super.onChange(BasketBloc, BasketChange);
     if (BasketBloc is Cubit) print(BasketChange);
   }
 }
-
-
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -42,17 +40,19 @@ class MyApp extends StatelessWidget {
         providers: [
           BlocProvider(create: (_) => FavoritesBloc()..add(StartFavorites())),
           BlocProvider(create: (_) => BasketBloc()..add(BasketStarted())),
-          BlocProvider(create: (context) => BasketdataBloc(basketBloc: context.read<BasketBloc>(), basketDataRepository: BasketDataRepository())),
+          BlocProvider(
+              create: (context) => BasketdataBloc(
+                  basketBloc: context.read<BasketBloc>(),
+                  basketDataRepository: BasketDataRepository())),
           BlocProvider(
             create: (_) => CategoryBloc(
               categoryRepository: CategoryRepository(),
-              )..add(LoadCategories()),
+            )..add(LoadCategories()),
           ),
           BlocProvider(
-            create: (_) => ProductBloc(
-              productRepository: ProductRepository(),
-              )..add(LoadProducts())
-          ),
+              create: (_) => ProductBloc(
+                    productRepository: ProductRepository(),
+                  )..add(LoadProducts())),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
