@@ -388,7 +388,7 @@ class _ShippingState extends State<Shipping> {
                                                 MaterialPageRoute(
                                                     builder: (context) =>
                                                         OrdersPage(
-                                                          fr: 'Seller',
+                                                          fr: 'Buyer',
                                                           seller: x['Seller']
                                                               .toString(),
                                                           dateordered:
@@ -580,7 +580,7 @@ class _CompletedState extends State<Completed> {
                                                 MaterialPageRoute(
                                                     builder: (context) =>
                                                         OrdersPage(
-                                                          fr: 'Seller',
+                                                          fr: 'Buyer',
                                                           seller: x['Seller']
                                                               .toString(),
                                                           dateordered:
@@ -753,7 +753,7 @@ class _CancelledState extends State<Cancelled> {
                                                 MaterialPageRoute(
                                                     builder: (context) =>
                                                         OrdersPage(
-                                                          fr: 'Seller',
+                                                          fr: 'Buyer',
                                                           seller: x['Seller']
                                                               .toString(),
                                                           dateordered:
