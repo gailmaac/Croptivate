@@ -261,6 +261,16 @@ class _ShowtoshipState extends State<Showtoship> {
                                               primary: cGreen),
                                           onPressed: () {
                                             FirebaseFirestore.instance
+                                                .collection('Notifications')
+                                                .doc()
+                                                .set({
+                                              "Buyer": x['Buyer'],
+                                              "Seller": x['Seller'],
+                                              "Date ordered": x['Date ordered'],
+                                              "Date": DateTime.now(),
+                                              "Status": 'OrderCancelled'
+                                            });
+                                            FirebaseFirestore.instance
                                                 .collection('Orders')
                                                 .doc(x.id)
                                                 .update({
@@ -452,6 +462,16 @@ class _ShippingState extends State<Shipping> {
                                           style: ElevatedButton.styleFrom(
                                               primary: cGreen),
                                           onPressed: () {
+                                            FirebaseFirestore.instance
+                                                .collection('Notifications')
+                                                .doc()
+                                                .set({
+                                              "Buyer": x['Buyer'],
+                                              "Seller": x['Seller'],
+                                              "Date ordered": x['Date ordered'],
+                                              "Date": DateTime.now(),
+                                              "Status": 'OrderReceived'
+                                            });
                                             FirebaseFirestore.instance
                                                 .collection('Orders')
                                                 .doc(x.id)
