@@ -213,7 +213,7 @@ class _SellerShopState extends State<SellerShop> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text("Shop Name",
+                                        Text(widget.shopname,
                                             style: TextStyle(
                                                 fontSize: 18,
                                                 fontFamily: 'Poppins',
@@ -229,12 +229,14 @@ class _SellerShopState extends State<SellerShop> {
                                             SizedBox(
                                               width: 10,
                                             ),
-                                            Text("Shop Address",
-                                                style: TextStyle(
-                                                    fontSize: 15,
-                                                    fontFamily: 'Poppins',
-                                                    fontWeight: FontWeight.w700,
-                                                    color: cBlack)),
+                                            Flexible(
+                                              child: Text(widget.location,
+                                                  style: TextStyle(
+                                                      fontSize: 15,
+                                                      fontFamily: 'Poppins',
+                                                      fontWeight: FontWeight.w700,
+                                                      color: cBlack)),
+                                            ),
                                           ],
                                         ),
                                         SizedBox(
@@ -247,7 +249,7 @@ class _SellerShopState extends State<SellerShop> {
                                             SizedBox(
                                               width: 10,
                                             ),
-                                            Text("Opening Times",
+                                            Text("7:00AM-6:00PM",
                                                 style: TextStyle(
                                                     fontSize: 15,
                                                     fontFamily: 'Poppins',
