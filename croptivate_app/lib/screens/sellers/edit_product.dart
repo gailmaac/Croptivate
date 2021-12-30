@@ -106,7 +106,7 @@ set _imageThreeFile(XFile? value) {
     return downloadUrlThree;
   }
 
-  updatePostInFirestore({String? imageUrlOne, 
+  Future updatePostInFirestore({String? imageUrlOne, 
                     String? imageUrlTwo, 
                     String? imageUrlThree, 
                     String? category,
@@ -117,11 +117,11 @@ set _imageThreeFile(XFile? value) {
                     String? weight,
                     int? weightCount,
                     int? stockCount, 
-                    double? price, }) {
+                    double? price, }) async {
                      //String? wholesale, //String? count String? location
-    postRef
+    return await postRef
     .doc(postId)
-    .update({
+    .set({
       // "postId": postId,
       "ownerId": _auth.currentUser!.uid,
       "imageUrlOne": imageUrlOne,

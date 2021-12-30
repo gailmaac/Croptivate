@@ -428,10 +428,26 @@ class _OrdersPageState extends State<OrdersPage> {
                                     itemBuilder: (context, index) {
                                       return ListTile(
                                         leading:
-                                            Text(Itemvalues[index].toString()),
-                                        title: Text(Itemsordered[index]),
+                                            Text(
+                                              Itemvalues[index].toString()+"x",
+                                              style: TextStyle(
+                                                fontFamily: 'Poppins',
+                                                fontSize: 18,
+                                                color: cBlack
+                                              )),
+                                        title: Text(Itemsordered[index],
+                                        style: TextStyle(
+                                                fontFamily: 'Poppins',
+                                                fontSize: 18,
+                                                color: cBlack
+                                              )),
                                         trailing:
-                                            Text(Itemprice[index].toString()),
+                                            Text(Itemprice[index].toString(),
+                                            style: TextStyle(
+                                                fontFamily: 'Poppins',
+                                                fontSize: 18,
+                                                color: cBlack
+                                              )),
                                       );
                                     },
                                   ),
@@ -810,10 +826,25 @@ class _OrdersPageState extends State<OrdersPage> {
                                     itemBuilder: (context, index) {
                                       return ListTile(
                                         leading:
-                                            Text(Itemvalues[index].toString()),
-                                        title: Text(Itemsordered[index]),
+                                            Text(Itemvalues[index].toString()+"x",
+                                            style: TextStyle(
+                                                fontFamily: 'Poppins',
+                                                fontSize: 18,
+                                                color: cBlack
+                                              )),
+                                        title: Text(Itemsordered[index],
+                                        style: TextStyle(
+                                                fontFamily: 'Poppins',
+                                                fontSize: 18,
+                                                color: cBlack
+                                              )),
                                         trailing:
-                                            Text(Itemprice[index].toString()),
+                                            Text(Itemprice[index].toString(),
+                                            style: TextStyle(
+                                                fontFamily: 'Poppins',
+                                                fontSize: 18,
+                                                color: cBlack
+                                              )),
                                       );
                                     },
                                   ),
@@ -877,7 +908,8 @@ class _OrdersPageState extends State<OrdersPage> {
                                 ),
                               )
                             ],
-                          )
+                          ),
+                          
                         ],
                       ),
                     ),
@@ -926,11 +958,13 @@ class _OrdersPageState extends State<OrdersPage> {
                                       fontSize: 20,
                                       color: cGreen,
                                       fontWeight: FontWeight.w800))
-                            ]
+                            ],
+                            
                           ],
                         ),
                       ),
-                    ))
+                    )),
+                    SizedBox(height: 20)
                   ],
                 ),
               ));
