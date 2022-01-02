@@ -30,6 +30,12 @@ class _BottomNavBarState extends State<BottomNavBar> {
   int Notifs = 0;
   List allUserSellers = [];
   List allUserSellersid = [];
+  String firstname = '';
+  String lastname = '';
+  String name = '';
+  String location = '';
+  String contactnumber = '';
+  String profilepic = '';
 
   @override
   void initState() {
@@ -37,6 +43,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
     getuserSeller();
     getContacts();
     countnotifs();
+    getuser();
   }
 
   countnotifs() {
@@ -47,6 +54,34 @@ class _BottomNavBarState extends State<BottomNavBar> {
     setState(() {
       Notifs = y;
     });
+  }
+
+  getuser() async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('userBuyer')
+          .get()
+          .then((querySnapshot) {
+        querySnapshot.docs.forEach((doc) {
+          if (_auth.currentUser!.uid == doc.id) {
+            setState(() {
+              firstname = doc['first name'];
+              lastname = doc['last name'];
+              name = doc['first name'] + ' ' + doc['last name'];
+              contactnumber = doc['contact number'].toString();
+              location = doc['location'];
+              profilepic = doc['Profile Picture'].toString();
+            });
+          }
+        });
+      }).whenComplete(() {
+        setState(() {
+          loading = false;
+        });
+      });
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   getContacts() async {
@@ -135,23 +170,17 @@ class _BottomNavBarState extends State<BottomNavBar> {
               ),
             ),
             IconButton(
-                onPressed: () async {
-                  var name = '';
-                  var address = '';
-                  await FirebaseFirestore.instance
-                      .collection('userBuyer')
-                      .get()
-                      .then((querySnapshot) {
-                    querySnapshot.docs.forEach((doc) {
-                      if (_auth.currentUser?.uid == doc.id) {
-                        name = doc['first name'] + ' ' + doc['last name'];
-                      } else {
-                        print("something went wrong");
-                      }
-                    });
-                  });
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => UserProfile()));
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => UserProfile(
+                                firstname: firstname,
+                                lastname: lastname,
+                                contactnumber: contactnumber,
+                                location: location,
+                                profilepic: profilepic,
+                              )));
                 },
                 icon: Icon(
                   Icons.person_outline_rounded,
