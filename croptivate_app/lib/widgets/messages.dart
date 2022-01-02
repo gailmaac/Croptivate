@@ -490,13 +490,7 @@ class Showmessages extends StatelessWidget {
                               ),
                       ),
                     ],
-                  ),
-                  trailing: sender == x['sender']
-                      ? CircleAvatar(
-                          backgroundColor: cGreen,
-                          radius: 10,
-                        )
-                      : CircleAvatar(backgroundColor: cWhite, radius: 10));
+                  ));
             });
       },
     );
