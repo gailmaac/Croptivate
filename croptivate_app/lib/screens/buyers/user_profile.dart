@@ -14,16 +14,22 @@ import 'package:croptivate_app/shared/loading.dart';
 import 'package:croptivate_app/services/database.dart';
 
 class UserProfile extends StatefulWidget {
-  const UserProfile({Key? key}) : super(key: key);
+  final firstname;
+  final lastname;
+  final location;
+  final contactnumber;
+  final profilepic;
+  const UserProfile(
+      {Key? key,
+      required this.firstname,
+      required this.lastname,
+      required this.location,
+      required this.contactnumber,
+      required this.profilepic})
+      : super(key: key);
 
   @override
   _UserProfileState createState() => _UserProfileState();
-  static const String routeName = '/userprofilebuyer';
-  static Route route() {
-    return MaterialPageRoute(
-        settings: RouteSettings(name: routeName),
-        builder: (_) => UserProfile());
-  }
 }
 
 bool loading = true;
@@ -31,46 +37,15 @@ String resultuser = '';
 
 class _UserProfileState extends State<UserProfile> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  String name = '';
-  String location = '';
-  String contactnumber = '';
-  String profilepic = '';
-
-  getuser() async {
-    try {
-      await FirebaseFirestore.instance
-          .collection('userBuyer')
-          .get()
-          .then((querySnapshot) {
-        querySnapshot.docs.forEach((doc) {
-          if (_auth.currentUser!.uid == doc.id) {
-            setState(() {
-              name = doc['first name'] + ' ' + doc['last name'];
-              contactnumber = doc['contact number'].toString();
-              location = doc['location'];
-              profilepic = doc['Profile Picture'].toString();
-            });
-          }
-        });
-      }).whenComplete(() {
-        setState(() {
-          loading = false;
-        });
-      });
-    } catch (e) {
-      print(e.toString());
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
-    getuser();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: Text(
-          name,
+          widget.firstname.toString() + ' ' + widget.lastname.toString(),
           style: TextStyle(
             fontFamily: 'Poppins',
             color: cGreen,
@@ -93,114 +68,99 @@ class _UserProfileState extends State<UserProfile> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Column(
-              children: [
-                // getusers()
-              ],
-            ),
             SizedBox(height: 20),
             loading == false
                 ? Center(
-                  child: CircleAvatar(
-                    radius: 80.0,
-                    child: ClipOval(
-                      child: Image.network(
-                        profilepic,
+                    child: CircleAvatar(
+                      radius: 80.0,
+                      child: ClipOval(
+                          child: Image.network(
+                        widget.profilepic,
                         fit: BoxFit.cover,
                         width: 160.0,
                         height: 160.0,
-                      )
+                      )),
                     ),
-                  ),
-                )
+                  )
                 : Image.asset(
                     "assets/addpic.png",
                     height: 160,
                     width: 160,
                   ),
             SizedBox(height: 20),
-      
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Row(
                 children: [
-                  Icon(
-                    Icons.person_outline_rounded,
-                    color: cGreen
+                  Icon(Icons.person_outline_rounded, color: cGreen),
+                  SizedBox(
+                    width: 40,
                   ),
-                  SizedBox(width: 40,),
                   Flexible(
                     child: Text(
-                      name,
+                      widget.firstname.toString() +
+                          ' ' +
+                          widget.lastname.toString(),
                       style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 22,
-                        fontWeight: FontWeight.w500,
-                        color: cBlack
-                      ),
+                          fontFamily: 'Poppins',
+                          fontSize: 22,
+                          fontWeight: FontWeight.w500,
+                          color: cBlack),
                     ),
                   ),
                 ],
               ),
             ),
-      
             Divider(),
-      
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               child: Row(
                 children: [
-                  Icon(
-                    Icons.phone_android_rounded,
-                    color: cGreen
+                  Icon(Icons.phone_android_rounded, color: cGreen),
+                  SizedBox(
+                    width: 40,
                   ),
-                  SizedBox(width: 40,),
                   Text(
-                    "+63" + contactnumber,
+                    "0" + widget.contactnumber,
                     style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 22,
-                      fontWeight: FontWeight.w500,
-                      color: cBlack
-                    ),
+                        fontFamily: 'Poppins',
+                        fontSize: 22,
+                        fontWeight: FontWeight.w500,
+                        color: cBlack),
                   ),
                 ],
               ),
             ),
-      
             Divider(),
-      
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               child: Row(
                 children: [
-                  Icon(
-                    Icons.location_on_outlined,
-                    color: cGreen
+                  Icon(Icons.location_on_outlined, color: cGreen),
+                  SizedBox(
+                    width: 40,
                   ),
-                  SizedBox(width: 40,),
                   Flexible(
                     child: Text(
-                      location,
+                      widget.location,
                       style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 22,
-                        fontWeight: FontWeight.w500,
-                        color: cBlack
-                      ),
+                          fontFamily: 'Poppins',
+                          fontSize: 22,
+                          fontWeight: FontWeight.w500,
+                          color: cBlack),
                     ),
                   ),
                 ],
               ),
             ),
-      
             Divider(),
-      
             SizedBox(height: 20),
             myOrdersbutton(),
             SizedBox(height: 5),
             editProfilebutton(),
-            SizedBox(height: 10,),
+            SizedBox(
+              height: 10,
+            ),
             signOutButton()
           ],
         ),
@@ -211,58 +171,58 @@ class _UserProfileState extends State<UserProfile> {
   Widget myOrdersbutton() {
     return TextButton(
       onPressed: () {
-        Navigator.push(context, MaterialPageRoute(
-          builder: (context) => MyOrders()
-        ));
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => MyOrders()));
       },
       child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.storefront_outlined,
-                      color: cGreen
-                    ),
-                    SizedBox(width: 40,),
-                    Flexible(
-                      child: Text(
-                        "My Orders",
-                        style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 22,
-                          fontWeight: FontWeight.w800,
-                          color: cBlack,
-                          
-                        ),
-                      ),
-                    ),
-                  ],
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        child: Row(
+          children: [
+            Icon(Icons.storefront_outlined, color: cGreen),
+            SizedBox(
+              width: 40,
+            ),
+            Flexible(
+              child: Text(
+                "My Orders",
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                  fontSize: 22,
+                  fontWeight: FontWeight.w800,
+                  color: cBlack,
                 ),
               ),
+            ),
+          ],
+        ),
+      ),
     );
   }
-
 
   //Edit Profile Button
   Widget editProfilebutton() {
     return TextButton(
-        onPressed: () {
-          Navigator.push(context,
-          MaterialPageRoute(builder: (context) => EditProfileBuyer()));
-        },
-        child: 
-          Text("Edit My Profile",
-            style: TextStyle(
-              decoration: TextDecoration.underline,
-              fontSize: 20,
-              color: cGreen,
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.bold,
-            )
-          ),
-        );
+      onPressed: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => EditProfileBuyer(
+                    firstname: widget.firstname,
+                    lastname: widget.lastname,
+                    location: widget.location,
+                    contactnumber: widget.contactnumber,
+                    profilepic: widget.profilepic)));
+      },
+      child: Text("Edit My Profile",
+          style: TextStyle(
+            decoration: TextDecoration.underline,
+            fontSize: 20,
+            color: cGreen,
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.bold,
+          )),
+    );
   }
-
 
   //Sign Out Button
   Widget signOutButton() {
