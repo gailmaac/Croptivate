@@ -20,7 +20,8 @@ class UserProfileSeller extends StatefulWidget {
 
 class _UserProfileSellerState extends State<UserProfileSeller> {
   bool loading = true;
-  String name = '';
+  String firstname = '';
+  String lastname = '';
   String location = '';
   String contactnumber = '';
   String profilepic = '';
@@ -37,7 +38,8 @@ class _UserProfileSellerState extends State<UserProfileSeller> {
         querySnapshot.docs.forEach((doc) {
           if (_auth.currentUser!.uid == doc.id) {
             setState(() {
-              name = doc['first name'] + ' ' + doc['last name'];
+              firstname = doc['first name'];
+              lastname = doc['last name'];
               contactnumber = doc['contact number'].toString();
               location = doc['location'];
               profilepic = doc['Profile Picture'].toString();
@@ -61,7 +63,7 @@ class _UserProfileSellerState extends State<UserProfileSeller> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: Text(
-          name,
+          firstname.toString() + ' ' + lastname.toString(),
           style: TextStyle(
             fontFamily: 'Poppins',
             color: cGreen,
@@ -92,119 +94,103 @@ class _UserProfileSellerState extends State<UserProfileSeller> {
             SizedBox(height: 20),
             loading == false
                 ? Center(
-                  child: CircleAvatar(
-                    radius: 80.0,
-                    child: ClipOval(
-                      child: Image.network(
+                    child: CircleAvatar(
+                      radius: 80.0,
+                      child: ClipOval(
+                          child: Image.network(
                         profilepic,
                         fit: BoxFit.cover,
                         width: 160.0,
                         height: 160.0,
-                      )
+                      )),
                     ),
-                  ),
-                )
+                  )
                 : Image.asset(
                     "assets/addpic.png",
                     height: 160,
                     width: 160,
                   ),
             SizedBox(height: 20),
-      
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Row(
                 children: [
-                  Icon(
-                    Icons.person_outline_rounded,
-                    color: cGreen
+                  Icon(Icons.person_outline_rounded, color: cGreen),
+                  SizedBox(
+                    width: 40,
                   ),
-                  SizedBox(width: 40,),
                   Flexible(
                     child: Text(
-                      name,
+                      firstname.toString() + ' ' + lastname.toString(),
                       style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 22,
+                          fontWeight: FontWeight.w500,
+                          color: cBlack),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Divider(),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              child: Row(
+                children: [
+                  Icon(Icons.phone_android_rounded, color: cGreen),
+                  SizedBox(
+                    width: 40,
+                  ),
+                  Text(
+                    "0" + contactnumber,
+                    style: TextStyle(
                         fontFamily: 'Poppins',
                         fontSize: 22,
                         fontWeight: FontWeight.w500,
-                        color: cBlack
-                      ),
-                    ),
+                        color: cBlack),
                   ),
                 ],
               ),
             ),
-      
             Divider(),
-      
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               child: Row(
                 children: [
-                  Icon(
-                    Icons.phone_android_rounded,
-                    color: cGreen
+                  Icon(Icons.location_on_outlined, color: cGreen),
+                  SizedBox(
+                    width: 40,
                   ),
-                  SizedBox(width: 40,),
-                  Text(
-                    "+63" + contactnumber,
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 22,
-                      fontWeight: FontWeight.w500,
-                      color: cBlack
-                    ),
-                  ),
-                ],
-              ),
-            ),
-      
-            Divider(),
-      
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.location_on_outlined,
-                    color: cGreen
-                  ),
-                  SizedBox(width: 40,),
                   Flexible(
                     child: Text(
                       location,
                       style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 22,
-                        fontWeight: FontWeight.w500,
-                        color: cBlack
-                      ),
+                          fontFamily: 'Poppins',
+                          fontSize: 22,
+                          fontWeight: FontWeight.w500,
+                          color: cBlack),
                     ),
                   ),
                 ],
               ),
             ),
-      
             Divider(),
-      
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
               child: Row(
                 children: [
-                  Icon(
-                    Icons.store_outlined,
-                    color: cGreen
+                  Icon(Icons.store_outlined, color: cGreen),
+                  SizedBox(
+                    width: 40,
                   ),
-                  SizedBox(width: 40,),
                   Flexible(
                     child: Text(
                       shopname,
                       style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 22,
-                        fontWeight: FontWeight.w500,
-                        color: cBlack
-                      ),
+                          fontFamily: 'Poppins',
+                          fontSize: 22,
+                          fontWeight: FontWeight.w500,
+                          color: cBlack),
                     ),
                   ),
                 ],
@@ -212,9 +198,10 @@ class _UserProfileSellerState extends State<UserProfileSeller> {
             ),
             Divider(),
             SizedBox(height: 20),
-      
             editProfilebutton(),
-            SizedBox(height: 10,),
+            SizedBox(
+              height: 10,
+            ),
             signOutButton()
           ],
         ),
@@ -225,23 +212,29 @@ class _UserProfileSellerState extends State<UserProfileSeller> {
   //Edit Profile Button
   Widget editProfilebutton() {
     return TextButton(
-        onPressed: () {
-          Navigator.push(context,
-          MaterialPageRoute(builder: (context) => EditProfile()));
-        },
-        child: 
-          Text("Edit My Profile",
-            style: TextStyle(
-              decoration: TextDecoration.underline,
-              fontSize: 20,
-              color: cGreen,
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.bold,
-            )
-          ),
-        );
+      onPressed: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => EditProfile(
+                      firstname: firstname,
+                      lastname: lastname,
+                      shopname: shopname,
+                      location: location,
+                      profilepic: profilepic,
+                      contactnumber: contactnumber,
+                    )));
+      },
+      child: Text("Edit My Profile",
+          style: TextStyle(
+            decoration: TextDecoration.underline,
+            fontSize: 20,
+            color: cGreen,
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.bold,
+          )),
+    );
   }
-
 
   //Sign Out Button
   Widget signOutButton() {
