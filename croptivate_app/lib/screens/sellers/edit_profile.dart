@@ -14,153 +14,190 @@ import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 
 class EditProfile extends StatefulWidget {
+  final firstname;
+  final lastname;
+  final location;
+  final contactnumber;
+  final profilepic;
+  final shopname;
+  const EditProfile(
+      {Key? key,
+      required this.firstname,
+      required this.lastname,
+      required this.location,
+      required this.contactnumber,
+      required this.shopname,
+      required this.profilepic})
+      : super(key: key);
 
   @override
   _EditProfileState createState() => _EditProfileState();
-  
 }
 
 class _EditProfileState extends State<EditProfile> {
   final _formKey = GlobalKey<FormState>();
+  final sellerPic = FirebaseStorage.instance.ref();
+  bool profilepicChanged = false;
+  final buyerInfo = FirebaseFirestore.instance.collection('userSeller');
   bool loading = true;
-  String name = '';
-  String location = '';
-  String contactnumber = '';
-  String profilepic = '';
-  String shopname = '';
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
-  TextEditingController nameController = new TextEditingController();
+  String profilepic = '';
+  TextEditingController firstnameController = new TextEditingController();
+  TextEditingController lastnameController = new TextEditingController();
   TextEditingController numberController = new TextEditingController();
   TextEditingController locationController = new TextEditingController();
   TextEditingController shopnameController = new TextEditingController();
-
-  getuser() async {
-    // print(_auth.currentUser!.uid);
-    try {
-      await FirebaseFirestore.instance
-          .collection('userSeller')
-          .get()
-          .then((querySnapshot) {
-        querySnapshot.docs.forEach((doc) {
-          if (_auth.currentUser!.uid == doc.id) {
-            setState(() {
-              name = doc['first name'] + ' ' + doc['last name'];
-              contactnumber = doc['contact number'].toString();
-              location = doc['location'];
-              profilepic = doc['Profile Picture'].toString();
-              shopname = doc['shop name'];
-            });
-          }
-        });
-      }).whenComplete(() {
-        loading = false;
-      });
-    } catch (e) {
-      // print(e.toString());
-    }
-  }
+  String sellerId = Uuid().v4();
 
   void initState() {
     super.initState();
-    nameController.text = name;
-    numberController.text = contactnumber;
-    locationController.text = location;
-    shopnameController.text = shopname;
+    firstnameController.text = widget.firstname.toString();
+    lastnameController.text = widget.lastname.toString();
+    numberController.text = '0' + widget.contactnumber.toString();
+    locationController.text = widget.location.toString();
+    profilepic = widget.profilepic;
+    shopnameController.text = widget.shopname;
   }
 
-  File ? image;
+  File? image;
   set _imageFile(XFile? value) {
     image = (value == null ? null : [value]) as File?;
   }
 
-  Future chooseImage(ImageSource source) async {
+  Future updatePostInFirestore({
+    String? profilepic,
+    String? firstname,
+    String? lastname,
+    int? contactnumber,
+    String? location,
+    String? shopname,
+  }) async {
+    return await FirebaseFirestore.instance
+        .collection('userSeller')
+        .doc(_auth.currentUser!.uid)
+        .update({
+      "Profile Picture": profilepic,
+      "contact number": contactnumber,
+      "first name": firstname,
+      "last name": lastname,
+      "location": location,
+      "shop name": shopname,
+    }).whenComplete(() {
+      setState(() {
+        loading = false;
+      });
+    });
+  }
 
+  handleUpdate() async {
+    String accimage;
+    if (profilepicChanged == true) {
+      accimage = await uploadaccImage(image);
+    } else {
+      accimage = widget.profilepic;
+    }
+
+    updatePostInFirestore(
+        profilepic: accimage,
+        location: locationController.text,
+        firstname: firstnameController.text,
+        lastname: lastnameController.text,
+        contactnumber: int.parse(numberController.text),
+        shopname: shopnameController.text);
+    firstnameController.clear();
+    lastnameController.clear();
+    numberController.clear();
+    locationController.clear();
+    shopnameController.clear();
+    setState(() {
+      Navigator.pushNamed(context, '/homeseller');
+    });
+  }
+
+  uploadaccImage(accImage) async {
+    UploadTask uploadImage =
+        sellerPic.child("sellerImage_$sellerId.jpg").putFile(accImage);
+    TaskSnapshot storageImage = await uploadImage;
+    String downloadImage = await storageImage.ref.getDownloadURL();
+    return downloadImage;
+  }
+
+  Future chooseImage(ImageSource source) async {
     try {
       final image = await ImagePicker().pickImage(source: source);
-    if (image == null) return;
+      if (image == null) return;
 
-    final imageTemporary = File(image.path);
-    setState(() => this.image = imageTemporary);
-    } on PlatformException catch(error) {
+      final imageTemporary = File(image.path);
+      setState(() => this.image = imageTemporary);
+    } on PlatformException catch (error) {
       print("Failed to pick image: $error");
     }
   }
 
   selectImage(parentContext) {
     return showDialog(
-      context: parentContext,
-      builder: (context) {
-        return SimpleDialog(
-          title: Text("Update Profile Picture",
-          style: TextStyle(
-            fontFamily: 'Poppins',
-            fontWeight: FontWeight.bold,
-            fontSize: 20
-          )),
-          children: <Widget>[
-            SimpleDialogOption(
-              child: TextButton(
-                child: Text("Take Picture with Camera",
-                style: TextStyle(
-                    color: cGreen,
-                    fontFamily: 'Poppins'
-                  ),
-                ),
-              onPressed: () => chooseImage(ImageSource.camera),
-              )
-            ),
-            SimpleDialogOption(
-              child: TextButton(
-                child: Text("Choose Image from Gallery",
+        context: parentContext,
+        builder: (context) {
+          return SimpleDialog(
+              title: Text("Update Profile Picture",
                   style: TextStyle(
-                    color: cGreen,
-                    fontFamily: 'Poppins'
+                      fontFamily: 'Poppins',
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20)),
+              children: <Widget>[
+                SimpleDialogOption(
+                    child: TextButton(
+                  child: Text(
+                    "Take Picture with Camera",
+                    style: TextStyle(color: cGreen, fontFamily: 'Poppins'),
                   ),
-                ),
-                onPressed: () => chooseImage(ImageSource.gallery),
-              )
-            ),
-            SimpleDialogOption(
-              child: Text("Cancel"),
-              onPressed: () => Navigator.pop(context),
-            )
-          ]
-        );
-      }
-    );
+                  onPressed: () => chooseImage(ImageSource.camera),
+                )),
+                SimpleDialogOption(
+                    child: TextButton(
+                  child: Text(
+                    "Choose Image from Gallery",
+                    style: TextStyle(color: cGreen, fontFamily: 'Poppins'),
+                  ),
+                  onPressed: () => chooseImage(ImageSource.gallery),
+                )),
+                SimpleDialogOption(
+                  child: Text("Cancel"),
+                  onPressed: () => Navigator.pop(context),
+                )
+              ]);
+        });
   }
 
   Widget buildEditIcon() => buildCircle(
-    all: 3, 
-    color: cWhite,
-    child: buildCircle(
-      color: cGreen,
-      all: 8,
-      child: Icon(
-        Icons.edit_outlined,
-        size: 20,
+        all: 3,
         color: cWhite,
-      ),
-    ),
-  );
+        child: buildCircle(
+          color: cGreen,
+          all: 8,
+          child: Icon(
+            Icons.edit_outlined,
+            size: 20,
+            color: cWhite,
+          ),
+        ),
+      );
 
   Widget buildCircle({
     required Widget child,
     required double all,
     required Color color,
-  }) => 
-    ClipOval(
-      child: Container(
-        child: child,
-        padding: EdgeInsets.all(all),
-        color: color,
-      ),
-    );
+  }) =>
+      ClipOval(
+        child: Container(
+          child: child,
+          padding: EdgeInsets.all(all),
+          color: color,
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {
-    getuser();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -191,149 +228,138 @@ class _EditProfileState extends State<EditProfile> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Column(
-                children: [
-                  // getusers()
-                ],
-              ),
               SizedBox(height: 20),
-              Stack(
-                children: [ 
-                  InkWell(
-                  onTap: () {
-                    selectImage(context);
-                  },
-                  child: image == null 
-                      ? CircleAvatar(
-                          radius: 80.0,
-                          child: ClipOval(
-                            child: Image.network(
-                              profilepic,
+              Stack(children: [
+                InkWell(
+                    onTap: () {
+                      setState(() {
+                        profilepicChanged = true;
+                      });
+                      selectImage(context);
+                    },
+                    child: image == null
+                        ? CircleAvatar(
+                            radius: 80.0,
+                            child: ClipOval(
+                                child: Image.network(
+                              widget.profilepic,
                               fit: BoxFit.cover,
                               width: 160.0,
                               height: 160.0,
-                            )
-                          ),
-                        )
-                      : Container(
-                          height: 160,
-                          width: 160,
-                          child: ClipOval(
-                            child: Image.file(
+                            )),
+                          )
+                        : Container(
+                            height: 160,
+                            width: 160,
+                            child: ClipOval(
+                                child: Image.file(
                               File(image!.path),
                               fit: BoxFit.cover,
                               width: 160.0,
                               height: 160.0,
-                            )
-                          )
-                        )  
-                  ),
-                  Positioned(
-                  bottom: 0,
-                  right: 4,
-                  child: InkWell(
-                    onTap: () {
-                      selectImage(context);            
-                    },
-                    child: buildEditIcon()))
-                ]
-              ),
+                            )))),
+                Positioned(
+                    bottom: 0,
+                    right: 4,
+                    child: InkWell(
+                        onTap: () {
+                          selectImage(context);
+                        },
+                        child: buildEditIcon()))
+              ]),
               SizedBox(height: 20),
-              
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 child: Row(
                   children: [
-                    Icon(
-                      Icons.person_outline_rounded,
-                      color: cGreen
+                    Icon(Icons.person_outline_rounded, color: cGreen),
+                    SizedBox(
+                      width: 40,
                     ),
-                    SizedBox(width: 40,),
                     Flexible(
                       child: TextFormField(
-                        controller: nameController,
+                        controller: firstnameController,
                         style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 22,
-                          fontWeight: FontWeight.w500,
-                          color: cBlack
-                        ),
+                            fontFamily: 'Poppins',
+                            fontSize: 22,
+                            fontWeight: FontWeight.w500,
+                            color: cBlack),
                       ),
                     ),
-                  ],
-                ),
-              ),
-              
-              Divider(),
-              
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.phone_android_rounded,
-                      color: cGreen
-                    ),
-                    SizedBox(width: 40,),
-                    Text(
-                      contactnumber,
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 22,
-                        fontWeight: FontWeight.w500,
-                        color: cBlack
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              
-              Divider(),
-              
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.location_on_outlined,
-                      color: cGreen
-                    ),
-                    SizedBox(width: 40,),
                     Flexible(
-                      child: Text(
-                        location,
+                      child: TextFormField(
+                        controller: lastnameController,
                         style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 22,
-                          fontWeight: FontWeight.w500,
-                          color: cBlack
-                        ),
+                            fontFamily: 'Poppins',
+                            fontSize: 22,
+                            fontWeight: FontWeight.w500,
+                            color: cBlack),
                       ),
                     ),
                   ],
                 ),
               ),
-              
               Divider(),
-              
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                 child: Row(
                   children: [
-                    Icon(
-                      Icons.store_outlined,
-                      color: cGreen
+                    Icon(Icons.phone_android_rounded, color: cGreen),
+                    SizedBox(
+                      width: 40,
                     ),
-                    SizedBox(width: 40,),
                     Flexible(
-                      child: Text(
-                        shopname,
+                      child: TextFormField(
+                        controller: numberController,
                         style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 22,
-                          fontWeight: FontWeight.w500,
-                          color: cBlack
-                        ),
+                            fontFamily: 'Poppins',
+                            fontSize: 22,
+                            fontWeight: FontWeight.w500,
+                            color: cBlack),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Divider(),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                child: Row(
+                  children: [
+                    Icon(Icons.location_on_outlined, color: cGreen),
+                    SizedBox(
+                      width: 40,
+                    ),
+                    Flexible(
+                      child: TextFormField(
+                        controller: locationController,
+                        style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 22,
+                            fontWeight: FontWeight.w500,
+                            color: cBlack),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Divider(),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                child: Row(
+                  children: [
+                    Icon(Icons.store_outlined, color: cGreen),
+                    SizedBox(
+                      width: 40,
+                    ),
+                    Flexible(
+                      child: TextFormField(
+                        controller: shopnameController,
+                        style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 22,
+                            fontWeight: FontWeight.w500,
+                            color: cBlack),
                       ),
                     ),
                   ],
@@ -341,7 +367,6 @@ class _EditProfileState extends State<EditProfile> {
               ),
               Divider(),
               SizedBox(height: 20),
-              
               updateButton()
             ],
           ),
@@ -350,45 +375,27 @@ class _EditProfileState extends State<EditProfile> {
     );
   }
 
-  //Edit Profile Button
-  Widget editProfilebutton() {
-    return TextButton(
-        onPressed: () {
-          Navigator.push(context,
-          MaterialPageRoute(builder: (context) => EditProfile()));
-        },
-        child: 
-          Text("Edit My Profile",
-            style: TextStyle(
-              decoration: TextDecoration.underline,
-              fontSize: 20,
-              color: cGreen,
-              fontFamily: 'Poppins',
-              fontWeight: FontWeight.bold,
-            )
-          ),
-        );
-  }
-
   Widget updateButton() {
     return TextButton(
         onPressed: () async {
-          //update firebase
+          setState(() {
+            loading = true;
+          });
+          handleUpdate();
         },
         child: Container(
           decoration: BoxDecoration(
               color: cGreen, borderRadius: BorderRadius.circular(12)),
           padding: EdgeInsets.all(20),
-          child: 
-              Center(
-                child: Text("Update Profile",
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: cWhite,
-                      fontFamily: 'Poppins',
-                      fontWeight: FontWeight.bold,
-                    )),
-              ),
+          child: Center(
+            child: Text("Update Profile",
+                style: TextStyle(
+                  fontSize: 20,
+                  color: cWhite,
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.bold,
+                )),
+          ),
           width: 350,
           height: 65,
         ));
