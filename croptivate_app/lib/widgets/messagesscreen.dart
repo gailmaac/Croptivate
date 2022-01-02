@@ -216,13 +216,8 @@ class ShowContacts extends StatelessWidget {
                                                   .collection('Contacts')
                                                   .doc(x.id)
                                                   .collection('Messages')
-                                                  .get()
-                                                  .then((querySnapshot) {
-                                                querySnapshot.docs
-                                                    .forEach((element) {
-                                                  element.data().clear();
-                                                });
-                                              });
+                                                  .doc()
+                                                  .delete();
 
                                               FirebaseFirestore.instance
                                                   .collection('Chats')
