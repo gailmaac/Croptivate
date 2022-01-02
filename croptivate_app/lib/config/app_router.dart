@@ -61,9 +61,6 @@ class AppRouter {
       case SetUpBuyer.routeName:
         return SetUpBuyer.route();
 
-      case UserProfile.routeName:
-        return UserProfile.route();
-
       case UserProfileSeller.routeName:
         return UserProfileSeller.route();
 
