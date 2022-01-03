@@ -580,7 +580,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                                         height: 10,
                                                       ),
                                                       Text(
-                                                          "By using E-Wallet Payment Method, Pay Manually through GCash:\n\nGCash\n091718xxxx\nCamille Abi Enzo",
+                                                          "By using E-Wallet Payment Method, pay manually through the seller's GCash\nKindly go to the Seller's Profile -> Click View Shop Information and refer to the GCash number of the Seller.",
                                                           style: TextStyle(
                                                               fontSize: 13,
                                                               fontFamily:
@@ -856,15 +856,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                                       horizontal: 12),
                                               child: Row(
                                                 children: [
-                                                  Text(
-                                                    "Click to view pinned\naddress",
-                                                    style: TextStyle(
-                                                        fontSize: 12,
-                                                        fontFamily: 'Poppins',
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: cBlack),
-                                                  )
+                                                  // Text(
+                                                  //   "Click to view pinned\naddress",
+                                                  //   style: TextStyle(
+                                                  //       fontSize: 12,
+                                                  //       fontFamily: 'Poppins',
+                                                  //       fontWeight:
+                                                  //           FontWeight.w500,
+                                                  //       color: cBlack),
+                                                  // )
                                                 ],
                                               ),
                                             )
@@ -930,15 +930,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                                       horizontal: 12),
                                               child: Row(
                                                 children: [
-                                                  Text(
-                                                    "Click to view pinned\naddress",
-                                                    style: TextStyle(
-                                                        fontSize: 12,
-                                                        fontFamily: 'Poppins',
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: cBlack),
-                                                  )
+                                                  // Text(
+                                                  //   "Click to view pinned\naddress",
+                                                  //   style: TextStyle(
+                                                  //       fontSize: 12,
+                                                  //       fontFamily: 'Poppins',
+                                                  //       fontWeight:
+                                                  //           FontWeight.w500,
+                                                  //       color: cBlack),
+                                                  // )
                                                 ],
                                               ),
                                             )
@@ -949,7 +949,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 SizedBox(
                                   width: 10,
                                 ),
-                                // Mr. Speedy
+                                // Borzo
                                 Container(
                                   width: 170,
                                   height: 92,
@@ -963,7 +963,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                         onPressed: () {
                                           setState(() {
                                             selectedDO = 3;
-                                            DO = 'Mr. Speedy';
+                                            DO = 'Borzo';
                                           });
                                         },
                                         child: Column(
@@ -983,7 +983,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                                   width: 10,
                                                 ),
                                                 Text(
-                                                  "Mr. Speedy",
+                                                  "Borzo",
                                                   style: TextStyle(
                                                       fontSize: 15,
                                                       fontFamily: 'Poppins',
@@ -1004,15 +1004,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                                       horizontal: 12),
                                               child: Row(
                                                 children: [
-                                                  Text(
-                                                    "Click to view pinned\naddress",
-                                                    style: TextStyle(
-                                                        fontSize: 12,
-                                                        fontFamily: 'Poppins',
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                        color: cBlack),
-                                                  )
+                                                  // Text(
+                                                  //   "Click to view pinned\naddress",
+                                                  //   style: TextStyle(
+                                                  //       fontSize: 12,
+                                                  //       fontFamily: 'Poppins',
+                                                  //       fontWeight:
+                                                  //           FontWeight.w500,
+                                                  //       color: cBlack),
+                                                  // )
                                                 ],
                                               ),
                                             )
