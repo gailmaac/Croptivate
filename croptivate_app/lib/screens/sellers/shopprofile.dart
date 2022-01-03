@@ -244,6 +244,26 @@ class _SellerShopState extends State<SellerShop> {
                                         ),
                                         Row(
                                           children: [
+                                            Icon(Icons.phone_android_rounded,
+                                                color: cGreen),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            Flexible(
+                                              child: Text("+63" + widget.contactnumber,
+                                                  style: TextStyle(
+                                                      fontSize: 15,
+                                                      fontFamily: 'Poppins',
+                                                      fontWeight: FontWeight.w700,
+                                                      color: cBlack)),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 20,
+                                        ),
+                                        Row(
+                                          children: [
                                             Icon(Icons.access_time_rounded,
                                                 color: cGreen),
                                             SizedBox(
