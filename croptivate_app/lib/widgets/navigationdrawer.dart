@@ -27,22 +27,22 @@ class NavigationDrawerWidget extends StatelessWidget {
           padding: padding,
           children: <Widget>[
             const SizedBox(height: 300,),
-            buildMenuItem(
-              text: "Notifications",
-              icon: Icons.notifications_none_rounded,
-              onClicked: () => selectedItem(context, 0),
-            ),
+            // buildMenuItem(
+            //   text: "Notifications",
+            //   icon: Icons.notifications_none_rounded,
+            //   onClicked: () => selectedItem(context, 0),
+            // ),
             const SizedBox(height: 16,),
             buildMenuItem(
               text: "Product Listings",
               icon: Icons.note_alt_outlined,
-              onClicked: () => selectedItem(context, 1),
+              onClicked: () => selectedItem(context, 0),
             ),
             const SizedBox(height: 16,),
             buildMenuItem(
               text: "Orders",
               icon: Icons.shopping_basket_outlined,
-              onClicked: () => selectedItem(context, 2),
+              onClicked: () => selectedItem(context, 1),
             ),
             const SizedBox(height: 300,),
             // Divider(color: Colors.black38,),
@@ -91,13 +91,10 @@ Widget buildMenuItem({
 void selectedItem(BuildContext context, int index) {
   switch (index) {
     case 0:
-      Navigator.pushNamed(context, '/notifications');
-      break;
-    case 1:
       Navigator.push(context,
       MaterialPageRoute(builder: (context) => ProductPage()));
       break;
-    case 2:
+    case 1:
       Navigator.pushNamed(context, '/homeseller');
       break;
     default: break;
